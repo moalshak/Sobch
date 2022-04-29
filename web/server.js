@@ -7,8 +7,6 @@ import expressLayout from 'express-ejs-layouts';
 import mongoose from 'mongoose';
 
 import index from './routes/index.js';
-import register from './routes/register.js';
-import login from './routes/login.js';
 
 const PORT = process.env.PORT || 8080;
 
