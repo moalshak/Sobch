@@ -1,0 +1,132 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Sobch Project",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+        "url": "https://api.sobch.test/v1",
+        "description": "Sobch Backend API"
+        }
+    ],
+    "paths" : {
+        "/add-device": {
+            "post": {
+                "description": "links a device to the user",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "device-id",
+                        "description": "the device's id to add/link to the user",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "otp",
+                        "description": "the device's one time password",
+                        "required": true,
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - device linked to user"
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device already linked to user"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/my-devices": {
+            "get": {
+                "description": "returns all devices linked to the user",
+                "responses": {
+                    "200": {
+                        "description": "Success - all devices linked to user"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/stats/{device-id}": {
+            "get": {
+                "description": "returns the device's information",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "device-id",
+                        "description": "the device's id to get information about",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - device information"
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device not linked to user"
+                    }
+                    
+                }
+            }
+        },
+        "/alter/{device-id}": {
+            "post": {
+                "description": "changes the device's configuration",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "device-id",
+                        "description": "the device's id to change its configuration",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "unlink",
+                        "description": "unlinks the device from the user",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - device information changed"
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device not linked to user"
+                    }
+                    
+                }
+            }
+        }
+    }
+}
