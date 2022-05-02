@@ -4,17 +4,31 @@ import Config from '../Config/Config.js';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import expressLayout from 'express-ejs-layouts';
-import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+// // import admin from 'firebase-admin';
+import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
+import { getFirestore, Timestamp, FieldValue }  from 'firebase-admin/firestore';
 
 import index from './routes/index.js';
+import addDevice from './routes/add-device.js';
+import signUp from './routes/sign-up.js';
+import login from './routes/login.js';
+
+dotenv.config()
 
 const PORT = process.env.PORT || 8080;
+export var GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 const Log = Config.getLog('main');
 
+var db;
 
 const routes = {
-    '/' : index
+    "/" : index,
+    "/add-device": addDevice,
+    "/sign-up": signUp,
+    "/login": login
 }
 
 function initFolders(app) {
@@ -38,11 +52,19 @@ function initRoutes(app) {
 }
 
 function initDB() {
-    const dbUrl = 'mongodb://localhost/mybrary';
-    mongoose.connect(dbUrl);
-    const db = mongoose.connection;
-    db.on('error', () => Log.error('Error connecting to database'));
-    db.once('open', () => Log.info('Connected to database', {url : dbUrl}));
+    // const firebaseConfig = JSON.parse(Config.firebaseConfig);
+    // Initialize Firebase
+    // const app = initializeApp(firebaseConfig);
+
+    const serviceAccountJson = JSON.parse(process.env.serviceAccountJson);
+
+    const app = initializeApp({
+        credential: cert(serviceAccountJson),
+        databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
+    })
+    // const auth = getAuth(app);
+
+    return getFirestore();
 }
 
 function init() {
@@ -50,13 +72,13 @@ function init() {
 
     app.set('view engine', 'ejs');
 
-    app.use(express.urlencoded({ extended: false }));
+    app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
     initFolders(app);
     initRoutes(app);
 
-    initDB();
+    db = initDB();
 
     app.listen(PORT, () => {
         Log.info(`Server is running on port ${PORT}`, {url : `http://localhost:${PORT}/`});
@@ -64,3 +86,7 @@ function init() {
 }
 
 init();
+
+export {
+    db as database
+}

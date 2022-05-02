@@ -53,8 +53,11 @@ var paths = {
 	root: path.join(process.cwd(), '..'),
 }
 
+const firebaseConfig = process.env.firebaseConfig
+
 // export the getLog function
 export default {
     getLog: getLog,
-	path : paths
+	path : paths,
+	firebaseConfig: firebaseConfig,
 };
