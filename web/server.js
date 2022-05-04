@@ -43,7 +43,6 @@ function initDB() {
     // const app = initializeApp(firebaseConfig);
 
     const serviceAccountJson = JSON.parse(process.env.serviceAccountJson);
-    console.log(serviceAccountJson)
 
     const app = initializeApp({
         credential: cert(serviceAccountJson),
