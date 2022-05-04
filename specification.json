@@ -52,7 +52,7 @@
         },
         "/my-devices": {
             "get": {
-                "description": "returns all devices linked to the user",
+                "description": "returns all devices linked to the user. image url from model + current temp",
                 "responses": {
                     "200": {
                         "description": "Success - all devices linked to user"
@@ -103,20 +103,37 @@
                         "schema": {
                             "type": "string"
                         }
-                    },
-                    {
-                        "in": "query",
-                        "name": "unlink",
-                        "description": "unlinks the device from the user",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean"
-                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Success - device information changed"
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device not linked to user"
+                    }
+                    
+                }
+            },
+            "delete": {
+                "description": "deletes the device",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "device-id",
+                        "description": "the device's id to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - device deleted / unlinked"
                     },
                     "404": {
                         "description": "Device not found"
