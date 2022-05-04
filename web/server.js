@@ -74,5 +74,7 @@ function init() {
 init();
 
 export {
-    db as database
+    db as database,
+    init
 }
+
