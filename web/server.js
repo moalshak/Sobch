@@ -3,7 +3,6 @@ import bodyParser from 'body-parser';
 import Config from '../Config/Config.js';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import expressLayout from 'express-ejs-layouts';
 import dotenv from 'dotenv';
 
 // // import admin from 'firebase-admin';
@@ -17,7 +16,7 @@ import login from './routes/login.js';
 
 dotenv.config()
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 export var GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
 const Log = Config.getLog('main');
