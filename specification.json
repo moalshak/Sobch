@@ -459,6 +459,10 @@
                         "description": "Current temperature",
                         "format": "float"
                     },
+                    "up-time": {
+                        "type": "string",
+                        "description": "The amount of time the device has been online / active for"
+                    },
                     "Config": {
                         "$ref": "#/components/schemas/Config"
                     }
