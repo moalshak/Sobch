@@ -31,18 +31,6 @@ const routes = {
     "/login": login
 }
 
-function initFolders(app) {
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    
-    app.set('views', __dirname + '/views');
-    // set layouts
-    app.set('layout', 'layouts/layout');
-    app.use(expressLayout);
-
-    app.use(express.static(path.join(__dirname + '/public')));
-}
-
 
 function initRoutes(app) {
     for (var route in routes) {
@@ -75,7 +63,6 @@ function init() {
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
-    initFolders(app);
     initRoutes(app);
 
     db = initDB();
