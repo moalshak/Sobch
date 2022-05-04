@@ -5,7 +5,7 @@
   "description": "Remote thermostat controller",
   "scripts": {
     "devStart": "nodemon web/server.js",
-    "test": "mocha -C test -t 30000 --exit"
+    "test": "mocha -C test -t 30000 --exit "
   },
   "author": "Mohammad Al Shakoush",
   "license": "ISC",
