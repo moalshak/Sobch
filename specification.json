@@ -10,33 +10,203 @@
         "description": "Sobch Backend API"
         }
     ],
+    "tags": [
+        {
+        "name": "auth"
+        },
+        {
+        "name": "users"
+        }
+    ],
     "paths" : {
-        "/add-device": {
+        "/register": {
             "post": {
-                "description": "links a device to the user",
-                "parameters": [
-                    {
-                        "in": "query",
-                        "name": "device-id",
-                        "description": "the device's id to add/link to the user",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                "tags": [
+                    "auth"
+                ],
+                "description": "Register a new user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": true,
+                                "$ref": "#/components/schemas/Info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Info"
+                                }
+                            }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "description": "Login a user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": true,
+                                "$ref": "#/components/schemas/Credentials"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - Logged in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Info"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/profile/{user-id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "parameters": [
                     {
-                        "in": "query",
-                        "name": "otp",
-                        "description": "the device's one time password",
+                        "in": "path",
+                        "name": "user-id",
                         "required": true,
-                        "schema": {
-                            "type": "number"
+                        "schema" : {
+                            "type": "string"
                         }
                     }
                 ],
+                "description": "Get user profile / information",
                 "responses": {
                     "200": {
-                        "description": "Success - device linked to user"
+                        "description": "Success - profile information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/alter/{user-id}": {
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "description": "changes the user's information",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user-id",
+                        "required": true,
+                        "schema" : {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": true,
+                                "$ref": "#/components/schemas/Info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - user information changed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Info"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/add-device": {
+            "post": {
+                "description": "links a device to the user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "device": {
+                                        "$ref": "#/components/schemas/Device"
+                                    },
+                                    "otp": {
+                                        "$ref": "#/components/schemas/OTP"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - device linked to user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Device_res"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Device not found"
@@ -52,10 +222,23 @@
         },
         "/my-devices": {
             "get": {
+                "tags": [
+                    "users"
+                ],
                 "description": "returns all devices linked to the user. image url from model + current temp",
                 "responses": {
                     "200": {
-                        "description": "Success - all devices linked to user"
+                        "description": "Success - all devices linked to user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Device_res"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "500": {
                         "description": "Internal server error"
@@ -73,13 +256,20 @@
                         "description": "the device's id to get information about",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Device-ID"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success - device information"
+                        "description": "Success - device information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Device_res"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Device not found"
@@ -92,7 +282,7 @@
             }
         },
         "/alter/{device-id}": {
-            "post": {
+            "put": {
                 "description": "changes the device's configuration",
                 "parameters": [
                     {
@@ -101,13 +291,29 @@
                         "description": "the device's id to change its configuration",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Device-ID"
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Device"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Success - device information changed"
+                        "description": "Success - device information changed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Device"
+                                }
+                            }
+                        }
                     },
                     "404": {
                         "description": "Device not found"
@@ -127,13 +333,13 @@
                         "description": "the device's id to delete",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/components/schemas/Device-ID"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Success - device deleted / unlinked"
+                        "description": "Success - device unlinked"
                     },
                     "404": {
                         "description": "Device not found"
@@ -142,6 +348,120 @@
                         "description": "Device not linked to user"
                     }
                     
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "info": {
+                        "$ref": "#/components/schemas/Info"
+                    },
+                    "devices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Device"
+                        }
+                    }
+                }
+            },
+            "Info" : {
+                "type": "object",
+                "description": "user's information",
+                "properties": {
+                    "Credentials": {
+                        "$ref": "#/components/schemas/Credentials"
+                    },
+                    "address": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Credentials": {
+                "type": "object",
+                "description": "The credentials of the user to be used",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Device-ID": {
+                "description": "the device's identifier",
+                "type": "string"
+            },
+            "Device": {
+                "type": "object",
+                "description": "the device",
+                "properties": {
+                    "device-id": {
+                        "$ref": "#/components/schemas/Device-ID"
+                    },
+                    "Config": {
+                        "$ref": "#/components/schemas/Config"
+                    }
+                }
+            },
+            "OTP": {
+                "type": "string",
+                "description": "The one time password for the device (can also be seen as confirmation of purchase)"
+            },
+            "Config": {
+                "type": "object",
+                "description": "The device's configuration",
+                "properties": {
+                    "min": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "the minimum temperature the room can reach before notifying the user"
+                    },
+                    "max": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "the maximum temperature the room can reach before notifying the user"
+                    },
+                    "room": {
+                        "type": "string",
+                        "description": "The room at which the device is located"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "description": "Whether the device is active or not",
+                        "default": true
+                    }
+                }
+            },
+            "Device_res": {
+                "type": "object",
+                "properties": {
+                    "device-id": {
+                        "$ref": "#/components/schemas/Device-ID"
+                    },
+                    "model": {
+                        "type": "string",
+                        "description": "the device's model"
+                    },
+                    "image": {
+                        "type": "string",
+                        "description": "Image url to the device's model"
+                    },
+                    "temp": {
+                        "type": "number",
+                        "description": "Current temperature",
+                        "format": "float"
+                    },
+                    "Config": {
+                        "$ref": "#/components/schemas/Config"
+                    }
                 }
             }
         }
