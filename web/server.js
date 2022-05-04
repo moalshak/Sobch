@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import Config from '../Config/Config.js';
+import Config from '../Config/config.js';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import dotenv from 'dotenv';

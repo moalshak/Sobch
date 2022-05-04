@@ -1,5 +1,5 @@
 import express from "express";
-import Config from "../../Config/Config.js";
+import Config from "../../Config/config.js";
 import { database } from "../server.js";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
