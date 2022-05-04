@@ -4,7 +4,8 @@
   "type": "module",
   "description": "Remote thermostat controller",
   "scripts": {
-    "devStart": "nodemon web/server.js"
+    "devStart": "nodemon web/server.js",
+    "test": "node web/server.js"
   },
   "author": "Mohammad Al Shakoush",
   "license": "ISC",
