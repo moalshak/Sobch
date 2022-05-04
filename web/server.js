@@ -5,7 +5,6 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import dotenv from 'dotenv';
 
-// // import admin from 'firebase-admin';
 import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
 import { getFirestore, Timestamp, FieldValue }  from 'firebase-admin/firestore';
 
