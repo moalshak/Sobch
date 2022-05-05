@@ -15,3 +15,6 @@
 - Share device with other people by inviting them by email with a confirmation link 
 - Roles ? owner, editor, spectator
 
+## More registration options
+
+- Mobile number, Github, Facebook ...etc
