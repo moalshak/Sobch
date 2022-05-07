@@ -1,12 +1,12 @@
 {
     "openapi": "3.0.2",
     "info": {
-        "title": "Sobch Project",
+        "title": "Sobch Project API",
         "version": "1.0"
     },
     "servers": [
         {
-        "url": "https://api.sobch.test/v1",
+        "url": "https://api.sobch.xyz/",
         "description": "Sobch Backend API"
         }
     ],
@@ -24,7 +24,7 @@
                 "tags": [
                     "auth"
                 ],
-                "description": "Register a new user",
+                "description": "Registers a new user",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -375,7 +375,7 @@
                 "type": "object",
                 "description": "user's information",
                 "properties": {
-                    "Credentials": {
+                    "credentials": {
                         "$ref": "#/components/schemas/Credentials"
                     },
                     "address": {

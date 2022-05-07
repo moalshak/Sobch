@@ -2,7 +2,7 @@
   "name": "sobch",
   "version": "1.0.0",
   "type": "module",
-  "description": "Remote thermostat controller",
+  "description": "Remote thermometer",
   "scripts": {
     "devStart": "nodemon web/server.js",
     "test": "mocha -C test -t 30000 --exit"
