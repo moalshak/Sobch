@@ -1,0 +1,491 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Sobch API",
+        "version": "1.0",
+        "description": "Sobch is a company that provides smart thermometers. With the help of this API the user will be able to set configurations for their thermometers and be notified when the temperature is outside the range.",
+        "license": {
+            "name" : "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "servers": [
+        {
+        "url": "https://api.sobch.xyz/v1",
+        "description": "Sobch Backend API"
+        }
+    ],
+    "tags": [
+        {
+        "name": "auth",
+        "description": "Authentication"
+        },
+        {
+        "name": "users",
+        "description": "Users"
+        }
+    ],
+    "paths" : {
+        "/register": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Register a new user",
+                "operationId": "registerUser",
+                "description": "Registers a new user with the given info if the user does not already exist.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": true,
+                                "$ref": "#/components/schemas/Info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Info"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Login a user",
+                "operationId": "loginUser",
+                "description": "Login a user if the user exists and the credentials are correct.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": true,
+                                "$ref": "#/components/schemas/Credentials"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - Logged in",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Info"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/profile/{user-id}": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user profile",
+                "operationId": "getUserProfile",
+                "description": "Get the profile of the user with the given id.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user-id",
+                        "required": true,
+                        "schema" : {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - profile information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user profile",
+                "operationId": "updateUserProfile",
+                "description": "Update the profile of the user with the given id.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "user-id",
+                        "required": true,
+                        "schema" : {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": true,
+                                "$ref": "#/components/schemas/Info"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - user information changed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Info"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/my-devices": {
+            "get": {
+                "summary": "Get all linked devices",
+                "operationId": "getMyDevices",
+                "description": "returns all devices linked to the user. image url from model + current temp",
+                "responses": {
+                    "200": {
+                        "description": "Success - all devices linked to user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Device_res"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "link / add a new device",
+                "description": "links a device to the user",
+                "operationId": "addDevice",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "device": {
+                                        "$ref": "#/components/schemas/Device"
+                                    },
+                                    "otp": {
+                                        "$ref": "#/components/schemas/OTP"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - device linked to user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Device_res"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device already linked to user"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/stats/{device-id}": {
+            "get": {
+                "operationId": "getStats",
+                "summary": "Get the device's current stats",
+                "description": "returns the information/stats of the device with the device-id passed in the path if it is linked to the user requesting the information",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "device-id",
+                        "description": "the device's id to get information about",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/Device-ID"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - device information",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Device_res"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device not linked to user"
+                    }
+                    
+                }
+            }
+        },
+        "/alter/{device-id}": {
+            "put": {
+                "operationId": "alterDevice",
+                "summary": "Updates the device's information/configuration",
+                "description": "changes the device's configuration / information with the id passed in the path parameter, if the device is linked to the user requesting the change",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "device-id",
+                        "description": "the device's id to change its configuration",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/Device-ID"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Device"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success - device information changed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Device"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device not linked to user"
+                    }
+                    
+                }
+            },
+            "delete": {
+                "operationId": "deleteDevice",
+                "summary": "Deletes a linked device",
+                "description": "Deletes the device with the id passed in the path parameter if linked to the user requesting the deletion",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "device-id",
+                        "description": "the device's id to delete",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/components/schemas/Device-ID"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success - device unlinked"
+                    },
+                    "404": {
+                        "description": "Device not found"
+                    },
+                    "405": {
+                        "description": "Device not linked to user"
+                    }
+                    
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "info": {
+                        "$ref": "#/components/schemas/Info"
+                    },
+                    "devices": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Device"
+                        }
+                    }
+                }
+            },
+            "Info" : {
+                "type": "object",
+                "description": "user's information",
+                "properties": {
+                    "credentials": {
+                        "$ref": "#/components/schemas/Credentials"
+                    },
+                    "address": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Credentials": {
+                "type": "object",
+                "description": "The credentials of the user to be used",
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Device-ID": {
+                "description": "the device's identifier",
+                "type": "string"
+            },
+            "Device": {
+                "type": "object",
+                "description": "the device",
+                "properties": {
+                    "device-id": {
+                        "$ref": "#/components/schemas/Device-ID"
+                    },
+                    "Config": {
+                        "$ref": "#/components/schemas/Config"
+                    }
+                }
+            },
+            "OTP": {
+                "type": "string",
+                "description": "The one time password for the device (can also be seen as confirmation of purchase)"
+            },
+            "Config": {
+                "type": "object",
+                "description": "The device's configuration",
+                "properties": {
+                    "min": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "the minimum temperature the room can reach before notifying the user"
+                    },
+                    "max": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "the maximum temperature the room can reach before notifying the user"
+                    },
+                    "room": {
+                        "type": "string",
+                        "description": "The room at which the device is located"
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "description": "Whether the device is active or not",
+                        "default": true
+                    }
+                }
+            },
+            "Device_res": {
+                "type": "object",
+                "properties": {
+                    "device-id": {
+                        "$ref": "#/components/schemas/Device-ID"
+                    },
+                    "model": {
+                        "type": "string",
+                        "description": "the device's model"
+                    },
+                    "image": {
+                        "type": "string",
+                        "description": "Image url to the device's model"
+                    },
+                    "temp": {
+                        "type": "number",
+                        "description": "Current temperature",
+                        "format": "float"
+                    },
+                    "up-time": {
+                        "type": "string",
+                        "description": "The amount of time the device has been online / active for"
+                    },
+                    "Config": {
+                        "$ref": "#/components/schemas/Config"
+                    }
+                }
+            }
+        }
+    }
+}
