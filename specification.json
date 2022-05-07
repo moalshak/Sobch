@@ -189,6 +189,7 @@
         "/my-devices": {
             "get": {
                 "summary": "Get all linked devices",
+                "operationId": "getMyDevices",
                 "description": "returns all devices linked to the user. image url from model + current temp",
                 "responses": {
                     "200": {
@@ -212,6 +213,7 @@
             "post": {
                 "summary": "link / add a new device",
                 "description": "links a device to the user",
+                "operationId": "addDevice",
                 "requestBody": {
                     "required": true,
                     "content": {
