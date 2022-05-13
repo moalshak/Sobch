@@ -3,11 +3,9 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-})
-
-router.get("/", (req, res) => {
-    res.render("index", { name: "DB" });
+router.post("/", (req, res) => {    
+    console.log(req.body)
+    res.send(req.body);
 })
 
 export default {
