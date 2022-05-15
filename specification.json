@@ -421,11 +421,11 @@
                 "type": "object",
                 "description": "the device",
                 "properties": {
-                    "device-id": {
+                    "id": {
                         "$ref": "#/components/schemas/Device-ID"
                     },
-                    "Config": {
-                        "$ref": "#/components/schemas/Config"
+                    "config": {
+                        "$ref": "#/components/schemas/config"
                     }
                 }
             },
@@ -433,7 +433,7 @@
                 "type": "string",
                 "description": "The one time password for the device (can also be seen as confirmation of purchase)"
             },
-            "Config": {
+            "config": {
                 "type": "object",
                 "description": "The device's configuration",
                 "properties": {
@@ -461,7 +461,7 @@
             "Device_res": {
                 "type": "object",
                 "properties": {
-                    "device-id": {
+                    "id": {
                         "$ref": "#/components/schemas/Device-ID"
                     },
                     "model": {
@@ -481,8 +481,8 @@
                         "type": "string",
                         "description": "The amount of time the device has been online / active for"
                     },
-                    "Config": {
-                        "$ref": "#/components/schemas/Config"
+                    "config": {
+                        "$ref": "#/components/schemas/config"
                     }
                 }
             }
