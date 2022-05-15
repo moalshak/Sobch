@@ -1,36 +1,56 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import Config from '../lib/config.js';
-import path from 'path';
-import {fileURLToPath} from 'url';
-import dotenv from 'dotenv';
+import { initializeApp } from "firebase/app";
 import cors from 'cors';
+import { getDatabase } from "firebase/database";
+import config from '../lib/config.js';
 
-import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
-import { getFirestore, Timestamp, FieldValue }  from 'firebase-admin/firestore';
-
+/**
+ * the routes
+ */
 import index from './routes/index.js';
-import my_devices from './routes/my-devices.js';
-import signUp from './routes/sign-up.js';
-import login from './routes/login.js';
+import my_devices from './routes/devices/my-devices.js';
+import register from './routes/auth/register.js';
+import login from './routes/auth/login.js';
+import stats from './routes/devices/stats.js';
+import alter from './routes/devices/alter.js';
+import profile from './routes/users/profile.js';
 
-dotenv.config()
+/**
+ * the port to listen on either specified in the config or the default port 8000
+ */
+const PORT = config.PORT;
 
-const PORT = process.env.PORT || 8000;
-export var GOOGLE_APPLICATION_CREDENTIALS = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+/**
+ * Logger for this js file
+ */
+const Log = config.getLog('main');
 
-const Log = Config.getLog('main');
-
+/**
+ * the database object that will be exported by this file
+ * so that it can be used in other files
+ */
 var db;
 
+/**
+ * the routes
+ *  - an object with the endpoint as key and the js file as value
+ */
 const routes = {
     "/" : index,
+    "/register": register,
+    "/login": login,
+    "profile": profile,
     "/my-devices": my_devices,
-    "/sign-up": signUp,
-    "/login": login
+    "/stats": stats,
+    "/alter": alter
 }
 
 
+/**
+ * initialize the routes and add them to the server
+ * 
+ * @param {express.Application} app the express application
+ */
 function initRoutes(app) {
     for (var route in routes) {
         // add middleware here
@@ -38,23 +58,29 @@ function initRoutes(app) {
     }
 }
 
+/**
+ * initialize the database and connect to it
+ * 
+ * @returns {firebase.database.Database} Database 
+ */
 function initDB() {
-    return;
-    // const firebaseConfig = JSON.parse(Config.firebaseConfig);
+
+    const firebaseConfig = config.FIRE_BASE_CONFIG;
     // Initialize Firebase
-    // const app = initializeApp(firebaseConfig);
+    const app = initializeApp(firebaseConfig);
 
-    const serviceAccountJson = JSON.parse(process.env.serviceAccountJson);
-
-    const app = initializeApp({
-        credential: cert(serviceAccountJson),
-        databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
-    })
-    // const auth = getAuth(app);
-
-    return getFirestore();
+    // Get a reference to the database service
+    return getDatabase(app);
 }
 
+/**
+ * initialize the server and start it
+ * 
+ * - first call express.js to create the server
+ * - then call initRoutes to add the routes
+ * - then call initDB to initialize the database
+ * - then call listen to start the server
+ */
 function init() {
     const app = express();
 
@@ -73,8 +99,10 @@ function init() {
 
 init();
 
+/**
+ * export the database object so that it can be used in other files
+ */
 export {
-    db as database,
-    init
+    db as db
 }
 
