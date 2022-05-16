@@ -21,10 +21,12 @@ router.post("/", (req, res) => {
         "otp": req.body.otp
     });
     res.status(200).send(req.body);
+    Log.info("Device added", device);
 });
 
 router.get("/", (req, res) => {
     res.status(200).send("Request received");
+    Log.info("Request received");
 });
 
 export default {
