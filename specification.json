@@ -76,8 +76,12 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "required": true,
-                                "$ref": "#/components/schemas/Credentials"
+                                "type": "object",
+                                "properties": {
+                                    "credentials": {
+                                        "$ref": "#/components/schemas/Credentials"
+                                    }   
+                                }
                             }
                         }
                     }
