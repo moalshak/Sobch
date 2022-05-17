@@ -3,6 +3,9 @@ import { initializeApp } from "firebase/app";
 import cors from 'cors';
 import { getDatabase } from "firebase/database";
 import config from '../lib/config.js';
+import { getAuth } from "firebase/auth";
+
+
 
 /**
  * the routes
@@ -29,7 +32,7 @@ const Log = config.getLog('main');
  * the database object that will be exported by this file
  * so that it can be used in other files
  */
-var db;
+var db,auth;
 
 /**
  * the routes
@@ -68,6 +71,7 @@ function initDB() {
     const firebaseConfig = config.FIRE_BASE_CONFIG;
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
+    auth = getAuth();
 
     // Get a reference to the database service
     return getDatabase(app);
@@ -103,6 +107,7 @@ init();
  * export the database object so that it can be used in other files
  */
 export {
-    db as db
+    db as db,
+    auth as auth
 }
 
