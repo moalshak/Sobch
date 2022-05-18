@@ -42,7 +42,7 @@ const routes = {
     "/" : index,
     "/register": register,
     "/login": login,
-    "profile": profile,
+    "/profile": profile,
     "/my-devices": my_devices,
     "/stats": stats,
     "/alter": alter
