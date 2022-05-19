@@ -4,6 +4,7 @@ import { db, auth} from "../../server.js";
 import {  signInWithEmailAndPassword } from "firebase/auth";
 
 
+
 const router = express.Router(),
     Log = config.getLog("login");
 
@@ -19,7 +20,8 @@ router.post('/', async (req, res) => {
 
     var code,message;
 
-    try {
+
+     try {
        
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
@@ -30,16 +32,42 @@ router.post('/', async (req, res) => {
         message = user;
 
         res.status(code).send(message);
-        console.log(req.body);
         
-    }catch(error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        code = 400;
-        message = {errorCode, errorMessage};
+        
+        
+    } catch(error) {
+         const errorCode = error.code;
+         const errorMessage = error.message;
+         
+         if(errorCode == "auth/user-not-found"){
+            code = 400;
+            message = "Invalid Email";
+            res.status(code).send(message);
+            
 
-        res.status(code).send(message);
-      }
+         }
+
+         if(errorCode == "auth/wrong-password") {
+             code = 400;
+             message = "Wrong password"
+             res.status(code).send(message);
+         }
+
+         if(errorCode == "auth/invalid-email"){
+            code = 400;
+            message = "Invalid email"
+            res.status(code).send(message);
+         }
+
+         else{
+            code = 500;
+            message = "Internal server error"
+    
+            res.status(code).send(message);
+         }
+        
+        
+    }
 });
 
 export default {
