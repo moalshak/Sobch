@@ -22,11 +22,13 @@ router.post('/', async (req, res) => {
     try {
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
         // Signed in 
+        
         const user = userCredential.user;
         req.user = user;
         
         code = 200;
-        message = user;
+        //message = user;
+        message = "Success"
 
         res.status(code).send(message);
 
@@ -47,9 +49,14 @@ router.post('/', async (req, res) => {
         res.status(code).send(message);
 
      }
-     else {
+     if(errorCode == "auth/invalid-email"){
         code = 400;
-        message = {errorCode, errorMessage};
+        message = "Invalid email"
+        res.status(code).send(message);
+     }
+     else {
+        code = 500;
+        message = "Internal server error"
 
         res.status(code).send(message);
      }

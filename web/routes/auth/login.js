@@ -29,8 +29,8 @@ router.post('/', async (req, res) => {
         req.user = user;
 
         code = 200;
-        message = user;
-
+        //message = user;
+        message = "Success - Logged in"
         res.status(code).send(message);
         
         
@@ -61,7 +61,7 @@ router.post('/', async (req, res) => {
 
          else{
             code = 500;
-            message = "Internal server error"
+            
     
             res.status(code).send(message);
          }
