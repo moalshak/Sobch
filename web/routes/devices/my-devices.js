@@ -9,7 +9,7 @@ const router = express.Router(),
 
 router.post("/", (req, res) => {
     const device = req.body.device;
-    set(ref(db, `users/${device.id}`),
+    set(ref(db, `devices/${device.id}`),
     {
         "id": device.id,
         "config": {
