@@ -39,9 +39,8 @@ router.post('/', async (req, res) => {
         //message = user;
         message = "Success"
 
-        res.status(code).send(req.body);
-        Log.info("Success", user.stsTokenManager.accessToken);
-
+        res.status(code).send(user.stsTokenManager.accessToken);
+        
     } catch(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
