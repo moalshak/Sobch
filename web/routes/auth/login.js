@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
         code = 200;
         //message = user;
         message = "Success - Logged in"
-        res.status(code).send(credentials);
+        res.status(code).send(user.stsTokenManager.accessToken);
         
         
         
