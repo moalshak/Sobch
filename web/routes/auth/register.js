@@ -26,12 +26,10 @@ router.post('/', async (req, res) => {
         const user = userCredential.user;
         set(ref(db, `users/${user.uid}`),
             {
-            
                 "credentials": {
                 "email": email,
                 },
-                "address": address
-                
+                "address": address   
             });
 
         
@@ -39,7 +37,7 @@ router.post('/', async (req, res) => {
         //message = user;
         message = "Success"
 
-        res.status(code).send(user.stsTokenManager.accessToken);
+        res.status(code).send({accessToken : user.stsTokenManager.accessToken});
         
     } catch(error) {
         const errorCode = error.code;
