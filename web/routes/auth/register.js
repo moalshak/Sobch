@@ -44,28 +44,29 @@ router.post('/', async (req, res) => {
     } catch(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
+        var message = {error : ""};
 
     if(errorCode == "auth/email-already-in-use"){
         code = 400;
-        message = "Email already in use"
+        message.error = "Email already in use"
         res.status(code).send(message);
 
         
      }
      if (errorCode == "auth/weak-password"){
         code = 400;
-        message = "Weak password: Should be at least 6 characters long"
+        message.error = "Weak password: Should be at least 6 characters long"
         res.status(code).send(message);
 
      }
      if(errorCode == "auth/invalid-email"){
         code = 400;
-        message = "Invalid email"
+        message.error = "Invalid email"
         res.status(code).send(message);
      }
      else {
         code = 500;
-        message = "Internal server error"
+        message.error = "Internal server error"
 
         res.status(code).send(message);
      }

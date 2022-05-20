@@ -35,10 +35,10 @@ router.post('/', async (req, res) => {
     } catch(error) {
          const errorCode = error.code;
          const errorMessage = error.message;
-         
+         var message = {error : ""}
          if(errorCode == "auth/user-not-found"){
             code = 400;
-            message = "Invalid Email";
+            message.error = "Invalid Email";
             res.status(code).send(message);
             
 
