@@ -2,7 +2,7 @@ import express from "express";
 import config from "../../../lib/config.js";
 import { db,auth } from "../../server.js";
 import {createUserWithEmailAndPassword } from "firebase/auth";
-
+import { ref, set } from "firebase/database";
 
 const router = express.Router(),
     Log = config.getLog("register");
@@ -24,13 +24,23 @@ router.post('/', async (req, res) => {
         // Signed in 
         
         const user = userCredential.user;
+
+        set(ref(db, `users/${user.uid}`),
+            {
+                "credentials": {
+                    "email": email,
+                },
+                "address": address   
+            }
+        );
+
         
         code = 200;
         //message = user;
         message = "Success"
 
-        res.status(code).send(message);
-
+        res.status(code).send({accessToken : user.stsTokenManager.accessToken});
+        
     } catch(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
