@@ -3,11 +3,7 @@ import config from "../../../lib/config.js";
 import { db, auth} from "../../server.js";
 import {  signInWithEmailAndPassword } from "firebase/auth";
 
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 1cdc3b667838e318c8f6b73e81264c25aa671966
 const router = express.Router(),
     Log = config.getLog("login");
 
@@ -22,14 +18,8 @@ router.post('/', async (req, res) => {
 
     var code,message;
 
-<<<<<<< HEAD
-    try {
-
-=======
 
      try {
-       
->>>>>>> 1cdc3b667838e318c8f6b73e81264c25aa671966
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         const user = userCredential.user;
