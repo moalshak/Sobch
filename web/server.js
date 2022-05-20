@@ -62,24 +62,24 @@ const getAuthToken = (req) => {
 };
 
 
-const middleWare = (req, res, next) => {
+const middleWare = async (req, res, next) => {
     if (whiteList.includes(req.url)) {
         next();
     } else {
         const authToken = getAuthToken(req);
         if (authToken) {
-            admin_auth.verifyIdToken(authToken)
-                .then((decodedToken) => {
-                    console.log(decodedToken)
-                    const uid = decodedToken.uid;
-                    Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
-                    next();
-                })
-                .catch((err) => {
-                    console.log(err);
-                    Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
-                    return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
-                });
+            try {
+                const decodedToken = await admin_auth.verifyIdToken(authToken)
+                const uid = decodedToken.uid;
+                const user = await admin_auth.getUser(uid);
+                req.user = user
+                Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                next();
+            } catch(err) {
+                req.user = null;
+                Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
+            }
         } else {
             Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
             return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
@@ -93,7 +93,7 @@ const middleWare = (req, res, next) => {
  * @param {express.Application} app the express application
  */
 function initRoutes(app) {
-    //app.use(middleWare);
+    app.use(middleWare);
     for (var route in routes) {
         app.use(route, routes[route].router);
     }
