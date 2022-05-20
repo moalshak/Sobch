@@ -93,7 +93,7 @@ const middleWare = (req, res, next) => {
  * @param {express.Application} app the express application
  */
 function initRoutes(app) {
-    app.use(middleWare);
+    //app.use(middleWare);
     for (var route in routes) {
         app.use(route, routes[route].router);
     }
