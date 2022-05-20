@@ -3,7 +3,6 @@ import config from "../../../lib/config.js";
 import { db, auth} from "../../server.js";
 import {  signInWithEmailAndPassword } from "firebase/auth";
 
-
 const router = express.Router(),
     Log = config.getLog("login");
 
@@ -12,7 +11,6 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-
     const credentials = req.body,
     email = credentials.email,
     password = credentials.password;
@@ -20,7 +18,7 @@ router.post('/', async (req, res) => {
     var code,message;
 
     try {
-       
+
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         const user = userCredential.user;
@@ -30,7 +28,6 @@ router.post('/', async (req, res) => {
         message = user;
 
         res.status(code).send(message);
-        console.log(req.body);
         
     }catch(error) {
         const errorCode = error.code;

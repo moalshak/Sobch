@@ -23,7 +23,6 @@ router.post('/', async (req, res) => {
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
         // Signed in 
         const user = userCredential.user;
-        req.user = user;
         
         code = 200;
         message = user;

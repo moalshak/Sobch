@@ -1,11 +1,12 @@
 import express from 'express';
-import { initializeApp } from "firebase/app";
 import cors from 'cors';
-import { getDatabase } from "firebase/database";
 import config from '../lib/config.js';
-import { getAuth } from "firebase/auth";
-
-
+import { initializeApp, cert } from 'firebase-admin/app';
+import { getAuth } from "firebase-admin/auth";
+import { getDatabase } from "firebase-admin/database";
+import { initializeApp as c_initializeApp} from 'firebase/app';
+import { getAuth as c_getAuth} from 'firebase/auth';
+import { getDatabase as c_getDatabase } from 'firebase/database';
 
 /**
  * the routes
@@ -32,7 +33,7 @@ const Log = config.getLog('main');
  * the database object that will be exported by this file
  * so that it can be used in other files
  */
-var db,auth;
+var db, auth, admin_auth;
 
 /**
  * the routes
@@ -48,6 +49,43 @@ const routes = {
     "/alter": alter
 }
 
+const whiteList = [
+    "/login",
+    "/register"
+]
+
+const getAuthToken = (req) => {
+    if (req.headers.authorization) {
+        return req.headers.authorization;
+    }
+    return null;
+};
+
+
+const middleWare = (req, res, next) => {
+    if (whiteList.includes(req.url)) {
+        next();
+    } else {
+        const authToken = getAuthToken(req);
+        if (authToken) {
+            admin_auth.verifyIdToken(authToken)
+                .then((decodedToken) => {
+                    console.log(decodedToken)
+                    const uid = decodedToken.uid;
+                    Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                    next();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                    return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
+                });
+        } else {
+            Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+            return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
+        }
+    }
+};
 
 /**
  * initialize the routes and add them to the server
@@ -55,8 +93,8 @@ const routes = {
  * @param {express.Application} app the express application
  */
 function initRoutes(app) {
+    app.use(middleWare);
     for (var route in routes) {
-        // add middleware here
         app.use(route, routes[route].router);
     }
 }
@@ -68,13 +106,24 @@ function initRoutes(app) {
  */
 function initDB() {
 
-    const firebaseConfig = config.FIRE_BASE_CONFIG;
+    const serviceAccount = config.SERVICE_ACCOUNT;
+    const firebaseConfig = config.FIRE_BASE_CONFIG
     // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth();
+    const app = initializeApp({
+        firebaseConfig,
+        credential: cert(serviceAccount),
+        databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
+    });
+
+    admin_auth = getAuth(app);
+
+    const c_app = c_initializeApp(firebaseConfig);
+
+    // const app = initializeApp(firebaseConfig);
+    auth = c_getAuth(c_app);
 
     // Get a reference to the database service
-    return getDatabase(app);
+    return c_getDatabase(c_app);
 }
 
 /**
