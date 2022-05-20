@@ -22,22 +22,49 @@ router.post('/', async (req, res) => {
     try {
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
         // Signed in 
+        
         const user = userCredential.user;
         
         code = 200;
-        message = user;
+        //message = user;
+        message = "Success"
 
         res.status(code).send(message);
+
     } catch(error) {
         const errorCode = error.code;
         const errorMessage = error.message;
+
+    if(errorCode == "auth/email-already-in-use"){
         code = 400;
-        message = {errorCode, errorMessage};
+        message = "Email already in use"
+        res.status(code).send(message);
+
+        
+     }
+     if (errorCode == "auth/weak-password"){
+        code = 400;
+        message = "Weak password: Should be at least 6 characters long"
+        res.status(code).send(message);
+
+     }
+     if(errorCode == "auth/invalid-email"){
+        code = 400;
+        message = "Invalid email"
+        res.status(code).send(message);
+     }
+     else {
+        code = 500;
+        message = "Internal server error"
 
         res.status(code).send(message);
+     }
     }
+
+
     
-});
+}); 
+
 
 export default {
     router: router

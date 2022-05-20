@@ -7,3 +7,10 @@ describe('No JS errors', () => {
         done();
     });
 })
+
+describe('No errors from the alter/{device-id} endpoints', () => {
+    it('running alter/{device-id} DELETE request', (deleteDevice) => {
+        
+        done();
+    })
+})
