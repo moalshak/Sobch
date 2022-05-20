@@ -24,15 +24,15 @@ router.post('/', async (req, res) => {
         // Signed in 
         
         const user = userCredential.user;
-        set(ref(db, `users/${user.id}`),
-    {
-    
-        "credentials": {
-        "email": email,
-        "password": password
-        },
-        "address": address
-    });
+        set(ref(db, `users/${user.uid}`),
+            {
+            
+                "credentials": {
+                "email": email,
+                },
+                "address": address
+                
+            });
 
         
         code = 200;
