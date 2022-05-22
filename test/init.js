@@ -1,7 +1,7 @@
 import * as server from '../web/server.js';
 import assert from 'assert';
 import { describe } from 'mocha';
-import { get as getRequest } from 'request';
+//import { get as getRequest } from 'request';
 import { ref, get, set } from "@firebase/database";
 
 describe('No JS errors', () => {
@@ -37,9 +37,10 @@ describe('No errors from the alter/{device-id} endpoints', () => {
         },
         "otp": device1.otp
     }).then(() => {
-        get(ref(db, `devices/${device1.id}`)).then((deviceSnapshot) => {
+        get(ref(server.db, `devices/${device1.id}`)).then((deviceSnapshot) => {
             if(deviceSnapshot.exists()) {
-                getRequest
+                //getRequest
+                done();
             } else {
                 console.log("Testing objects have not been created.");
             }
