@@ -9,6 +9,8 @@ const router = express.Router(),
 
 router.post("/", (req, res) => {
     const device = req.body.device;
+    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
+    // TODO: only allow this if the user is the owner of the device
     set(ref(db, `devices/${device.id}`),
     {
         "id": device.id,
@@ -25,6 +27,8 @@ router.post("/", (req, res) => {
 });
 
 router.get("/", (req, res) => {
+    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
+    // TODO: only allow this if the user is the owner of the device
     res.status(200).send("Request received");
     Log.info("Request received");
 });

@@ -21,6 +21,7 @@ router.put('/:deviceId', (req, res) => {
                     "active": device.config.active
                     }
             }).then(() => {
+                // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
                 res.status(200).send(`Success - device information changed`);
                 Log.info(`Success - device information changed`)
             }).catch((error) => {
