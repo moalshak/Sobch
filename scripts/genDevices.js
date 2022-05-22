@@ -53,7 +53,11 @@ var devices = [];
 for (var i = 0; i < 10; i++) {
     var device = generateDevice();
     devices.push(device);
-    set(ref(db, `devices/${device.id}`), device);
+    set(ref(db, `devices/${device.id}`), {
+        config : device.config,
+        owners : device.owners,
+        otp : device.otp
+    });
 }
 
 
