@@ -8,6 +8,9 @@ const router = express.Router(),
     Log = config.getLog("stats");
 
 router.get('/:id', (req, res) => {
+  // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
+  // TODO: only allow this if the user is the owner of the device
+  // to get the user id do req.user.uid
     const datainf = req.params;
     //using this 'user' variable for now.
     var user = false;

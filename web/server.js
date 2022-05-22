@@ -62,14 +62,17 @@ const getAuthToken = (req) => {
 
 
 const middleWare = async (req, res, next) => {
-    if (whiteList.includes(req.url)) {
+    const endPoint = "/" + req.url.split("/")[1];
+    if (whiteList.includes(endPoint)) {
         next();
     } else {
         const authToken = getAuthToken(req);
         if (authToken) {
             try {
-                const decodedToken = await admin_auth.verifyIdToken(authToken)
+                const decodedToken = await admin_auth.verifyIdToken(authToken);
                 const uid = decodedToken.uid;
+                // refresh the token
+                await admin_auth.revokeRefreshTokens(uid);
                 const user = await admin_auth.getUser(uid);
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
@@ -81,7 +84,7 @@ const middleWare = async (req, res, next) => {
             }
         } else {
             // if the req.url is not in the routes, then it is not a valid request
-            if (!Object.keys(routes).includes(req.url)) {
+            if (!Object.keys(routes).includes(endPoint)) {
                 Log.info(`invalid request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
                 return res.status(400).send({ error: `Invalid request cannot ${req.method} to ${req.url}` });
             } else {

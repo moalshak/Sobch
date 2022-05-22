@@ -7,9 +7,12 @@ const router = express.Router(),
     Log = config.getLog("profile");
 
 router.get('/:id', (req, res) => {
+    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
+    // TODO : only send the user's profile if the user is the same as the requester : req.user.uid === req.params.id
+    // TODO : send metadata
     const userdata = req.params;
-    console.log(userdata)
-        get(ref(db, `users/${userdata.id}`)).then((snapshot) => {
+
+    get(ref(db, `users/${userdata.id}`)).then((snapshot) => {
         if (!snapshot.exists()){
             res.status(404).send("Not Found");
             Log.info("ID doesn't exist");
@@ -33,12 +36,12 @@ router.get('/:id', (req, res) => {
 
 
 router.put('/:id', (req, res) => {
+    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
+    // TODO : only allow this if the user is the same as the requester : req.user.uid === req.params.id
     const userid = req.params;
     const credentials = req.body.credentials;
     const address = req.body.address;
     
-    
-    console.log(credentials.email)
     if(credentials.email == ""){
         res.status(400).send("Bad Request");
         Log.info("Empty string");
