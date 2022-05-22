@@ -29,8 +29,10 @@ const PORT = config.PORT;
 const Log = config.getLog('main');
 
 /**
- * the database object that will be exported by this file
+ * - db the database object that will be exported by this file
  * so that it can be used in other files
+ * - auth : the auth object that will be exported by this file
+ * - admin_auth : the admin auth object that will be exported by this file
  */
 var db, auth, admin_auth;
 
@@ -48,11 +50,20 @@ const routes = {
     "/alter": alter
 }
 
+/**
+ * the white listed endpoints (allowed to be accessed without authentication)
+ */
 const whiteList = [
     "/login",
     "/register"
 ]
 
+/**
+ * retrieve the auth token from the request
+ * 
+ * @param {express.Request} req the request
+ * @returns {string} the auth token
+ */
 const getAuthToken = (req) => {
     if (req.headers.authorization) {
         return req.headers.authorization;
@@ -60,7 +71,19 @@ const getAuthToken = (req) => {
     return null;
 };
 
-
+/**
+ * The middle ware for the server
+ *  - If the endpoint is whitelisted then allow access for non logged in / authenticated users
+ *  - If the endpoint is not whitelisted then check if the user is logged in / authenticated
+ *  - If the user is not logged in / authenticated then send a 401 error
+ *  - If the user is logged in / authenticated then send the request to the next middleware
+ * 
+ * @param {express.Request} req the request
+ * @param {express.Response} res the response
+ * @param {function} next the next function (what happens after the middleware)
+ * 
+ * @returns 
+ */
 const middleWare = async (req, res, next) => {
     const endPoint = "/" + req.url.split("/")[1];
     if (whiteList.includes(endPoint)) {
