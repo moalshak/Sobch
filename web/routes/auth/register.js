@@ -35,7 +35,7 @@ router.delete('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const credentials = req.body.credentials,
-    email = credentials.email,
+    email = credentials.email.trim(),
     password = credentials.password,
     address = req.body.address;
 
