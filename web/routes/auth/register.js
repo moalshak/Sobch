@@ -1,7 +1,7 @@
 import express from "express";
 import config from "../../../lib/config.js";
 import { db,auth } from "../../server.js";
-import {createUserWithEmailAndPassword } from "firebase/auth";
+import {createUserWithEmailAndPassword, deleteUser, getAuth } from "firebase/auth";
 import { ref, set } from "firebase/database";
 
 const router = express.Router(),
@@ -9,8 +9,29 @@ const router = express.Router(),
 
 
 router.delete('/', async (req, res) => {
-    // TODO: add this @fergal
-})
+
+    const user = auth.currentUser ;
+    var message, code;
+    
+
+    try{
+        deleteUser(user);
+        code = 200;
+        message = "Success"   
+
+        set(ref(db, `users/${user.uid}`), null),
+        res.status(200).send(`Account Nuked`);
+        Log.info(`Success - Account deleted`);
+    
+
+    } catch (error){
+        code = 400;
+        message = "FAILED"
+        res.status(code).send({message});
+    }
+
+   
+});
 
 router.post('/', async (req, res) => {
     const credentials = req.body.credentials,
