@@ -19,51 +19,32 @@ router.post('/', async (req, res) => {
     var code,message;
 
 
-     try {
+    try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         const user = userCredential.user;
-        req.user = user;
 
         code = 200;
-        //message = user;
         message = "Success - Logged in"
-        res.status(code).send(user.stsTokenManager.accessToken);
-        
-        
-        
+        res.status(code).send({accessToken: user.stsTokenManager.accessToken});
     } catch(error) {
          const errorCode = error.code;
-         const errorMessage = error.message;
          var message = {error : ""}
-         if(errorCode == "auth/user-not-found"){
+
+        if(errorCode == "auth/user-not-found"){
             code = 400;
             message.error = "Invalid Email";
-            res.status(code).send(message);
-            
-
-         }
-
-         if(errorCode == "auth/wrong-password") {
-             code = 400;
-             message = "Wrong password"
-             res.status(code).send(message);
-         }
-
-         if(errorCode == "auth/invalid-email"){
+        } else if(errorCode == "auth/wrong-password") {
+            code = 400;
+            message = "Wrong password"
+        } else if(errorCode == "auth/invalid-email"){
             code = 400;
             message = "Invalid email"
-            res.status(code).send(message);
-         }
-
-         else{
+        } else{
             code = 500;
-            
-    
-            res.status(code).send(message);
-         }
-        
-        
+            message.error = error.message;
+        }
+        res.status(code).send(message);
     }
 });
 

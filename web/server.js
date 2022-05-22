@@ -3,7 +3,6 @@ import cors from 'cors';
 import config from '../lib/config.js';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from "firebase-admin/auth";
-import { getDatabase } from "firebase-admin/database";
 import { initializeApp as c_initializeApp} from 'firebase/app';
 import { getAuth as c_getAuth} from 'firebase/auth';
 import { getDatabase as c_getDatabase } from 'firebase/database';
@@ -81,8 +80,14 @@ const middleWare = async (req, res, next) => {
                 return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
             }
         } else {
-            Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
-            return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
+            // if the req.url is not in the routes, then it is not a valid request
+            if (!Object.keys(routes).includes(req.url)) {
+                Log.info(`invalid request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                return res.status(400).send({ error: `Invalid request cannot ${req.method} to ${req.url}` });
+            } else {
+                Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                return res.status(401).send({ error: 'You are not authorized to make this request' });
+            }
         }
     }
 };
