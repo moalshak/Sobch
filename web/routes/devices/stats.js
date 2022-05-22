@@ -1,42 +1,57 @@
 import express from "express";
 import config from "../../../lib/config.js";
 import { db } from "../../server.js";
-import { ref, get, child } from "firebase/database";
+import { ref, get} from "firebase/database";
 
 
 const router = express.Router(),
     Log = config.getLog("stats");
 
+//Bad Request
+router.get('/', (req, res) => {
+    const datainf = req;
+    //using this 'user' variable for now.
+    var user = false;
+    get(ref(db, `devices/${datainf.id}`)).then((snapshot) => {
+            res.status(400).send("Bad Request");
+            console.log("Bad Request")
+      }).catch((error) => {
+        console.error(error);
+      });
+        
+})
+   
 router.get('/:id', (req, res) => {
     const datainf = req.params;
     //using this 'user' variable for now.
-    var user = false;
-    console.log(datainf)
+    var user = true;
     get(ref(db, `devices/${datainf.id}`)).then((snapshot) => {
-        // The Device of associated ID exists
-        if (snapshot.exists()) {
-          res.status(200).send(snapshot.val());  
-          Log.info(snapshot.val());
-        } 
-        // The Device of associated ID exists but is not liked to  User(s)
-        else if (!snapshot.exists() && user == false)
+        if (!snapshot.exists()) 
         {
-            res.status(405).send(snapshot.val());
-            Log.info(snapshot.val());
-            console.log("Device not linked to User")
+            res.status(401).send("Unauthorized");
+            console.log("Unauthorized")
         }
-        else  
-        // The device is non-existent
+        else if (snapshot.exists() && user == false)
         {
-          res.status(404)  
-          console.log("Device Not Found");
+            res.status(401).send("Unauthorized");
+            Log.info("Unauthorized");
+        }
+        // The Device of associated ID exists.
+        else if (snapshot.exists() && user == true) {
+          res.status(200).send(snapshot.val(),"Success");  
+          Log.info(snapshot.val());
+        }
+        //Internal Server error
+        else 
+        {
+            res.status(500).send("Internal server error");
+            Log.info("Internal server error")
         }
       }).catch((error) => {
         console.error(error);
       });
+        
 })
-
-
 
 export default {
     router: router
