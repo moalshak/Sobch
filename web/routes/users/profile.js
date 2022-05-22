@@ -2,68 +2,77 @@ import express from "express";
 import config from "../../../lib/config.js";
 import { db } from "../../server.js";
 import { ref, get, set, child } from "firebase/database";
+import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail } from "firebase/auth";
 
 const router = express.Router(),
     Log = config.getLog("profile");
 
 router.get('/:id', (req, res) => {
-    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
-    // TODO : only send the user's profile if the user is the same as the requester : req.user.uid === req.params.id
-    // TODO : send metadata
-    const userdata = req.params;
+    //to do : testinggggg
+    if (!req.user) {
+        return res.status(401).send({error : "Unauthorized access"});
+    } else if (req.user.uid !== req.params.id) {
+        return res.status(401).send({error : "Unauthorized access"});
+    }
 
-    get(ref(db, `users/${userdata.id}`)).then((snapshot) => {
-        if (!snapshot.exists()){
-            res.status(404).send("Not Found");
-            Log.info("ID doesn't exist");
-            console.log("Not Found")
-        }
-        else if (snapshot.exists()) {
-            res.status(200).send(snapshot.val());
+    const userid = req.user.uid;
+    const meta = req.user.metadata;
+
+    get(ref(db, `users/${userid}`)).then((snapshot) => {
+        if (req.user.uid === req.params.id) {
+            //console.log(meta)
+            res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
             Log.info("Profile details returned successfully");
+        } else if (!snapshot.exists()){
+            res.status(401).send({error : "Unauthorized access"});
+        } else {
+            res.status(400).send({error : "Bad Request"});
         }
-        else {
-            res.status(404).send(snapshot.val());
-            Log.info("ID doesn't exist");
-            console.log("Not Found")
-        }
-        //todo authorized/unauthorized
     }).catch((error) => {
         console.error(error);
-    });    
-    
+        res.status(400).send({error : error});
+    });        
 })
 
 
 router.put('/:id', (req, res) => {
-    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
-    // TODO : only allow this if the user is the same as the requester : req.user.uid === req.params.id
-    const userid = req.params;
+    //to do : testinggggg
+
+    const reqToken = req.user.stsTokenManager.accessToken;
+    const userid = req.user.uid;
+    const reqid = req.params.id;
     const credentials = req.body.credentials;
     const address = req.body.address;
     
-    if(credentials.email == ""){
-        res.status(400).send("Bad Request");
-        Log.info("Empty string");
-        console.log("Bad Request")
+    if(req.user.uid !== req.params.id){
+        res.status(401).send({error : "Unauthorized access"});
     }
-    else{
-        set(ref(db, `users/${userid.id}`),
-        {
-            "credentials": {
-            "email": credentials.email,
-            "password": credentials.password,
-            },
-            "address": address
-        }).catch((error) => {
-            console.error(error);
-        });
-        res.status(200).send("User information has been updated successfully");
-        Log.info("User information updated", credentials);
-    } 
-       
+    else if (req.user.uid === req.params.id){
+        get(ref(db, `users/${userid}`)).then((snapshot) => {
+            if (snapshot.exists()){
+                set(ref(db, `users/${userid}`),
+                {
+                    "credentials": {
+                    "email": credentials.email,
+                    },
+                    "address": address
 
-    //todo : add authentification and other responses
+                }).then(() => {
+                    res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                    Log.info("User information updated", credentials)
+                }).catch((error) => {
+                    console.error(error);
+                    res.status(400).send({error : error});
+                });
+            }
+            else {
+                res.status(400).send({error : "Bad Request"});
+            }
+    })
+    } else {
+        res.status(400).send({error : "Bad Request"});
+
+    }
 })
 
 export default {
