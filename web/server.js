@@ -3,7 +3,6 @@ import cors from 'cors';
 import config from '../lib/config.js';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getAuth } from "firebase-admin/auth";
-import { getDatabase } from "firebase-admin/database";
 import { initializeApp as c_initializeApp} from 'firebase/app';
 import { getAuth as c_getAuth} from 'firebase/auth';
 import { getDatabase as c_getDatabase } from 'firebase/database';
@@ -63,15 +62,22 @@ const getAuthToken = (req) => {
 
 
 const middleWare = async (req, res, next) => {
-    if (whiteList.includes(req.url)) {
+    const endPoint = "/" + req.url.split("/")[1];
+    if (whiteList.includes(endPoint)) {
         next();
     } else {
         const authToken = getAuthToken(req);
         if (authToken) {
             try {
-                const decodedToken = await admin_auth.verifyIdToken(authToken)
+                const decodedToken = await admin_auth.verifyIdToken(authToken);
                 const uid = decodedToken.uid;
+                // if the token is about to expire (1 minute), refresh it
+                if (decodedToken.exp - decodedToken.auth_time === 60) {
+                    await admin_auth.revokeRefreshTokens(uid);
+                }
+                // refresh the token
                 const user = await admin_auth.getUser(uid);
+                user.stsTokenManager = {accessToken : authToken};
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
                 next();
@@ -81,8 +87,14 @@ const middleWare = async (req, res, next) => {
                 return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
             }
         } else {
-            Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
-            return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
+            // if the req.url is not in the routes, then it is not a valid request
+            if (!Object.keys(routes).includes(endPoint)) {
+                Log.info(`invalid request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                return res.status(400).send({ error: `Invalid request cannot ${req.method} to ${req.url}` });
+            } else {
+                Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                return res.status(401).send({ error: 'You are not authorized to make this request' });
+            }
         }
     }
 };
@@ -159,4 +171,3 @@ export {
     db as db,
     auth as auth
 }
-
