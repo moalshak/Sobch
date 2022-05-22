@@ -1,4 +1,4 @@
-import {db} from '../../server.js';
+import {db, auth} from '../../server.js';
 import config from "../../../lib/config.js";
 import express from "express";
 import { ref, set } from "firebase/database";
@@ -15,10 +15,10 @@ router.post("/", (req, res) => {
     {
         "id": device.id,
         "config": {
-        "min": device.config.min,
-        "max": device.config.max,
-        "room": device.config.room,
-        "active": device.config.active
+            "min": device.config.min,
+            "max": device.config.max,
+            "room": device.config.room,
+            "active": device.config.active
         },
         "otp": req.body.otp
     });

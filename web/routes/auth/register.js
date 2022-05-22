@@ -23,6 +23,7 @@ router.post('/', async (req, res) => {
     try {
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
+        req.user = user;
         set(ref(db, `users/${user.uid}`),
             {
                 "credentials": {

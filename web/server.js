@@ -71,9 +71,13 @@ const middleWare = async (req, res, next) => {
             try {
                 const decodedToken = await admin_auth.verifyIdToken(authToken);
                 const uid = decodedToken.uid;
+                // if the token is about to expire (1 minute), refresh it
+                if (decodedToken.exp - decodedToken.auth_time === 60) {
+                    await admin_auth.revokeRefreshTokens(uid);
+                }
                 // refresh the token
-                await admin_auth.revokeRefreshTokens(uid);
                 const user = await admin_auth.getUser(uid);
+                user.stsTokenManager = {accessToken : authToken};
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
                 next();

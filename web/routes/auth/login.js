@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
         const user = userCredential.user;
-
+        req.user = user;
         code = 200;
         message = "Success - Logged in"
         res.status(code).send({accessToken: user.stsTokenManager.accessToken});
