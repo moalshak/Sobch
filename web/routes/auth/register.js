@@ -5,12 +5,14 @@ import {createUserWithEmailAndPassword, deleteUser, getAuth } from "firebase/aut
 import { ref, set } from "firebase/database";
 
 const router = express.Router(),
-    Log = config.getLog("register");
+    Log = config.getLog("register"),
+    addUser = config.addUser,
+    getUser = config.getUser;
 
 
 router.delete('/', async (req, res) => {
 
-    const user = auth.currentUser ;
+    const user = getUser(req.user.uid) ;
     var message, code;
     
 
@@ -29,8 +31,6 @@ router.delete('/', async (req, res) => {
         message = "FAILED"
         res.status(code).send({message});
     }
-
-   
 });
 
 router.post('/', async (req, res) => {
@@ -44,7 +44,9 @@ router.post('/', async (req, res) => {
     try {
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
-        req.user = user;
+        
+        addUser(user);
+
         set(ref(db, `users/${user.uid}`),
             {
                 "credentials": {

@@ -5,7 +5,8 @@ import {  signInWithEmailAndPassword } from "firebase/auth";
 
 
 const router = express.Router(),
-    Log = config.getLog("login");
+    Log = config.getLog("login"),
+    addUser = config.addUser;
 
 router.get('/', (req, res) => {
     res.status(200).send("Request received");
@@ -21,9 +22,11 @@ router.post('/', async (req, res) => {
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
+        
         const user = userCredential.user;
-        req.user = user;
+        
+        addUser(user);
+
         code = 200;
         message = "Success - Logged in"
         res.status(code).send({accessToken: user.stsTokenManager.accessToken});

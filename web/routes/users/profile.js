@@ -20,7 +20,6 @@ router.get('/:id', (req, res) => {
 
     get(ref(db, `users/${userid}`)).then((snapshot) => {
         if (req.user.uid === req.params.id) {
-            //console.log(meta)
             res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
             Log.info("Profile details returned successfully");
         } else if (!snapshot.exists()){

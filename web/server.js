@@ -86,7 +86,7 @@ const getAuthToken = (req) => {
  */
 const middleWare = async (req, res, next) => {
     const endPoint = "/" + req.url.split("/")[1];
-    if (whiteList.includes(endPoint)) {
+    if (whiteList.includes(endPoint) && req.method !== "DELETE") {
         next();
     } else {
         const authToken = getAuthToken(req);
