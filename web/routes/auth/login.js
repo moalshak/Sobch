@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
     const credentials = req.body,
-    email = credentials.email,
+    email = credentials.email.trim(),
     password = credentials.password;
 
     var code,message;

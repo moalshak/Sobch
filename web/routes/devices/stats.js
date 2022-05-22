@@ -1,46 +1,66 @@
 import express from "express";
 import config from "../../../lib/config.js";
-import { db } from "../../server.js";
+import { db, auth } from "../../server.js";
 import { ref, get, child } from "firebase/database";
+import myDevices from "./my-devices.js";
 
 
 const router = express.Router(),
     Log = config.getLog("stats");
 
+
+
+//Bad Request
+router.get('/', (req, res) => {
+  const datainf = req;
+  const user = auth.user;
+  //using this 'user' variable for now.
+  get(ref(db, `devices/${datainf.id}`)).then((snapshot) => {
+          res.status(400).send({device : req.body, accessToken: req.user.stsTokenManager.accessToken},"Bad Request");
+          console.log("Bad Request")
+    }).catch((error) => {
+      console.error(error);
+    });
+      
+})
+ 
 router.get('/:id', (req, res) => {
-  // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
-  // TODO: only allow this if the user is the owner of the device
-  // to get the user id do req.user.uid
-    const datainf = req.params;
-    //using this 'user' variable for now.
-    var user = false;
-    console.log(datainf)
-    get(ref(db, `devices/${datainf.id}`)).then((snapshot) => {
-        // The Device of associated ID exists
-        if (snapshot.exists()) {
-          res.status(200).send(snapshot.val());  
-          Log.info(snapshot.val());
-        } 
-        // The Device of associated ID exists but is not liked to  User(s)
-        else if (!snapshot.exists() && user == false)
-        {
-            res.status(405).send(snapshot.val());
-            Log.info(snapshot.val());
-            console.log("Device not linked to User")
-        }
-        else  
-        // The device is non-existent
-        {
-          res.status(404)  
-          console.log("Device Not Found");
-        }
-      }).catch((error) => {
-        console.error(error);
-      });
+  const datainf = req.params;
+  //using this 'user' variable for now.
+  const user = req.user;
+
+  const dataId = datainf.id.trim();
+
+  get(ref(db, `devices/${dataId}`)).then((snapshot) => {
+    if (!snapshot.exists()) 
+      {
+          res.status(401).send({error : "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
+          Log.info("Unauthorized")
+      }
+      else if (snapshot.exists() && !snapshot.val().owner.includes(user.uid))
+      {
+          res.status(401).send({accessToken: req.user.stsTokenManager.accessToken});
+          Log.info("Unauthorized");
+      }
+      // The Device of associated ID exists.
+      else if (snapshot.exists() && snapshot.val().owner.includes(user.uid)) {
+        res.status(200).send({device : snapshot.val(), accessToken: req.user.stsTokenManager.accessToken});  
+        Log.info(snapshot.val());
+      }
+      //Internal Server error
+      else 
+      {
+          res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
+          Log.info("Internal server error")
+      }
+    }).catch((error) => {
+      Log.info(error);
+    });    
 })
 
-
-
 export default {
-    router: router
-}
+  router: router
+}    
+
+
+
