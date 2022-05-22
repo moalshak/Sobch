@@ -1,16 +1,16 @@
 import {db, auth} from '../../server.js';
 import config from "../../../lib/config.js";
 import express from "express";
-import { ref, set } from "firebase/database";
+import { ref, set, get } from "firebase/database";
 
 const router = express.Router(),
     Log = config.getLog("my-devices");
 
 
 router.post("/", (req, res) => {
-    const device = req.body.device;
-    // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
-    // TODO: only allow this if the user is the owner of the device
+    const device = req.body.device,
+        user = req.user;
+    console.log(user);
     set(ref(db, `devices/${device.id}`),
     {
         "id": device.id,
@@ -20,15 +20,20 @@ router.post("/", (req, res) => {
             "room": device.config.room,
             "active": device.config.active
         },
+        "owner" : [user.uid],
         "otp": req.body.otp
     });
-    res.status(200).send(req.body);
+    res.status(200).send({device : req.body, accessToken: req.user.stsTokenManager.accessToken});
     Log.info("Device added", device);
 });
 
 router.get("/", (req, res) => {
     // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
     // TODO: only allow this if the user is the owner of the device
+    const user = req.user;
+
+    var fuck = get(ref(db, `devices`));
+    console.log(fuck);
     res.status(200).send("Request received");
     Log.info("Request received");
 });
