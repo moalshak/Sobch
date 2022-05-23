@@ -98,8 +98,8 @@ const middleWare = async (req, res, next) => {
                 if (decodedToken.exp - decodedToken.auth_time <= 60) {
                     await admin_auth.revokeRefreshTokens(uid);
                 }
-                const user = config.getUser(uid);
-                user.stsTokenManager = {accessToken : authToken};
+                var user = config.getUser(uid);
+                user.stsTokenManager.accessToken = authToken;
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
                 next();

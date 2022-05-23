@@ -21,7 +21,7 @@ router.post("/", (req, res) => {
             "active": device.config.active
         },
         "owner" : [user.uid],
-        "otp": req.body.otp
+        "otp": req.body.device.otp
     });
     get(ref(db, `users/${user.uid}`)).then((snapshot) => {
         if(snapshot.exists()) 
