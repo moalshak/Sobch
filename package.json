@@ -4,7 +4,7 @@
   "type": "module",
   "description": "Remote thermometer",
   "scripts": {
-    "devStart": "nodemon web/server.js",
+    "devStart": "nodemon web/server.js start",
     "test": "mocha -C test -t 30000 --exit"
   },
   "author": "Mohammad Al Shakoush",

@@ -184,7 +184,10 @@ function init() {
     })
 }
 
-init();
+
+if (process.argv[2] === 'start') {
+    init();
+}
 
 /**
  * export the database object so that it can be used in other files

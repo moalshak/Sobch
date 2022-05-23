@@ -5,10 +5,11 @@ import config from '../lib/config.js';
 const Log = config.getLog("simulation");
 
 var defaultAggressiveness =  {
-    min : -0.1,
+    min : -0.2,
     max : 0.2,
     decimals : 2,
     changeChance : 0.1,
+    delay : 5000,
 }, aggressiveness;
 
 /**
@@ -71,7 +72,7 @@ var simulateEnvironment = (devices) => {
             if (device.currentTemp === undefined) {
                 device.currentTemp = getRandomFloat(15, 20, 2);
             }
-            device.currentTemp = Math.round(generateChange(device.currentTemp) * 100) / 100;
+            device.currentTemp = Math.round(generateChange(device.currentTemp) * aggressiveness.decimals * 50) / (aggressiveness.decimals * 50);
             // update the database
             set(ref(db, `devices/${id}`), device);
         }
@@ -90,7 +91,7 @@ var startSimulation = async (agg) => {
         // wait for 10 seconds
         devices = (await get(devicesRef)).val();
         simulateEnvironment(devices);
-        await delay(5000);
+        await delay(aggressiveness.delay);
     }
 }
 
@@ -100,7 +101,8 @@ if (process.argv[2] === 'start') {
         min : parseFloat(process.argv[3]) || defaultAggressiveness.min,
         max : parseFloat(process.argv[4]) || defaultAggressiveness.max,
         decimals : parseInt(process.argv[5]) || defaultAggressiveness.decimals,
-        changeChance : parseFloat(process.argv[6]) || defaultAggressiveness.changeChance
+        changeChance : parseFloat(process.argv[6]) || defaultAggressiveness.changeChance,
+        delay : parseInt(process.argv[7]) || 1000
     }
     Log.info("Starting simulation", {aggressiveness : agg});
     startSimulation(agg);
