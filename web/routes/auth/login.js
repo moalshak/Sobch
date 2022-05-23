@@ -14,8 +14,8 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
     const credentials = req.body,
-    email = credentials.email.trim(),
-    password = credentials.password;
+        email = credentials.email.trim(),
+        password = credentials.password;
 
     var code,message;
 
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
         } else if(errorCode == "auth/invalid-email"){
             code = 400;
             message = "Invalid email"
-        } else{
+        } else {
             code = 500;
             message.error = error.message;
         }

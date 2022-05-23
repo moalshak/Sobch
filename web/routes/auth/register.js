@@ -12,7 +12,7 @@ const router = express.Router(),
 
 router.delete('/', async (req, res) => {
 
-    const user = getUser(req.user.uid) ;
+    const user = req.user;
     var message, code;
     
 

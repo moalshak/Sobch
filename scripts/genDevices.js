@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { generate } from 'generate-password';
 import {db} from "../web/server.js";
-import {ref, set, get} from "firebase/database";
+import {ref, set, get, update} from "firebase/database";
 
 /**
  * IDs of the admins
@@ -38,6 +38,7 @@ function generateOTP() {
 function generateDevice() {
     var device = {};
     device.id = generateID();
+    device.currentTemp = null; 
     device.config = {};
     device.config.min = 0;
     device.config.max = 0;
@@ -52,7 +53,7 @@ var devices = [];
 
 for (var i = 0; i < 10; i++) {
     var device = generateDevice();
-    devices.push(device);
+    devices.push(device.id);
     set(ref(db, `devices/${device.id}`), {
         config : device.config,
         owners : device.owners,
@@ -61,15 +62,24 @@ for (var i = 0; i < 10; i++) {
 }
 
 
-for (var device of devices) {
-    for (var admin of ADMINS) {
-        const snapshot = await get(ref(db, `users/${admin}`))
-        const user = snapshot.val();
-        if (user.owns === undefined) {
-            user.owns = [];
-        }
-        user.owns.push(device.id);
-        // user.owns = []; // uncomment this to remove all devices from the admins
-        set(ref(db, `users/${admin}`), user);
-    }
+
+for (var admin of ADMINS) {
+    
+    // const snapshot = await get(ref(db, `users/${admin}`))
+    // const user = snapshot.val();
+    // if (user.owns === undefined) {
+        //     user.owns = [];
+        // }
+    
+    const updates = {};
+    updates[`users/${admin}/owns`] = devices;
+
+    // update(ref(db), updates)
+    console.log(updates);
+    // user.owns.push(device.id);
+    // // user.owns = []; // uncomment this to remove all devices from the admins
+    // set(ref(db, `users/${admin}`), user);
 }
+
+console.log("Devices generated");
+process.exit(0);
