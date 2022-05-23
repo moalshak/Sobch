@@ -86,7 +86,7 @@ const getAuthToken = (req) => {
  */
 const middleWare = async (req, res, next) => {
     const endPoint = "/" + req.url.split("/")[1];
-    if (whiteList.includes(endPoint)) {
+    if (whiteList.includes(endPoint) && req.method !== "DELETE") {
         next();
     } else {
         const authToken = getAuthToken(req);
@@ -98,7 +98,7 @@ const middleWare = async (req, res, next) => {
                 if (decodedToken.exp - decodedToken.auth_time <= 60) {
                     await admin_auth.revokeRefreshTokens(uid);
                 }
-                const user = await admin_auth.getUser(uid);
+                const user = config.getUser(uid);
                 user.stsTokenManager = {accessToken : authToken};
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
@@ -112,7 +112,7 @@ const middleWare = async (req, res, next) => {
             // if the req.url is not in the routes, then it is not a valid request
             if (!Object.keys(routes).includes(endPoint)) {
                 Log.info(`invalid request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
-                return res.status(400).send({ error: `Invalid request cannot ${req.method} to ${req.url}` });
+                return res.status(400).send({ error: `Invalid request. cannot ${req.method} to ${req.url}` });
             } else {
                 Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
                 return res.status(401).send({ error: 'You are not authorized to make this request' });

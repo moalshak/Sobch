@@ -5,7 +5,8 @@ import {  signInWithEmailAndPassword } from "firebase/auth";
 
 
 const router = express.Router(),
-    Log = config.getLog("login");
+    Log = config.getLog("login"),
+    addUser = config.addUser;
 
 router.get('/', (req, res) => {
     res.status(200).send("Request received");
@@ -13,17 +14,19 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
     const credentials = req.body,
-    email = credentials.email.trim(),
-    password = credentials.password;
+        email = credentials.email.trim(),
+        password = credentials.password;
 
     var code,message;
 
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
+        
         const user = userCredential.user;
-        req.user = user;
+        
+        addUser(user);
+
         code = 200;
         message = "Success - Logged in"
         res.status(code).send({accessToken: user.stsTokenManager.accessToken});
@@ -40,7 +43,7 @@ router.post('/', async (req, res) => {
         } else if(errorCode == "auth/invalid-email"){
             code = 400;
             message = "Invalid email"
-        } else{
+        } else {
             code = 500;
             message.error = error.message;
         }
