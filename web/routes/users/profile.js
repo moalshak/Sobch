@@ -2,7 +2,7 @@ import express from "express";
 import config from "../../../lib/config.js";
 import { db } from "../../server.js";
 import { ref, get, set, child } from "firebase/database";
-import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail } from "firebase/auth";
+import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification } from "firebase/auth";
 
 const router = express.Router(),
     Log = config.getLog("profile");
@@ -42,6 +42,8 @@ router.put('/:id', (req, res) => {
     const reqid = req.params.id;
     const credentials = req.body.credentials;
     const address = req.body.address;
+    const user = req.user;
+    const newPassword = credentials.password.trim();
     
     if(req.user.uid !== req.params.id){
         res.status(401).send({error : "Unauthorized access"});
@@ -49,20 +51,44 @@ router.put('/:id', (req, res) => {
     else if (req.user.uid === req.params.id){
         get(ref(db, `users/${userid}`)).then((snapshot) => {
             if (snapshot.exists()){
+                if (newPassword !== ""){                   
+                    updatePassword(user, newPassword).then(() => {
+                        Log.info("User's password has been succesfully updated")
+                        res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                    }).catch((error) => {
+                        // An error ocurred
+                        // ...
+                    });
+                }
+                if(credentials.email !== ""){
+                    updateEmail(user, credentials.email).then(() => {
+                        Log.info("User's email has been successfully updated")
+                        res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken}); 
+                    }).catch((error) => {
+                        // An error occurred
+                        // ...
+                    });
+                    sendEmailVerification(user)
+                    .then(() => {
+                        console.log("verification email has been sent")
+                        res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                    }).catch((error) => {
+                        // An error occurred
+                        // ...
+                    });
+                }
                 set(ref(db, `users/${userid}`),
                 {
-                    "credentials": {
-                    "email": credentials.email,
-                    },
                     "address": address
 
                 }).then(() => {
                     res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                    Log.info("User information updated", credentials)
+                    Log.info("User information updated")
                 }).catch((error) => {
                     console.error(error);
                     res.status(400).send({error : error});
                 });
+
             }
             else {
                 res.status(400).send({error : "Bad Request"});
