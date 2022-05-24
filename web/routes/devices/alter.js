@@ -6,92 +6,116 @@ import { db } from "../../server.js";
 const router = express.Router(),
     Log = config.getLog("alter");
 
-    router.put('/:deviceId', async (req, res) => {
-        var device, deviceId, user, config;
-            try {
-                device = req.body;
-                config = device.config;
-                deviceId = req.params.deviceId.trim();
-                user = req.user;
-            } catch(error) {
-                res.status(400).send({error: "Bad Request"});
-                Log.error(error);
-                return;
-            }
-    
-        try {
-            // const deviceSnapshot = await get(ref(db, `users/${user.uid}/owns/${deviceId}`));
-            const deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
-            
-            if(deviceSnapshot.exists()) {
-                var requester = await get(ref(db, `users/${user.uid}`));
-                if (requester.exists()) {
-                    var owns = requester.val().owns;
-                    if (owns.includes(deviceId)) {
-                        const deviceVal = deviceSnapshot.val();
+router.put('/:deviceId', async (req, res) => {
+    var device, deviceId, user, config;
+    try {
+        device = req.body;
+        config = device.config;
+        deviceId = req.params.deviceId.trim();
+        user = req.user;
+    } catch(error) {
+        res.status(400).send({error: "Bad Request"});
+        Log.error(error);
+        return;
+    }
 
-                        const min = config.min || deviceVal.config.min || 0;
-                        const max = config.max || deviceVal.config.max || 30;
-                        const room = config.room || deviceVal.config.room || "";
-                        const active =  config.active || deviceVal.config.active || false;
-                        
-                        deviceVal.config = {
-                            "min": min,
-                            "max": max,
-                            "room": room,
-                            "active": active
-                        }
-    
-                        await set(ref(db, `devices/${deviceId}`), deviceVal);
-                        res.status(200).send({message: "Success device updated", device : deviceVal,accessToken: req.user.stsTokenManager.accessToken});
-                        Log.info("Success device updated", {device : deviceVal, user : user.uid});
-                        return;
-                    } else {
-                        res.status(401).send({error: "Unauthorized"});
-                        Log.info("Unauthorized user does not own this device", {user : user.uid});
-                        return;
+    try {
+        // const deviceSnapshot = await get(ref(db, `users/${user.uid}/owns/${deviceId}`));
+        const deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
+        
+        if(deviceSnapshot.exists()) {
+            var requester = await get(ref(db, `users/${user.uid}`));
+            if (requester.exists()) {
+                var owns = requester.val().owns;
+                if (owns.includes(deviceId)) {
+                    const deviceVal = deviceSnapshot.val();
+
+                    const min = config.min || deviceVal.config.min || 0;
+                    const max = config.max || deviceVal.config.max || 30;
+                    const room = config.room || deviceVal.config.room || "";
+                    const active =  config.active || deviceVal.config.active || false;
+                    
+                    deviceVal.config = {
+                        "min": min,
+                        "max": max,
+                        "room": room,
+                        "active": active
                     }
+
+                    await set(ref(db, `devices/${deviceId}`), deviceVal);
+                    res.status(200).send({message: "Success device updated", device : deviceVal,accessToken: req.user.stsTokenManager.accessToken});
+                    Log.info("Success device updated", {device : deviceVal, user : user.uid});
+                    return;
                 } else {
                     res.status(401).send({error: "Unauthorized"});
-                    Log.info("Unauthorized user does not exist", {user : user.uid});
+                    Log.info("Unauthorized user does not own this device", {user : user.uid});
                     return;
                 }
+            } else {
+                res.status(401).send({error: "Unauthorized"});
+                Log.info("Unauthorized user does not exist", {user : user.uid});
+                return;
             }
-        } catch(err) {
-            res.status(300).send({error: "Internal server error"});
-            Log.info("Internal server error", {user: user.uid});
-            return;
         }
-    })
+    } catch(error) {
+        res.status(500).send({message: "Internal server error", error: error});
+        Log.info("Internal server error", {user: user.uid});
+        return;
+    }
+})
 
-router.delete('/:deviceId', (req, res) => {
-    const deviceId = req.params.deviceId.trim();
-    const user = req.user;
+router.delete('/:deviceId', async (req, res) => {
+    var deviceId, user;
+    try {
+        deviceId = req.params.deviceId.trim();
+        user = req.user;
+    } catch(error) {
+        res.status(400).send({error: "Bad Request"});
+        Log.error(error);
+        return;
+    }
 
-    get(ref(db, `users/owns/${deviceId}`)).then((deviceSnapshot) => {
-        if(deviceSnapshot.exists() && deviceSnapshot.val().owner.includes(user.uid)) {
-            get(ref(db, `devices/${user.uid}`)).then((userSnapshot) => {
-                if(userSnapshot.exists() && userSnapshot.val().owner.includes(user.uid)) {
-                    set(ref(db, `devices/${user.uid}`), null);
-                    set(ref(db, `users/owns/${deviceId}`), null);
-                    res.status(200).send({message : "Success - device unlinked", accessToken: user.stsTokenManager.accessToken});
-                    Log.info(`Success - device unlinked`)
+    try {
+        var deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
+
+        if(deviceSnapshot.exists()) {
+            var requester = await get(ref(db, `users/${user.uid}`));
+
+            if(requester.exists()) {
+                var owns = requester.val().owns;
+                var owners = deviceSnapshot.val().owners;
+                if (owns.includes(deviceId)) {
+                    //console.log("owns: " + owns);
+                    //console.log("owners: " + owners + "\n\n");
+                    var indexDevice = owns.indexOf(deviceId);
+                    var indexOwner = owners.indexOf(user.uid);
+                    owns.splice(indexDevice, 1);
+                    owners.splice(indexOwner, 1);
+                    //console.log("owns: " + owns);
+                    //console.log("owners: " + owners);
+                    await set(ref(db, `users/${user.uid}/owns`), owns);
+                    await set(ref(db, `devices/${deviceId}/owners`), {"owners": []});  
+
+                    res.status(200).send({message: "Success device deleted",accessToken: req.user.stsTokenManager.accessToken});
+                    Log.info("Success device deleted", {deviceId: deviceId, user : user.uid});
+                    return;
                 } else {
-                    res.status(401).send({error: "Unauthorized", accessToken: user.stsTokenManager.accessToken}); 
-                    Log.info('Unauthorised')
+                    res.status(401).send({error: "Unauthorized"});
+                    Log.info("Unauthorized user does not own this device", {user : user.uid});
+                    return;
                 }
-            });
-        } else {
-            res.status(401).send({error: "Unauthorized", accessToken: user.stsTokenManager.accessToken}); 
-            Log.info('Unauthorised')
+            } else {
+                res.status(401).send({error: "Unauthorized"});
+                Log.info("Unauthorized user does not own this device", {user : user.uid});
+                return;
+            }
         }
-
-    }).catch((error) => {
-        res.status(500).send({error: "Internal server error", accessToken: user.stsTokenManager.accessToken});
-        Log.info("Internal server error");
-    })
-
-
+    } catch(error) {
+        console.log(error);
+        res.status(500).send({message: "Internal server error", error: error});
+        Log.info("Internal server error", {user: user.uid});
+        return;
+    }
 })
 
 export default {
