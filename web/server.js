@@ -99,6 +99,9 @@ const middleWare = async (req, res, next) => {
                     await admin_auth.revokeRefreshTokens(uid);
                 }
                 var user = config.getUser(uid);
+                if (!user.stsTokenManager) {
+                    user.stsTokenManager = {};
+                }
                 user.stsTokenManager.accessToken = authToken;
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
