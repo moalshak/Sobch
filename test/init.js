@@ -24,6 +24,16 @@ const device1 = {
     "otp": "70"
 }
 
+const user1 = {
+    "credentials":{
+        "email" : "userRegTest@test.com",
+        "password" : "login123"
+
+    },
+    "address" : "The Forum"
+
+}
+
 describe('No errors from the alter/{device-id} endpoints', () => {
     it('running alter/{device-id} DELETE request', (done) => {
     set(ref(server.db, `devices/${device1.id}`),
@@ -53,3 +63,26 @@ describe('No errors from the alter/{device-id} endpoints', () => {
         
     })
 })
+
+describe('No errors from the auth/register endpoints', () => {
+    it('running auth/register POST request', (done) => {
+        set(ref(db, `users/${user.uid}`),
+        {
+            "credentials": {
+                "email": email,
+                "password" : password,
+            },
+            "address": address   
+        }
+    );
+    }).then(() => {
+        
+        });
+        //done();
+    }).catch((error) => {
+        console.log(error);
+    });
+        //get(ref(db, `devices/${deviceId}`)).then
+        
+    
+

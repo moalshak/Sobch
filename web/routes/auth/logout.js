@@ -1,18 +1,29 @@
-import { auth, signOut } from "firebase/auth";
-import {userCredential} from "../auth/register"
+import express from 'express';
+import { auth } from '../../server.js';
+import { signOut } from 'firebase/auth';
+import config from '../../../lib/config.js';
 
-router.post('/', (req, res) => {
-    const user = userCredential.user ;
-    var message, code;
 
-   auth.signOut(user).then(() => {
-        code = 200;
-        message = "Success"
-        res.status(code).send({message});
-  }).catch((error) => {
-    // An error happened.
-  });
+const router = express.Router(),
+    removeUser = config.removeUser,
+    Log = config.getLog("logout");
+
+router.post('/', async (req, res) => {
+    const user = req.user;
+
+    try {
+        auth.currentUser = user;
+        removeUser(user);
+        await signOut(auth);
+        res.status(200).send("Success");
+        Log.info("Logged out", {user : user.uid});
+    } catch (error) {
+        Log.error("Failed to log out", {user : user.uid, error});
+        res.status(500).send(error);
+    }
 });
-        
-        
-    
+
+
+export default {
+    router: router
+}
