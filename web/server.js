@@ -17,6 +17,7 @@ import login from './routes/auth/login.js';
 import stats from './routes/devices/stats.js';
 import alter from './routes/devices/alter.js';
 import profile from './routes/users/profile.js';
+import logout from './routes/auth/logout.js';
 
 /**
  * the port to listen on either specified in the config or the default port 8000
@@ -44,6 +45,7 @@ const routes = {
     "/" : index,
     "/register": register,
     "/login": login,
+    "/logout": logout,
     "/profile": profile,
     "/my-devices": my_devices,
     "/stats": stats,

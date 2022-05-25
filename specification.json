@@ -281,9 +281,6 @@
                                 "properties": {
                                     "device": {
                                         "$ref": "#/components/schemas/Device"
-                                    },
-                                    "otp": {
-                                        "$ref": "#/components/schemas/OTP"
                                     }
                                 }
                             }
@@ -379,7 +376,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/Device"
+                                "$ref": "#/components/schemas/config"
                             }
                         }
                     }
@@ -516,6 +513,9 @@
                     },
                     "config": {
                         "$ref": "#/components/schemas/config"
+                    },
+                    "otp": {
+                        "$ref": "#/components/schemas/OTP"
                     }
                 }
             },
