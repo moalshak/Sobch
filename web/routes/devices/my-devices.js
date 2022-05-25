@@ -7,47 +7,74 @@ const router = express.Router(),
     Log = config.getLog("my-devices");
 
 
-router.post("/", (req, res) => {
-    const device = req.body.device,
+function alreadyOwned(res) {
+    res.status(405).send({error: "Already Owned"});
+    Log.info("Already Owned device request");
+    return;
+}
+
+function unauthorized(res, req) {
+    res.status(401).send({error: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
+    return;
+}
+
+
+router.post("/", async (req, res) => {
+    var device, otp, user;
+    try {
+        device = req.body.device;
+        otp = device.otp;
         user = req.user;
-
-    set(ref(db, `devices/${device.id}`),
-    {
-        "id": device.id,
-        "config": {
-            "min": device.config.min,
-            "max": device.config.max,
-            "room": device.config.room,
-            "active": device.config.active
-        },
-        "owner" : [user.uid],
-        "otp": req.body.device.otp
-    });
-    get(ref(db, `users/${user.uid}`)).then((snapshot) => {
-        if(snapshot.exists()) 
-        {
-            const user = snapshot.val();
-            if (user.owns === undefined) {
-                user.owns = [];
-            }
-            user.owns.push(device.id);
-            // user.owns = []; // uncomment this to remove all devices from the admins
-            set(ref(db, `users/${user.uid}`), user);   
+    } catch(error) {
+        res.status(400).send({error: "Bad Request"});
+        Log.error(error);
+        return;
     }
-    });
-    // const snapshot = await get(ref(db, `users/${user.uid}`))
-    // const userr = snapshot.val();
-    // if (userr.owns === undefined) {
-    //     userr.owns = [];
-    // }
-    // userr.owns.push(device.id);
-    // user.owns = []; // uncomment this to remove all devices from the admins
-    // set(ref(db, `users/${user.uid}`), user);
 
+    const deviceId = device.id.toString().trim();
+    const snapshot = await get(ref(db, `devices/${deviceId}`));
+    if (snapshot.exists()) {
+        var deviceSnapshot = snapshot.val();
+        // otp matches -> add device
+        if (otp === deviceSnapshot.otp) {
+            Log.info("OTP MATCHES!")
+            // make sure device owners is an array
+            if (deviceSnapshot.owners === undefined || !Array.isArray(deviceSnapshot.owners)) {
+                deviceSnapshot.owners = [];
+            }
+            // device already owned
+            var deviceLiked = deviceSnapshot.owners.includes(user.uid);
+            if (!deviceLiked) {
+                deviceSnapshot.owners.push(user.uid);
+            }
+            await set(ref(db, `devices/${deviceId}`), deviceSnapshot);
+            var userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();
+            if (userSnapshot.owns === undefined || !Array.isArray(userSnapshot.owns)) {
+                userSnapshot.owns = [];
+            }
+            var userLinked = userSnapshot.owns.includes(deviceId);
+            if (!userLinked) {
+                userSnapshot.owns.push(deviceId);
+            }
+            await set(ref(db, `users/${user.uid}`), userSnapshot);
 
-    //TODO - Linking user to Device, Make sure only a valid device id (containted in database). 
-    res.status(200).send({device : req.body, accessToken: req.user.stsTokenManager.accessToken});
-    Log.info("Device added", device);
+            if (deviceLiked && userLinked) {
+                return alreadyOwned(res);
+            }
+
+            res.status(200).send({message: "device added", device: deviceSnapshot, accessToken: req.user.stsTokenManager.accessToken});
+        }
+        // otp does not match -> unauthorized
+        else {
+            unauthorized(res, req);
+            Log.info("Device otp does not match");    
+            return;
+        }
+    } else {
+        unauthorized(res, req);
+        Log.info("Unauthorized request to add device");
+        return;
+    }
 });
 
 router.get("/", (req, res) => {
