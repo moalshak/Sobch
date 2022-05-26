@@ -165,7 +165,7 @@ function init() {
     initRoutes(app);
 
     app.listen(PORT, () => {
-        Log.info(`Server is running on port ${PORT}`, {url : `http://localhost:${PORT}/`});
+        Log.info(`Server is running on port ${PORT}`, {url : `http://0.0.0.0:${PORT}/`});
     })
 }
 
