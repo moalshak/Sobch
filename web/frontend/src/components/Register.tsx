@@ -1,12 +1,16 @@
 import { useState } from "react";
 import axios from 'axios';
-import {BASE_URL} from '../App';
+import {BACKEND_BASE_URL} from '../App';
 
 /***
  * Register component
  * 
  */
 function Register() {
+
+    /**
+     * State variables
+     */
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -27,7 +31,7 @@ function Register() {
 
         try {
             // send the data to the server
-            const res = await axios.post(`${BASE_URL}/register`, {
+            const res = await axios.post(`${BACKEND_BASE_URL}/register`, {
                 credentials: {
                     email : email.trim(),
                     password : password.trim()
@@ -65,8 +69,8 @@ function Register() {
         <div>
             <form onSubmit={doRegisterRequest}>
             <input type="text" value={email} onChange={(e) => setEmail(e.target.value) } placeholder="Email"/>
-            <input type="text" value={password} onChange={(e) => setPassword(e.target.value) } placeholder="Password"/>
-            <input type="text" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value) } placeholder="Confirm Password"/>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value) } placeholder="Password"/>
+            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value) } placeholder="Confirm Password"/>
             <input type="text" value={address} onChange={(e) => setAddress(e.target.value) } placeholder="Address"/>
             <button type="submit">Register</button>
             </form>
