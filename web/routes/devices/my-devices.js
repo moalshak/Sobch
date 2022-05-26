@@ -100,7 +100,7 @@ router.get('/', async (req, res) => {
                 devices.push (
                     {
                         id : deviceId,
-                        currentTemp : dev.currentTemp,
+                        ...dev
                     }
                 );
             }

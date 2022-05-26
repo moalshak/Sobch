@@ -1,6 +1,6 @@
 import express from "express";
 import {getLog} from "../../../lib/config.js";
-import { db } from "../../server.js";
+import { db } from "../../../lib/firebase.js";
 import { ref, get, set, child } from "firebase/database";
 import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification, getIdToken } from "firebase/auth";
 
