@@ -1,8 +1,17 @@
 import {useState} from 'react';
 import './App.css';
 import axios from 'axios';
+import Register from './components/Register';
+
+export const BASE_URL = "http://localhost:8000"
+// export const BASE_URL = "http://192.168.2.23:8000"
 
 function App() {
+
+  return (
+    <Register/>
+  )
+
   const [deviceId, setDeviceId] = useState('');
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(100);
