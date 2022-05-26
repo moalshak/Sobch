@@ -2,7 +2,7 @@ import express from "express";
 import config from "../../../lib/config.js";
 import { db } from "../../server.js";
 import { ref, get, set, child } from "firebase/database";
-import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification } from "firebase/auth";
+import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification, getIdToken } from "firebase/auth";
 
 const router = express.Router(),
     Log = config.getLog("profile");
@@ -54,28 +54,26 @@ router.put('/:id', (req, res) => {
                 if (newPassword !== ""){                   
                     updatePassword(user, newPassword).then(() => {
                         Log.info("User's password has been succesfully updated")
-                        res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                        //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
                     }).catch((error) => {
-                        // An error ocurred
-                        // ...
+                        console.error(error);
+                        res.status(400).send({error : error});
                     });
                 }
-                if(credentials.email !== ""){
-                    updateEmail(user, credentials.email).then(() => {
-                        Log.info("User's email has been successfully updated")
-                        res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken}); 
-                    }).catch((error) => {
-                        // An error occurred
-                        // ...
-                    });
-                    sendEmailVerification(user)
-                    .then(() => {
-                        console.log("verification email has been sent")
-                        res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                    }).catch((error) => {
-                        // An error occurred
-                        // ...
-                    });
+                
+                if (credentials.email === req.user.email){
+                    Log.info("email is same, nothing happens")
+                    //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                }
+                else if(credentials.email !== ""){
+                    verifyBeforeUpdateEmail(user, credentials.email)
+                        .then(function() {
+                            Log.info("Verification email has been set, awaiting verification")
+                            //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                        }).catch((error) => {
+                            console.error(error);
+                            res.status(400).send({error : error});
+                        });
                 }
                 set(ref(db, `users/${userid}`),
                 {
@@ -99,7 +97,7 @@ router.put('/:id', (req, res) => {
 
     }
 })
-
+// to do : take care pf errors and check for verification and use maybe verifybeforeupdate 
 export default {
     router: router
 }
