@@ -1,15 +1,9 @@
 import express from "express";
-<<<<<<< Updated upstream
 import config from "../../../lib/config.js";
-import { db, auth} from "../../server.js";
-import {  signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import {db, auth} from "../../../lib/firebase.js";
+import {signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
+import {getLog, addUser} from "../../../lib/config.js";
 
-=======
-import {getLog, addUser, EMAIL, PASSWORD} from "../../../lib/config.js";
-import {auth} from "../../server.js";
-import {signInWithEmailAndPassword} from "firebase/auth";
-import nodemailer from "nodemailer";
->>>>>>> Stashed changes
 
 const router = express.Router(),
     Log = getLog("login");
