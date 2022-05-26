@@ -1,5 +1,4 @@
 import express from "express";
-import config from "../../../lib/config.js";
 import {db, auth} from "../../../lib/firebase.js";
 import {signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import {getLog, addUser} from "../../../lib/config.js";
@@ -18,9 +17,6 @@ router.post('/', async (req, res) => {
         password = credentials.password;
 
     var code,message;
-
-    
-
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
