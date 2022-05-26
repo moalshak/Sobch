@@ -36,31 +36,26 @@ router.post("/", async (req, res) => {
     if (snapshot.exists()) {
         var deviceSnapshot = snapshot.val();
         // otp matches -> add device
-
         if (otp === deviceSnapshot.otp) {
             Log.info("OTP MATCHES!")
             // make sure device owners is an array
             if (deviceSnapshot.owners === undefined || !Array.isArray(deviceSnapshot.owners)) {
                 deviceSnapshot.owners = [];
             }
-
             // device already owned
             var deviceLiked = deviceSnapshot.owners.includes(user.uid);
             if (!deviceLiked) {
                 deviceSnapshot.owners.push(user.uid);
             }
-
             await set(ref(db, `devices/${deviceId}`), deviceSnapshot);
             var userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();
             if (userSnapshot.owns === undefined || !Array.isArray(userSnapshot.owns)) {
                 userSnapshot.owns = [];
             }
-
             var userLinked = userSnapshot.owns.includes(deviceId);
             if (!userLinked) {
                 userSnapshot.owns.push(deviceId);
             }
-
             await set(ref(db, `users/${user.uid}`), userSnapshot);
 
             if (deviceLiked && userLinked) {
@@ -94,21 +89,32 @@ router.post("/", async (req, res) => {
 // });
 
 router.get('/', (req, res) => {
-    try{
-    const user = req.user;
+    var user;
+    try{ 
+    user = req.user;
     } catch(error) {
-        res.status(400).send({error: "Bad Request"});
+        res.status(400).send({error: "Bad Request", accessToken: req.user.stsTokenManager.accessToken});
         Log.error(error);
-        return;
+    return;
     }
-    //using this 'user' variable for now.
+    // using this 'user' variable for now.
     get(ref(db, `users/${user.uid}`)).then((snapshot) => {
-            if (snapshot.exists())
+            if (snapshot.exists() && snapshot.val().owns !== undefined  && snapshot.val().owns.length > 0)
             {
-                res.status(200).send({message: "Devices", deviceID: snapshot.val().owns, accessToken: req.user.stsTokenManager.accessToken})
+                res.status(200).send({message: "Owned Device List.", deviceID: snapshot.val().owns, accessToken: req.user.stsTokenManager.accessToken})
             }
+            else if (user.owns === undefined || snapshot.val().owns.length === 0)
+            {
+                res.status(200).send({message: "No devices to show.", accessToken: req.user.stsTokenManager.accessToken})
+            }
+            else 
+            {
+                res.status(401).send({message: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken})
+            }
+
       }).catch((error) => {
         console.error(error);
+        res.status(500).send({message : "Internal Server Error"})
       });
         
   })
