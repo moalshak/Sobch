@@ -1,4 +1,4 @@
-import {db, auth} from '../../server.js';
+import {db, auth} from "../../../lib/firebase.js";
 import {getLog} from "../../../lib/config.js";
 import express from "express";
 import { ref, set, get, push} from "firebase/database";
@@ -76,17 +76,6 @@ router.post("/", async (req, res) => {
         return;
     }
 });
-
-// router.get("/", (req, res) => {
-//     // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}
-//     // TODO: only allow this if the user is the owner of the device
-//     const user = req.user;
-
-//     var habibi = get(ref(db, `devices`));
-//     console.log(habibi);
-//     res.status(200).send("Request received");
-//     Log.info("Request received");
-// });
 
 router.get('/', (req, res) => {
     var user;

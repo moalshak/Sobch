@@ -1,7 +1,5 @@
 import {useState} from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { idText } from 'typescript';
 import axios from 'axios';
 
 function App() {
