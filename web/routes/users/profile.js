@@ -1,11 +1,11 @@
 import express from "express";
-import config from "../../../lib/config.js";
+import {getLog} from "../../../lib/config.js";
 import { db } from "../../server.js";
 import { ref, get, set, child } from "firebase/database";
 import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification, getIdToken } from "firebase/auth";
 
 const router = express.Router(),
-    Log = config.getLog("profile");
+    Log = getLog("profile");
 
 router.get('/:id', (req, res) => {
     //to do : testinggggg

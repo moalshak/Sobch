@@ -1,10 +1,10 @@
 import { set, ref, get, update } from "firebase/database";
 import express from "express";
-import config from "../../../lib/config.js";
+import {getLog} from "../../../lib/config.js";
 import { db } from "../../server.js";
 
 const router = express.Router(),
-    Log = config.getLog("alter");
+    Log = getLog("alter");
 
 router.put('/:deviceId', async (req, res) => {
     var device, deviceId, user, config;

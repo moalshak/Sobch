@@ -1,13 +1,11 @@
 import express from "express";
-import config from "../../../lib/config.js";
+import {getLog, addUser, getUser} from "../../../lib/config.js";
 import { db,auth } from "../../server.js";
 import {createUserWithEmailAndPassword, deleteUser, getAuth, sendEmailVerification } from "firebase/auth";
 import { ref, set } from "firebase/database";
 
 const router = express.Router(),
-    Log = config.getLog("register"),
-    addUser = config.addUser,
-    getUser = config.getUser;
+    Log = getLog("register");
 
 
 router.delete('/', async (req, res) => {

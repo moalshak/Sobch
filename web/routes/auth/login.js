@@ -1,12 +1,18 @@
 import express from "express";
+<<<<<<< Updated upstream
 import config from "../../../lib/config.js";
 import { db, auth} from "../../server.js";
 import {  signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 
+=======
+import {getLog, addUser, EMAIL, PASSWORD} from "../../../lib/config.js";
+import {auth} from "../../server.js";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import nodemailer from "nodemailer";
+>>>>>>> Stashed changes
 
 const router = express.Router(),
-    Log = config.getLog("login"),
-    addUser = config.addUser;
+    Log = getLog("login");
 
 router.get('/', (req, res) => {
     res.status(200).send("Request received");
@@ -42,11 +48,11 @@ router.post('/', async (req, res) => {
                 console.error(error);
                 res.status(400).send({error : error});
             });
-        }else {
+        } else {
+            Log.info("Logged in", {user : user.uid});
             res.status(code).send({accessToken: user.stsTokenManager.accessToken, message});
         }
 
-        //console.log(user);
     } catch(error) {
          const errorCode = error.code;
          var message = {error : ""}
@@ -64,6 +70,7 @@ router.post('/', async (req, res) => {
             code = 500;
             message.error = error.message;
         }
+        Log.error("Failed to login", {error, message});
         res.status(code).send(message);
     }
 });

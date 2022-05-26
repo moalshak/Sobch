@@ -19,6 +19,7 @@
     "firebase-auth": "^0.1.2",
     "google-auth": "^0.0.1",
     "mocha": "^10.0.0",
+    "nodemailer": "^6.7.5",
     "request": "^2.88.2",
     "winston": "^3.7.2"
   },

@@ -1,9 +1,9 @@
 import express from "express";
-import config from "../../lib/config.js";
+import {getLog} from "../../lib/config.js";
 import { db } from "../server.js";
 
 const router = express.Router(),
-    Log = config.getLog("index");
+    Log = getLog("index");
 
 router.get('/', (req, res) => {
     // TODO : send back the access token : {accessToken: req.user.stsTokenManager.accessToken}

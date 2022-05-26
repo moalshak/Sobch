@@ -1,10 +1,10 @@
 import {db, auth} from '../../server.js';
-import config from "../../../lib/config.js";
+import {getLog} from "../../../lib/config.js";
 import express from "express";
 import { ref, set, get, push} from "firebase/database";
 
 const router = express.Router(),
-    Log = config.getLog("my-devices");
+    Log = getLog("my-devices");
 
 
 function alreadyOwned(res) {

@@ -1,12 +1,11 @@
 import express from 'express';
 import { auth } from '../../server.js';
 import { signOut } from 'firebase/auth';
-import config from '../../../lib/config.js';
+import {removeUser, getLog} from '../../../lib/config.js';
 
 
 const router = express.Router(),
-    removeUser = config.removeUser,
-    Log = config.getLog("logout");
+    Log = getLog("logout");
 
 router.post('/', async (req, res) => {
     const user = req.user;

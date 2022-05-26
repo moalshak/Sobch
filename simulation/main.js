@@ -1,15 +1,16 @@
-import {db} from '../web/server.js';
-import {ref, set, get, onValue} from 'firebase/database';
-import config from '../lib/config.js';
+import {db} from '../lib/firebase.js';
+import {ref, set, get} from 'firebase/database';
+import {getLog} from '../lib/config.js';
+import { notifyUserViaEmail } from '../lib/notifyUser.js';
 
-const Log = config.getLog("simulation");
+const Log = getLog("simulation");
 
 var defaultAggressiveness =  {
     min : -0.2,
     max : 0.2,
     decimals : 2,
     changeChance : 0.1,
-    delay : 5000,
+    delay : 60 * 1000,
 }, aggressiveness;
 
 /**
@@ -48,12 +49,6 @@ var ensureDBconnection = () => {
     }
 }
 
-/**
- * the database reference and the actual devices
- */
-var devicesRef = ref(db, 'devices/'),
-    devices = (await get(devicesRef)).val();
-
 
 /**
  * simulates the environment
@@ -61,7 +56,7 @@ var devicesRef = ref(db, 'devices/'),
  *  - if device is not active do not change current temp
  * @param {Array} devices the devices to simulate
  */
-var simulateEnvironment = (devices) => {
+var simulateEnvironment = async (devices) => {
     ensureDBconnection();
     // loop over all devices in the database
     for (var id in devices) {
@@ -73,12 +68,33 @@ var simulateEnvironment = (devices) => {
                 device.currentTemp = getRandomFloat(15, 20, 2);
             }
             device.currentTemp = Math.round(generateChange(device.currentTemp) * aggressiveness.decimals * 50) / (aggressiveness.decimals * 50);
+            // device has gone beyond the limits set by the owner
+            if (device.currentTemp >= device.config.max || device.currentTemp <= device.config.min) {
+                // notify the owners
+                var owners_ids = device.owners || [];
+                var owners = [];
+                for(var id of owners_ids) {
+                    var owner = (await get(ref(db, `users/${id}`))).val();
+                    owners.push(owner);
+                }
+                for (var owner of owners) {
+                    if (owner && owner.credentials && owner.credentials.email) {
+                        notifyUserViaEmail(owner.credentials.email, device);
+                        Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
+                    }
+                }
+            }
             // update the database
             set(ref(db, `devices/${id}`), device);
         }
     }
 }
 
+/**
+ * 
+ * @param {*} ms 
+ * @returns 
+ */
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 /**
@@ -86,10 +102,17 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
  */
 var startSimulation = async (agg) => {
     aggressiveness = agg || defaultAggressiveness;
-    
+    /**
+     * the database reference and the actual devices
+     */
+    var devicesRef = ref(db, 'devices/'),
+        devices;
     while (true) {
         // wait for 10 seconds
         devices = (await get(devicesRef)).val();
+        for (var dev in devices) {
+            devices[dev].id = dev;
+        }
         simulateEnvironment(devices);
         await delay(aggressiveness.delay);
     }
@@ -108,7 +131,9 @@ if (process.argv[2] === 'start') {
     startSimulation(agg);
 }
 
-export default {
-    startSimulation: startSimulation,
-    genRandomTemperature : getRandomFloat,
+
+export {
+    startSimulation,
+    getRandomFloat as genRandomTemperature,
+    notifyUserViaEmail as notifyUser,
 }
