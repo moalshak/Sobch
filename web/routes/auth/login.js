@@ -1,12 +1,11 @@
 import express from "express";
-import config from "../../../lib/config.js";
-import { db, auth} from "../../server.js";
-import {  signInWithEmailAndPassword } from "firebase/auth";
+import {db, auth} from "../../../lib/firebase.js";
+import {signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
+import {getLog, addUser} from "../../../lib/config.js";
 
 
 const router = express.Router(),
-    Log = config.getLog("login"),
-    addUser = config.addUser;
+    Log = getLog("login");
 
 router.get('/', (req, res) => {
     res.status(200).send("Request received");
@@ -19,7 +18,6 @@ router.post('/', async (req, res) => {
 
     var code,message;
 
-
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
         
@@ -29,7 +27,22 @@ router.post('/', async (req, res) => {
 
         code = 200;
         message = "Success - Logged in"
-        res.status(code).send({accessToken: user.stsTokenManager.accessToken});
+        if(!user.emailVerified){
+            sendEmailVerification(user)
+            .then(() => {
+                console.log("Verification email has been sent")
+                message = "Verify email in order to login"
+                code = 401;
+                res.status(code).send({message});
+            }).catch((error) => {
+                console.error(error);
+                res.status(400).send({error : error});
+            });
+        } else {
+            Log.info("Logged in", {user : user.uid});
+            res.status(code).send({accessToken: user.stsTokenManager.accessToken, message});
+        }
+
     } catch(error) {
          const errorCode = error.code;
          var message = {error : ""}
@@ -47,6 +60,7 @@ router.post('/', async (req, res) => {
             code = 500;
             message.error = error.message;
         }
+        Log.error("Failed to login", {error, message});
         res.status(code).send(message);
     }
 });

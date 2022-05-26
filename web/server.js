@@ -1,11 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import config from '../lib/config.js';
-import { initializeApp, cert } from 'firebase-admin/app';
-import { getAuth } from "firebase-admin/auth";
-import { initializeApp as c_initializeApp} from 'firebase/app';
-import { getAuth as c_getAuth} from 'firebase/auth';
-import { getDatabase as c_getDatabase } from 'firebase/database';
+import {PORT, getLog, getUser} from '../lib/config.js';
+import {db, auth, admin_auth, app} from '../lib/firebase.js';
 
 /**
  * the routes
@@ -20,22 +16,9 @@ import profile from './routes/users/profile.js';
 import logout from './routes/auth/logout.js';
 
 /**
- * the port to listen on either specified in the config or the default port 8000
- */
-const PORT = config.PORT;
-
-/**
  * Logger for this js file
  */
-const Log = config.getLog('main');
-
-/**
- * - db the database object that will be exported by this file
- * so that it can be used in other files
- * - auth : the auth object that will be exported by this file
- * - admin_auth : the admin auth object that will be exported by this file
- */
-var db, auth, admin_auth;
+const Log = getLog('main');
 
 /**
  * the routes
@@ -100,14 +83,14 @@ const middleWare = async (req, res, next) => {
                 if (decodedToken.exp - decodedToken.auth_time <= 60) {
                     await admin_auth.revokeRefreshTokens(uid);
                 }
-                var user = config.getUser(uid);
+                var user = getUser(uid);
                 if (!user.stsTokenManager) {
                     user.stsTokenManager = {};
                 }
                 user.stsTokenManager.accessToken = authToken;
                 req.user = user
                 Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
-                next();
+                return next();
             } catch(err) {
                 req.user = null;
                 Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
@@ -143,27 +126,26 @@ function initRoutes(app) {
  * 
  * @returns {firebase.database.Database} Database 
  */
-function initDB() {
+// function initDB() {
 
-    const serviceAccount = config.SERVICE_ACCOUNT;
-    const firebaseConfig = config.FIRE_BASE_CONFIG
-    // Initialize Firebase
-    const app = initializeApp({
-        firebaseConfig,
-        credential: cert(serviceAccount),
-        databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
-    });
+//     const serviceAccount = SERVICE_ACCOUNT;
+//     const firebaseConfig = FIRE_BASE_CONFIG;
+//     // Initialize Firebase
+//     app = initializeApp({
+//         firebaseConfig,
+//         credential: cert(serviceAccount),
+//         databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
+//     });
 
-    admin_auth = getAuth(app);
+//     admin_auth = getAuth(app);
 
-    const c_app = c_initializeApp(firebaseConfig);
+//     const c_app = c_initializeApp(firebaseConfig);
 
-    // const app = initializeApp(firebaseConfig);
-    auth = c_getAuth(c_app);
+//     auth = c_getAuth(c_app);
 
-    // Get a reference to the database service
-    return c_getDatabase(c_app);
-}
+//     // Get a reference to the database service
+//     return c_getDatabase(c_app);
+// }
 
 /**
  * initialize the server and start it
@@ -178,11 +160,9 @@ function init() {
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-    app.use(cors())
+    app.use(cors({origin: true}))
 
     initRoutes(app);
-
-    db = initDB();
 
     app.listen(PORT, () => {
         Log.info(`Server is running on port ${PORT}`, {url : `http://localhost:${PORT}/`});
@@ -199,6 +179,7 @@ if (process.argv[2] === 'start') {
  */
 export {
     db as db,
-    auth as auth
+    auth as auth,
+    app as app
 }
 

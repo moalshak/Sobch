@@ -1,13 +1,11 @@
 import express from "express";
-import config from "../../../lib/config.js";
+import {getLog, addUser, getUser} from "../../../lib/config.js";
 import { db,auth } from "../../server.js";
-import {createUserWithEmailAndPassword, deleteUser, getAuth } from "firebase/auth";
+import {createUserWithEmailAndPassword, deleteUser, getAuth, sendEmailVerification } from "firebase/auth";
 import { ref, set } from "firebase/database";
 
 const router = express.Router(),
-    Log = config.getLog("register"),
-    addUser = config.addUser,
-    getUser = config.getUser;
+    Log = getLog("register");
 
 
 router.delete('/', async (req, res) => {
@@ -55,6 +53,14 @@ router.post('/', async (req, res) => {
                 "address": address   
             }
         );
+
+        sendEmailVerification(user)
+            .then(() => {
+                console.log("verification email has been sent")
+            }).catch((error) => {
+                console.error(error);
+                res.status(400).send({error : error});
+            });
         code = 200;
         message = "Success"
         res.status(code).send({accessToken : user.stsTokenManager.accessToken});
@@ -75,7 +81,7 @@ router.post('/', async (req, res) => {
             code = 500;
             message.error = "Internal server error"
         }
-
+        console.error(error)
         res.status(code).send(message);
     }
 }); 

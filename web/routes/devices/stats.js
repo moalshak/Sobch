@@ -1,12 +1,12 @@
 import express from "express";
-import config from "../../../lib/config.js";
+import {getLog} from "../../../lib/config.js";
 import { db, auth } from "../../server.js";
 import { ref, get, child } from "firebase/database";
 import myDevices from "./my-devices.js";
 
 
 const router = express.Router(),
-    Log = config.getLog("stats");
+    Log = getLog("stats");
 
 
 

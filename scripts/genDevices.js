@@ -1,10 +1,9 @@
+console.log("Generating devices...");
 import { v4 as uuidv4 } from 'uuid';
 import { generate } from 'generate-password';
-import {db} from "../web/server.js";
-import sim from '../simulation/main.js';
+import {db} from "../lib/firebase.js";
 import {ref, set, get} from "firebase/database";
-
-const genRandomTemperature = sim.genRandomTemperature;
+import {genRandomTemperature} from '../simulation/main.js';
 
 /**
  * IDs of the admins
@@ -12,7 +11,7 @@ const genRandomTemperature = sim.genRandomTemperature;
 const ADMINS = [
     "4zmlwFZ2KmXW8eB2HPh7STmM5jJ3", // carmen
     "GN0MqIz07rWxrr2LTwDZmJl70Vj1", // dhruv
-    "VoFbQg2iEyfTKlQC0yng3TubXCx1", // mohammad
+    "VfULdqBkeYXXtjP0xK6lVvYQTIW2", // mohammad
     "GWXGfoZ3Vjfj1xNEhoz7xdkC01I3", // selim
     "zZeyGzB6vnSlYgiOCIkwtVnOFb42", // fergal
     "jHJkymK0fSesTXk5VVP8OrwfytB3", // root
@@ -73,7 +72,11 @@ for (var admin of ADMINS) {
     if (user.owns === undefined || !Array.isArray(user.owns)) {
         user.owns = [];
     }
-    user.owns.push(device.id);
+    var owns = user.owns || [];
+    for (var device of devices) {
+        owns.push(device);
+    }
+    user.owns = owns;
     // user.owns = []; // uncomment this to remove all devices from the admins
     set(ref(db, `users/${admin}`), user);
 }
