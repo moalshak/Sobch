@@ -9,17 +9,20 @@ function Login() {
 
    async function doLoginRequest(e: any) {
        e.preventDefault();
+       var data : any = {};
 
        try{
            const res = await axios.post(`${BACKEND_BASE_URL}/login`, {
                email : email.trim(),
                password : password.trim()
            });
-
-           const data = res.data;
+           data = res.data;
+           console.log(data);
            if(data.error) {
                if(data.message){
                    alert({message : data.message, error : data.error});
+               } else {
+                alert(data.error);
                }
                return;
            }
@@ -36,7 +39,11 @@ function Login() {
         
         window.location.href = '/';
     } catch(error) {
-        alert(`Something went wrong : ${error}`);
+        if (data.error) {
+            alert(data.error);
+        } else {
+            alert(`Something went wrong : ${error}`);
+        }
     }
        
 
