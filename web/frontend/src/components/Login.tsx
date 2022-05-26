@@ -11,7 +11,7 @@ function Login() {
        e.preventDefault();
 
        try{
-           const res = await axios.post(`${BACKEND_BASE_URL}/register`, {
+           const res = await axios.post(`${BACKEND_BASE_URL}/login`, {
                email : email.trim(),
                password : password.trim()
            });
@@ -29,11 +29,11 @@ function Login() {
             alert(data.message);
         }
 
-        // set local storage with the token
+        // set local storage 
         const accessToken = res.data.accessToken;
         localStorage.setItem('accessToken', accessToken);
 
-        // TODO: what to do here ?
+        
         window.location.href = '/';
     } catch(error) {
         alert(`Something went wrong : ${error}`);
@@ -49,10 +49,11 @@ function Login() {
 
     return (
         <div>
-            <form onSubmit={doLoginRequest}/>
+            <form onSubmit={doLoginRequest}>
             <input type = "text" value={email} onChange={(e) => logEmail(e.target.value) } placeholder = "Email"/>
             <input type="password" value={password} onChange={(e) => logPassword(e.target.value) } placeholder="Password"/>
             <button type="submit">Login </button>
+            </form>
         </div>
     );
 }
