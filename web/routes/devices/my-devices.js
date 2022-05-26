@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     var user;
     try{ 
     user = req.user;
@@ -86,27 +86,41 @@ router.get('/', (req, res) => {
         Log.error(error);
     return;
     }
-    // using this 'user' variable for now.
-    get(ref(db, `users/${user.uid}`)).then((snapshot) => {
-            if (snapshot.exists() && snapshot.val().owns !== undefined  && snapshot.val().owns.length > 0)
-            {
-                res.status(200).send({message: "Owned Device List.", deviceID: snapshot.val().owns, accessToken: req.user.stsTokenManager.accessToken})
-            }
-            else if (user.owns === undefined || snapshot.val().owns.length === 0)
-            {
-                res.status(200).send({message: "No devices to show.", accessToken: req.user.stsTokenManager.accessToken})
-            }
-            else 
-            {
-                res.status(401).send({message: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken})
+
+    try {
+        // using this 'user' variable for now.
+        var snapshot = await get(ref(db, `users/${user.uid}`))
+    
+        if (snapshot.exists() && snapshot.val().owns !== undefined  && snapshot.val().owns.length > 0)
+        {
+            var devicesIds = snapshot.val().owns;
+            var devices = [];
+            for (var deviceId of devicesIds) {
+                var dev = (await get(ref(db, `devices/${deviceId}`))).val();
+                devices.push (
+                    {
+                        id : deviceId,
+                        currentTemp : dev.currentTemp,
+                    }
+                );
             }
 
-      }).catch((error) => {
+            res.status(200).send({message: "Owned Device List.", devices, accessToken: req.user.stsTokenManager.accessToken})
+        }
+        else if (user.owns === undefined || snapshot.val().owns.length === 0)
+        {
+            res.status(200).send({message: "No devices to show.", accessToken: req.user.stsTokenManager.accessToken})
+        }
+        else 
+        {
+            res.status(401).send({message: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken})
+        }
+
+    } catch(error) {
         console.error(error);
         res.status(500).send({message : "Internal Server Error"})
-      });
-        
-  })
+    }
+})
 
 export default {
     router: router

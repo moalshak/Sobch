@@ -69,21 +69,21 @@ var simulateEnvironment = async (devices) => {
             }
             device.currentTemp = Math.round(generateChange(device.currentTemp) * aggressiveness.decimals * 50) / (aggressiveness.decimals * 50);
             // device has gone beyond the limits set by the owner
-            if (device.currentTemp >= device.config.max || device.currentTemp <= device.config.min) {
-                // notify the owners
-                var owners_ids = device.owners || [];
-                var owners = [];
-                for(var id of owners_ids) {
-                    var owner = (await get(ref(db, `users/${id}`))).val();
-                    owners.push(owner);
-                }
-                for (var owner of owners) {
-                    if (owner && owner.credentials && owner.credentials.email) {
-                        notifyUserViaEmail(owner.credentials.email, device);
-                        Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
-                    }
-                }
-            }
+            // if (device.currentTemp >= device.config.max || device.currentTemp <= device.config.min) {
+            //     // notify the owners
+            //     var owners_ids = device.owners || [];
+            //     var owners = [];
+            //     for(var id of owners_ids) {
+            //         var owner = (await get(ref(db, `users/${id}`))).val();
+            //         owners.push(owner);
+            //     }
+            //     for (var owner of owners) {
+            //         if (owner && owner.credentials && owner.credentials.email) {
+            //             // notifyUserViaEmail(owner.credentials.email, device);
+            //             // Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
+            //         }
+            //     }
+            // }
             // update the database
             set(ref(db, `devices/${id}`), device);
         }
