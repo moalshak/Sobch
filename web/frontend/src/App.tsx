@@ -10,7 +10,7 @@ import Stats from './components/Stats';
 import Alter from './components/Alter';
 
 
-export const BACKEND_BASE_URL = "http://localhost:8000"
+const BACKEND_BASE_URL = "http://localhost:8000"
 // export const BASE_URL = "http://192.168.2.23:8000"
 
 function App() {
@@ -32,5 +32,6 @@ function App() {
 }
 
 export {
-  App
+  App,
+  BACKEND_BASE_URL
 };
