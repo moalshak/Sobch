@@ -1,5 +1,5 @@
 import express from 'express';
-import { auth } from '../../server.js';
+import { auth } from '../../../lib/firebase.js';
 import { signOut } from 'firebase/auth';
 import {removeUser, getLog} from '../../../lib/config.js';
 
