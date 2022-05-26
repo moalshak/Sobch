@@ -62,7 +62,7 @@ router.post('/', async (req, res) => {
                 res.status(400).send({error : error});
             });
         code = 200;
-        message = "Success"
+        message = "Success, please make sure to verify your email in order to login"
         res.status(code).send({accessToken : user.stsTokenManager.accessToken});
     } catch(error) {
         const errorCode = error.code;
