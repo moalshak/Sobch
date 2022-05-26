@@ -19,13 +19,6 @@ function App() {
   return (
     
     <Router>
-        <div
-            style={{
-                   backgroundColor: 'blue',
-                   width: '1080px',
-                   height: '720px'
-            }}
-                />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
