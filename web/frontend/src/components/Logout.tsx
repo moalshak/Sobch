@@ -9,6 +9,8 @@ import {getAccessToken} from "../lib/acc"
 
 function Logout() {
 
+    const styles = { alert: { color: 'red' }};
+
 
 
     async function goLogout(e : any) {
@@ -23,7 +25,7 @@ function Logout() {
                 }
             });    
             data = res.data;
-            window.location.href = '/';    
+            window.location.href = '/';
     } catch(error) {
         if(data.error) {
             alert(data.error);
