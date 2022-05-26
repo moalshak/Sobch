@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
+import {Link} from "react-router-dom"
 
 function Login() {
 
@@ -49,6 +50,9 @@ function Login() {
 
     return (
         <div>
+            <Link to={'/'}>
+            <button>Home</button>
+            </Link>
             <form onSubmit={doLoginRequest}>
             <input type = "text" value={email} onChange={(e) => logEmail(e.target.value) } placeholder = "Email"/>
             <input type="password" value={password} onChange={(e) => logPassword(e.target.value) } placeholder="Password"/>
