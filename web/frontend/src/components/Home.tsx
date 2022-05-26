@@ -10,6 +10,9 @@ function Home() {
             <Link to={'/Login'}>
             <button>Login</button>
             </Link>
+            <Link to={'/Logout'}>
+            <button>Logout</button>
+            </Link>
         </div>
     );
 }

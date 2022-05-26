@@ -14,8 +14,10 @@ const BACKEND_BASE_URL = "http://localhost:8000"
 // export const BASE_URL = "http://192.168.2.23:8000"
 
 function App() {
+ 
 
   return (
+    
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
