@@ -31,6 +31,9 @@ function generateOTP() {
     return generate({ length: 20, numbers: true });
 }
 
+
+const ROOMS = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Garage"];
+
 /**
  * 
  * generates a device
@@ -44,7 +47,7 @@ function generateDevice() {
     device.config = {};
     device.config.min = genRandomTemperature(10, 15, 2);
     device.config.max = genRandomTemperature(25, 30, 2);
-    device.config.room = "";
+    device.config.room = ROOMS[Math.floor(Math.random() * ROOMS.length)];
     device.config.active = true;
     device.owners = ADMINS;
     device.otp = generateOTP();

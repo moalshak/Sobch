@@ -111,7 +111,7 @@ function MyDevices() {
 
     return (
         <div>
-            {loading ? (firstTime ? <div>Loading...</div> : <RenderDevices/>) : <RenderDevices/>}
+            {loading ? (firstTime ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderDevices/>) : <RenderDevices/>}
         </div>
     );
 

@@ -8,6 +8,13 @@ function Stats() {
     
     const [loading, setLoading] = useState(true);
     const [owners, setOwners] = useState([]);
+    const [currentTemp, setCurrentTemp] = useState(undefined);
+
+
+    /**
+     * The update indicator for the refresh of the devices
+     */
+    const [updateIndicator, setUpdateIndicator] = useState(false);
 
     const [device, setDevice] = useState(
         {
@@ -37,6 +44,7 @@ function Stats() {
                 }
             });
             setDevice(res.data.device);
+            setCurrentTemp(res.data.currentTemp);
             setOwners(res.data.device.owners);
             setLoading(false);
         } catch(error) {
@@ -44,19 +52,67 @@ function Stats() {
         }
     }
 
+    async function getCurrentTemp() {
+        try {
+            const res = await axios.get(`${BACKEND_BASE_URL}/stats/${deviceId}`,
+            {
+                headers: {
+                    Authorization: `${getAccessToken()}`
+                }
+            });
+            setCurrentTemp(res.data.device.currentTemp);
+        } catch(error) {
+            alert(error);
+        }
+    }
+
+
+    function CurrenTemp() {
+        if (currentTemp) {
+            return (
+                <span>
+                {currentTemp > device.config.max ? <span style={{fontSize: 16, color: "red"}}>🌡️{currentTemp} °C 🔥</span> :
+                currentTemp < device.config.min ? <span  style={{fontSize: 16,color: "blue"}}>🌡️{currentTemp} °C ❄️</span> :
+                <span style={{fontSize: 16, color: "green"}}>🌡️{currentTemp} °C ✅</span>}
+                </span>
+            )
+
+        } else {
+            return (
+                <img src="../loading.gif" style={{width:"16px", height:"16px"}}/>
+            )
+        }
+    }
+
+    setTimeout(()=> {
+        if (updateIndicator) {
+            setUpdateIndicator(false);
+        } else {
+            setUpdateIndicator(true);
+        }
+    }, 5000);
+
 
     useEffect(()=> {
         getStats();
     }, []);
 
+
+
+    useEffect(()=> {
+        getCurrentTemp();   
+    }, [updateIndicator])
+
+
+
     function RenderStats() {
         return (
             <div>
-                <li>Active : {device.config.active ? "YES" : "NO"}</li>
+                <li>Active : {device.config.active ? <span style={{color: "green"}}>YES</span> : <span style={{color: "red"}}>NO</span>}</li>
                 <li>Room : {device.config.room}</li>
                 <li>Max : {device.config.max}</li>
                 <li>Min : {device.config.min}</li>
-                <li>Current Temperature : {device.currentTemp}</li>
+                <li>Current temperature: {<CurrenTemp/>}</li>
                 <li>OTP : {device.otp}</li>
                 <h3>OWNERS</h3>
                 {owners.map((owner : any) => {
@@ -71,7 +127,7 @@ function Stats() {
     return (
         <div>
             <h2>Stats</h2>
-            {loading ? 'Loading...' : <RenderStats/>}
+            {loading ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderStats/>}
         </div>
     );
 }
