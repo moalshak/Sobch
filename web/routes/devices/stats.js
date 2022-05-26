@@ -1,8 +1,9 @@
 import express from "express";
 import {getLog} from "../../../lib/config.js";
-import { db, auth } from "../../server.js";
+import { db, auth } from "../../../lib/firebase.js";
 import { ref, get, child } from "firebase/database";
 import myDevices from "./my-devices.js";
+import { async } from "@firebase/util";
 
 
 const router = express.Router(),
@@ -24,27 +25,37 @@ router.get('/', (req, res) => {
       
 })
  
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   const datainf = req.params;
   //using this 'user' variable for now.
   const user = req.user;
 
   const dataId = datainf.id.trim();
 
-  get(ref(db, `devices/${dataId}`)).then((snapshot) => {
-    if (!snapshot.exists()) 
-      {
+
+  
+  try{
+    var snapshot = await get(ref(db, `devices/${dataId}`));
+    
+    if (!snapshot.exists()) {
           res.status(401).send({error : "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
           Log.info("Unauthorized")
       }
-      else if (snapshot.exists() && !snapshot.val().owner.includes(user.uid))
+      else if (snapshot.exists() && !snapshot.val().owners.includes(user.uid))
       {
           res.status(401).send({accessToken: req.user.stsTokenManager.accessToken});
           Log.info("Unauthorized");
       }
       // The Device of associated ID exists.
-      else if (snapshot.exists() && snapshot.val().owner.includes(user.uid)) {
-        res.status(200).send({device : snapshot.val(), accessToken: req.user.stsTokenManager.accessToken});  
+      else if (snapshot.exists() && snapshot.val().owners.includes(user.uid)) {
+        var device = snapshot.val();
+        var ownersEmails = [];
+
+        for (var owner in device.owners) {
+          ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+        }
+        device.owners = ownersEmails;
+        res.status(200).send({device, accessToken: req.user.stsTokenManager.accessToken});  
         Log.info(snapshot.val());
       }
       //Internal Server error
@@ -53,10 +64,10 @@ router.get('/:id', (req, res) => {
           res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
           Log.info("Internal server error")
       }
-    }).catch((error) => {
-      Log.info(error);
-    });    
-})
+    } catch(error){
+      Log.error(error);
+    }    
+});
 
 export default {
   router: router

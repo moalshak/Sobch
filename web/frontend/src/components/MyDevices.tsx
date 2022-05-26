@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function MyDevices() {
 
@@ -77,7 +78,7 @@ function MyDevices() {
             setUpdateIndicator(true);
         }
     }, 5000);
-
+    
     /**
      * Watch the updateIndicator state and update the devices list
      */
@@ -85,16 +86,25 @@ function MyDevices() {
         getDevices();
     }, [updateIndicator]);
 
+
+
     const RenderDevices = function () {
         return (
             <div>
+                <h1>MY DEVICES</h1>
                 {devices.map((device : any) => {
                     return (
                         <div key={device.id}>
-                            <h3>Devices' ID : {device.id} | Temp : {device.currentTemp}</h3>
+                            <h1/>
+                            {device.currentTemp > device.config.max ? <span style={{fontSize: 48, color: "red"}}>🌡️{device.currentTemp} °C 🔥</span> :
+                            device.currentTemp < device.config.min ? <span  style={{fontSize: 48,color: "blue"}}>🌡️{device.currentTemp} °C ❄️</span> : <span style={{fontSize: 48, color: "green"}}>🌡️{device.currentTemp} °C ✅</span>}
+                            <h1/>
+                            <Link to={`/stats/${device.id}`}>
+                            <button>See Stats</button>
+                            </Link>
                         </div>
                     );
-                })};
+                })}
             </div>
         );
     }
@@ -103,7 +113,7 @@ function MyDevices() {
         <div>
             {loading ? (firstTime ? <div>Loading...</div> : <RenderDevices/>) : <RenderDevices/>}
         </div>
-    )
+    );
 
 }
 

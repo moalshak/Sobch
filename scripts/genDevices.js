@@ -42,8 +42,8 @@ function generateDevice() {
     device.id = generateID();
     device.currentTemp = genRandomTemperature(15, 25, 2);
     device.config = {};
-    device.config.min = 0;
-    device.config.max = 0;
+    device.config.min = genRandomTemperature(10, 15, 2);
+    device.config.max = genRandomTemperature(25, 30, 2);
     device.config.room = "";
     device.config.active = true;
     device.owners = ADMINS;
