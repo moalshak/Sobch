@@ -71,7 +71,7 @@ const getAuthToken = (req) => {
  */
 const middleWare = async (req, res, next) => {
     const endPoint = "/" + req.url.split("/")[1];
-    const ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (whiteList.includes(endPoint) && req.method !== "DELETE") {
         next();
     } else {
