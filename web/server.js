@@ -71,6 +71,7 @@ const getAuthToken = (req) => {
  */
 const middleWare = async (req, res, next) => {
     const endPoint = "/" + req.url.split("/")[1];
+    const ip = request.headers['x-forwarded-for'] || request.connection.remoteAddress;
     if (whiteList.includes(endPoint) && req.method !== "DELETE") {
         next();
     } else {
@@ -89,20 +90,20 @@ const middleWare = async (req, res, next) => {
                 }
                 user.stsTokenManager.accessToken = authToken;
                 req.user = user
-                Log.info(`request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`, user: user.uid});
+                Log.info(`request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`, user: user.uid});
                 return next();
             } catch(err) {
                 req.user = null;
-                Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                Log.info(`unauthorized request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`});
                 return res.status(401).send({ error: 'You are not authorized to make this request', message: err.message });
             }
         } else {
             // if the req.url is not in the routes, then it is not a valid request
             if (!Object.keys(routes).includes(endPoint)) {
-                Log.info(`invalid request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                Log.info(`invalid request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`});
                 return res.status(400).send({ error: `Invalid request. cannot ${req.method} to ${req.url}` });
             } else {
-                Log.info(`unauthorized request received on ${req.url}`, {time : new Date().toISOString(), method: `${req.method}`});
+                Log.info(`unauthorized request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`});
                 return res.status(401).send({ error: 'You are not authorized to make this request' });
             }
         }
