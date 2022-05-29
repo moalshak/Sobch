@@ -101,7 +101,7 @@ const middleWare = async (req, res, next) => {
             // if the req.url is not in the routes, then it is not a valid request
             if (!Object.keys(routes).includes(endPoint)) {
                 Log.info(`invalid request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`});
-                return res.status(400).send({ error: `Invalid request. cannot ${req.method} to ${req.url}` });
+                return res.status(405).send({ error: `Invalid request. cannot ${req.method} to ${req.url}` });
             } else {
                 Log.info(`unauthorized request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`});
                 return res.status(401).send({ error: 'You are not authorized to make this request' });

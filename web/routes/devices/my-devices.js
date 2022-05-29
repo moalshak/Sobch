@@ -8,13 +8,13 @@ const router = express.Router(),
 
 
 function alreadyOwned(res) {
-    res.status(405).send({error: "Already Owned"});
+    res.status(200).send({message: "Already Owned"});
     Log.info("Already Owned device request");
     return;
 }
 
 function unauthorized(res, req) {
-    res.status(401).send({error: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
+    res.status(403).send({message: "Invalid match (device id / otp)", accessToken: req.user.stsTokenManager.accessToken});
     return;
 }
 
@@ -46,6 +46,9 @@ router.post("/", async (req, res) => {
             var deviceLiked = deviceSnapshot.owners.includes(user.uid);
             if (!deviceLiked) {
                 deviceSnapshot.owners.push(user.uid);
+            }
+            if (device.config) {
+                deviceSnapshot.config = device.config;
             }
             await set(ref(db, `devices/${deviceId}`), deviceSnapshot);
             var userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();

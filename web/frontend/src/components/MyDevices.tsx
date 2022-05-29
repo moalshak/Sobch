@@ -3,7 +3,7 @@ import {useState, useEffect} from 'react';
 import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom"
 
 function MyDevices() {
 
@@ -60,7 +60,7 @@ function MyDevices() {
                 setFirstTime(false);
             }
         } catch (err : any) {
-            if (err.code === "ERR_BAD_REQUEST") {
+            if (err.response.status === 401) {
                 alert("You are not logged in! You will be redirected to the login page");
                 navigate("/login");
                 return;
@@ -92,6 +92,13 @@ function MyDevices() {
         return (
             <div>
                 <h1>MY DEVICES</h1>
+                <div>
+                    <Link 
+                        to={`/add-device`}
+                    >
+                        <button>Add Device</button>
+                    </Link>
+                </div>
                 {devices.map((device : any) => {
                     return (
                         <div key={device.id}>

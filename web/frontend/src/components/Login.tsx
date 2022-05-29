@@ -20,7 +20,7 @@ function Login() {
                password : password.trim()
            });
            data = res.data;
-           console.log(data);
+
            if(data.error) {
                if(data.message){
                    alert({message : data.message, error : data.error});

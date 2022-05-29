@@ -8,9 +8,9 @@ import Logout from './components/Logout';
 import MyDevices from './components/MyDevices';
 import Stats from './components/Stats';
 import Alter from './components/Alter';
+import AddDevice from './components/AddDevice';
 
-
-const BACKEND_BASE_URL = "http://172.104.242.242:8080"
+const BACKEND_BASE_URL = "http://0.0.0.0:8000"
 // export const BASE_URL = "http://192.168.2.23:8000"
 
 function App() {
@@ -26,6 +26,7 @@ function App() {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/my-devices" element={<MyDevices />} />
+        <Route path="/add-device" element={<AddDevice />} />
         <Route path="/stats/:deviceId" element={<Stats />} />
         <Route path="/alter/:deviceId" element={<Alter />} />
       </Routes>
