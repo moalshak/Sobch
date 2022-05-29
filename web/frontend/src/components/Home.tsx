@@ -13,6 +13,7 @@ function Home() {
             <Link to={'/Logout'}>
             <button>Logout</button>
             </Link>
+            <Link to={`/my-devices`}><button>All Devices</button></Link>
         </div>
     );
 }

@@ -109,6 +109,9 @@ function MyDevices() {
                             <Link to={`/stats/${device.id}`}>
                             <button>See Stats</button>
                             </Link>
+                            <Link to={`/alter/${device.id}`}>
+                            <button>Edit Device</button>
+                            </Link>
                         </div>
                     );
                 })}

@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {BACKEND_BASE_URL} from "../App";
 import {getAccessToken} from "../lib/acc";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Device {
     device: {
@@ -85,7 +85,9 @@ function AddDevice() {
     /**
      * Do a request to the server to check for authorization
      */
-    whatEver();
+    useEffect(() => {
+        whatEver();
+    }, []);
 
 
     return(
@@ -122,6 +124,10 @@ function AddDevice() {
                 </label>
                 <input type="submit" value="Submit"/>
             </form>
+
+            <div>
+            <Link to={`/my-devices`}><button>All Devices</button></Link>
+            </div>
         </div>
     )
 }

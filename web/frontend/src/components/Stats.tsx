@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
+import {Link} from "react-router-dom";
 
 function Stats() {
     
@@ -22,7 +23,8 @@ function Stats() {
                 active: true,
                 max: 0,
                 min: 0,
-                room: ""
+                room: "",
+                wantsToBeNotified: true
             },
             currentTemp: 0,
             id: "",
@@ -120,6 +122,15 @@ function Stats() {
                         <li key={owner}>{owner}</li>
                     )
                 })}
+                <li>Notify me: {device.config.wantsToBeNotified ? "Yes" : "No"}</li>
+            <div>
+                <Link to={`/alter/${deviceId}`}>
+                    <button>Edit This Devices Configuration</button>
+                </Link>
+                <Link to={`/my-devices`}>
+                    <button>Back to My Devices</button>
+                </Link>
+            </div>
             </div>
         );
     }
