@@ -2,7 +2,9 @@ import {useState, useEffect} from 'react';
 import {BACKEND_BASE_URL} from '../App';
 import {useParams} from "react-router-dom"; 
 import { getAccessToken } from '../lib/acc';
+import {Link} from "react-router-dom"
 import axios from 'axios';
+import { profile } from 'console';
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -42,7 +44,9 @@ function Profile() {
         return (
             <div>
                 <h1> Profile </h1>
-                <button> Edit </button>
+                <Link to={`/edit-profile/${id}`}>
+                    <button>Edit Profile</button>
+                </Link>
                 <div>
                 <li>Email address : {email}</li>
                 <li>Address/city : {address}</li>
@@ -57,35 +61,6 @@ function Profile() {
             {loading ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderProfile/>}
         </div>
     );
-
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-//   async function updateProfile(e : "button click") {
-//     e.preventDefault();
-
-//     try {
-//       await axios.put('http://localhost:8000/profile', {
-//         email,
-//         password,
-//         address,
-//       });
-//     } catch(error) {
-//       console.log(error);
-//     }
-//   }
 }
-
-
-
-
-
 
 export default Profile;
