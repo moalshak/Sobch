@@ -10,8 +10,7 @@ import Stats from './components/Stats';
 import Alter from './components/Alter';
 import AddDevice from './components/AddDevice';
 
-const BACKEND_BASE_URL = "http://0.0.0.0:8000"
-// export const BASE_URL = "http://192.168.2.23:8000"
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL;
 
 function App() {
  
