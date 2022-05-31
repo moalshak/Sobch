@@ -17,7 +17,6 @@ interface Profile {
 }
 
 function EditProfile(){
-    console.log("here");
     const [profile, setProfile] = useState<Profile>({
         profile : {
             id: "",
@@ -40,7 +39,7 @@ function EditProfile(){
 
         try {
             setLoading(true);
-            const response = await axios.put(`${BACKEND_BASE_URL}/profile`, id, {
+            const response = await axios.put(`${BACKEND_BASE_URL}/profile/${id}`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }
