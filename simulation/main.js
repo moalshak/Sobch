@@ -85,6 +85,8 @@ var simulateEnvironment = async (devices) => {
                     }
                 }
                 device.config.wantsToBeNotified = false;
+            } else if (!beyondLimit && !device.config.wantsToBeNotified) {
+                device.config.wantsToBeNotified = true;
             }
             // update the database
             await set(ref(db, `devices/${id}`), device);
