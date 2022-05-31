@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import { getAccessToken } from '../lib/acc';
 import {Link} from "react-router-dom"
 import axios from 'axios';
-import { profile } from 'console';
+
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -27,9 +27,9 @@ function Profile() {
                     Authorization : `${accessToken}`
                 }
             })
-            setEmail(res.data.email)
-            setAddress(res.data.address)
-            setMetadata(res.data.metadata)
+            setEmail(res.data.profile.email)
+            setAddress(res.data.profile.address)
+            setMetadata(res.data.profile.metadata)
             setLoading(false);
         } catch (error) {
             alert (error);
