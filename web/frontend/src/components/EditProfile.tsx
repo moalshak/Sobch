@@ -33,14 +33,14 @@ function EditProfile(){
 
     const [loading, setLoading] = useState(true);
 
-    const {ProfileId} = useParams();
+    const {id} = useParams();
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         try {
             setLoading(true);
-            const response = await axios.put(`${BACKEND_BASE_URL}/profile`, ProfileId, {
+            const response = await axios.put(`${BACKEND_BASE_URL}/profile`, id, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }
@@ -57,7 +57,7 @@ function EditProfile(){
             }
             else if (err.response.status === 500) {
                 alert("Invalid password, must be at least 6 characters!");
-                navigate("/edit-profile");
+                navigate(`/edit-profile/${id}`);
                 return;
             }
         }
@@ -66,7 +66,7 @@ function EditProfile(){
     var getProfile = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${BACKEND_BASE_URL}/profile/${ProfileId}`, {
+            const response = await axios.get(`${BACKEND_BASE_URL}/profile/${id}`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }
