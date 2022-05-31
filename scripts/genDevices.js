@@ -9,19 +9,37 @@ import {genRandomTemperature} from '../simulation/main.js';
  * IDs of the admins
  */
 const ADMINS = [
-    "4zmlwFZ2KmXW8eB2HPh7STmM5jJ3", // carmen
-    "GN0MqIz07rWxrr2LTwDZmJl70Vj1", // dhruv
     "VfULdqBkeYXXtjP0xK6lVvYQTIW2", // mohammad
-    "GWXGfoZ3Vjfj1xNEhoz7xdkC01I3", // selim
-    "zZeyGzB6vnSlYgiOCIkwtVnOFb42", // fergal
-    "jHJkymK0fSesTXk5VVP8OrwfytB3", // root
-]
+    "1CUMvWFlucbIddCwslwEsY5qlQb2", // carmen
+    "yDU8z6Mizch1g4PMQHvWseYD8yF3", // dhruv
+    "a2szgwUYHnUMInbc6cdiwXHeUN73", // selim
+    "9GJaxXLYP5SaQDurokIpX2Yu79v1", // fergal
+], emails = {
+    "VfULdqBkeYXXtjP0xK6lVvYQTIW2" : {
+        email : "mo.alshakoush@gmail.com"
+    }, // mohammad
+    "1CUMvWFlucbIddCwslwEsY5qlQb2" : {
+        email : "m.c.jica@student.rug.nl"
+    }, // carmen
+    "yDU8z6Mizch1g4PMQHvWseYD8yF3" : {
+        email : "dgroxmusic@gmail.com"
+    }, // dhruv
+    "a2szgwUYHnUMInbc6cdiwXHeUN73" : {
+        email : "s.el.sayed.aly@student.rug.nl"
+    }, // selim
+    "9GJaxXLYP5SaQDurokIpX2Yu79v1" : {
+        email : "f.j.mcollam@student.rug.nl"
+    }, // fergal
+}
+
+var ID = 0;
 
 /**
  * @returns {string} A unique ID
  */
 function generateID() {
-    return uuidv4();
+    ID++;
+    return ID;
 }
 
 /**
@@ -71,7 +89,11 @@ for (var i = 0; i < 10; i++) {
 
 
 for (var admin of ADMINS) {
-    const snapshot = await get(ref(db, `users/${admin}`))
+    var snapshot = await get(ref(db, `users/${admin}`))
+    if (!snapshot.exists()) {
+        await set(ref(db, `users/${admin}`), {credentials : { email : emails[admin].email}, owns : []});
+        snapshot = await get(ref(db, `users/${admin}`))
+    }
     const user = snapshot.val();
     if (user.owns === undefined || !Array.isArray(user.owns)) {
         user.owns = [];
