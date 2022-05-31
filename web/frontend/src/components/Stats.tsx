@@ -110,19 +110,19 @@ function Stats() {
     function RenderStats() {
         return (
             <div>
-                <li>Active : {device.config.active ? <span style={{color: "green"}}>YES</span> : <span style={{color: "red"}}>NO</span>}</li>
+                <li>Current temperature: {<CurrenTemp/>}</li>
                 <li>Room : {device.config.room}</li>
                 <li>Max : {device.config.max}</li>
                 <li>Min : {device.config.min}</li>
-                <li>Current temperature: {<CurrenTemp/>}</li>
                 <li>OTP : {device.otp}</li>
+                <li>Active : {device.config.active ? <span style={{color: "green"}}>YES</span> : <span style={{color: "red"}}>NO</span>}</li>
+                <li>Notify me: {device.config.wantsToBeNotified ? "Yes" : "No"}</li>
                 <h3>OWNERS</h3>
                 {owners.map((owner : any) => {
                     return (
                         <li key={owner}>{owner}</li>
                     )
                 })}
-                <li>Notify me: {device.config.wantsToBeNotified ? "Yes" : "No"}</li>
             <div>
                 <Link to={`/alter/${deviceId}`}>
                     <button>Edit This Devices Configuration</button>
