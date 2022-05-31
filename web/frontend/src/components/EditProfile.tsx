@@ -97,10 +97,6 @@ function EditProfile(){
             <h1>Edit Profile</h1>
             <form onSubmit={handleSubmit}>
                 <label>
-                    Profile ID:
-                    <input type="text" value={profile.profile.id} onChange={(e) => setProfile({...profile, profile: {...profile.profile, id: e.target.value}})}/>
-                </label>
-                <label>
                     Email:
                     <input type="text" value={profile.profile.credentials.email} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, email: e.target.value}}})}/>
                 </label>
