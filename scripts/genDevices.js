@@ -28,7 +28,7 @@ const ADMINS = [
         email : "s.el.sayed.aly@student.rug.nl"
     }, // selim
     "9GJaxXLYP5SaQDurokIpX2Yu79v1" : {
-        email : "f.j.mcollam@student.rug.nl"
+        email : "f.j.mccollam@student.rug.nl"
     }, // fergal
 }
 
