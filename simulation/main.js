@@ -70,12 +70,12 @@ var simulateEnvironment = async (devices) => {
             device.currentTemp = Math.round(generateChange(device.currentTemp) * aggressiveness.decimals * 50) / (aggressiveness.decimals * 50);
             // device has gone beyond the limits set by the owner
             var beyondLimit = device.currentTemp >= device.config.max || device.currentTemp <= device.config.min;
-            if (beyondLimit && device.wantsToBeNotified) {
+            if (beyondLimit && device.config.wantsToBeNotified) {
                 // notify the owners
                 var owners_ids = device.owners || [];
                 var owners = [];
-                for(var id of owners_ids) {
-                    var owner = (await get(ref(db, `users/${id}`))).val();
+                for(var owner_id of owners_ids) {
+                    var owner = (await get(ref(db, `users/${owner_id}`))).val();
                     owners.push(owner);
                 }
                 for (var owner of owners) {
@@ -84,10 +84,12 @@ var simulateEnvironment = async (devices) => {
                         Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
                     }
                 }
-                device.wantsToBeNotified = false;
+                device.config.wantsToBeNotified = false;
+            } else if (!beyondLimit && !device.config.wantsToBeNotified) {
+                device.config.wantsToBeNotified = true;
             }
             // update the database
-            set(ref(db, `devices/${id}`), device);
+            await set(ref(db, `devices/${id}`), device);
         }
     }
 }

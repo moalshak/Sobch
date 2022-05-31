@@ -90,7 +90,7 @@ const middleWare = async (req, res, next) => {
                 }
                 user.stsTokenManager.accessToken = authToken;
                 req.user = user
-                Log.info(`request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`, user: user.uid});
+                Log.info(`request received on ${req.url}`, {ip, time : new Date().toISOString(), method: `${req.method}`, user: {uid : user.uid, email : user.email}});
                 return next();
             } catch(err) {
                 req.user = null;
