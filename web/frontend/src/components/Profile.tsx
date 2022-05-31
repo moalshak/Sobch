@@ -18,6 +18,25 @@ function Profile() {
     const url = `${BACKEND_BASE_URL}/profile/${id}` 
     const accessToken = getAccessToken();
 
+    async function goDelete(e : any) {
+        e.preventDefault();
+        var data : any = {};
+        
+        try {
+            const res = await axios.delete(`${BACKEND_BASE_URL}/register`, {
+            });    
+
+            data = res.data;
+            window.location.href = '/';
+    } catch(error) {
+        if(data.error) {
+            alert(data.error);
+        } else {
+            alert(`Something went wrong : ${error}`);
+        }
+    }
+}
+
 
     async function getProfile() {
         try{
@@ -59,8 +78,11 @@ function Profile() {
     return (
         <div>
             {loading ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderProfile/>}
+            <Link to={'/'}>
+                <button onClick={goDelete}>Delete account</button>
+            </Link>
         </div>
     );
-}
+};
 
 export default Profile;
