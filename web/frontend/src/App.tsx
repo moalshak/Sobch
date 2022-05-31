@@ -4,6 +4,7 @@ import Register from './components/Register';
 import Login from './components/Login';
 import Home from './components/Home';
 import Profile from './components/Profile';
+import EditProfile from './components/EditProfile';
 import Logout from './components/Logout';
 import MyDevices from './components/MyDevices';
 import Stats from './components/Stats';
@@ -23,7 +24,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/edit-profile/:id" element={<Profile />} />
+        <Route path="/edit-profile/:id" element={<EditProfile />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/my-devices" element={<MyDevices />} />
         <Route path="/add-device" element={<AddDevice />} />

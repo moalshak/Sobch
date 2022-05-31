@@ -17,7 +17,7 @@ interface Profile {
 }
 
 function EditProfile(){
-
+    console.log("here");
     const [profile, setProfile] = useState<Profile>({
         profile : {
             id: "",
@@ -86,6 +86,13 @@ function EditProfile(){
         getProfile();
     }, []);
 
+    if (loading) {
+        return (
+            <div className="loading">
+                <div className="loading-spinner"></div>
+            </div>
+        );
+    }
     return(
         <div>
             <h1>Edit Profile</h1>
@@ -112,3 +119,5 @@ function EditProfile(){
     )
 
 }
+
+export default EditProfile;
