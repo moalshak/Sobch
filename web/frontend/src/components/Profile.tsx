@@ -46,9 +46,9 @@ function Profile() {
                     Authorization : `${accessToken}`
                 }
             })
-            setEmail(res.data.profile.email)
+            setEmail(res.data.profile.credentials.email)
             setAddress(res.data.profile.address)
-            setMetadata(res.data.profile.metadata)
+            setMetadata(res.data.profile.meta)
             setLoading(false);
         } catch (error) {
             alert (error);
