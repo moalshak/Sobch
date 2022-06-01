@@ -1,6 +1,6 @@
 import { set, ref, get, update } from "firebase/database";
 import express from "express";
-import {getLog} from "../../../lib/config.js";
+import {getLog, isAdmin} from "../../../lib/config.js";
 import { db } from "../../server.js";
 
 const router = express.Router(),
@@ -85,16 +85,18 @@ router.delete('/:deviceId', async (req, res) => {
                 var owns = requester.val().owns || [];
                 var owners = deviceSnapshot.val().owners || [];
                 
-                if (!owners.includes(user.uid)) {
-                    res.status(401).send({error: true, message : "Unauthorized"});
-                    Log.info("Unauthorized user does not own this device, user is not linked", {user : user.uid});
-                    return;
-                }
+                if (!isAdmin(user.uid)) {
+                    if (!owners.includes(user.uid)) {
+                        res.status(401).send({error: true, message : "Unauthorized"});
+                        Log.info("Unauthorized user does not own this device, user is not linked", {user : user.uid});
+                        return;
+                    }
 
-                if (!owns.includes(deviceId)) {
-                    res.status(401).send({error: true, message : "Unauthorized"});
-                    Log.info("Unauthorized user does not own this device, device is not linked", {user : user.uid});
-                    return;
+                    if (!owns.includes(deviceId)) {
+                        res.status(401).send({error: true, message : "Unauthorized"});
+                        Log.info("Unauthorized user does not own this device, device is not linked", {user : user.uid});
+                        return;
+                    }
                 }
                 
                 owns = owns.filter(id => id !== deviceId);

@@ -1,9 +1,7 @@
 import express from "express";
-import {getLog} from "../../../lib/config.js";
+import {getLog, isAdmin} from "../../../lib/config.js";
 import { db, auth } from "../../../lib/firebase.js";
-import { ref, get, child } from "firebase/database";
-import myDevices from "./my-devices.js";
-import { async } from "@firebase/util";
+import { ref, get } from "firebase/database";
 
 
 const router = express.Router(),
@@ -41,18 +39,24 @@ router.get('/:id', async (req, res) => {
           res.status(401).send({error : "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
           Log.info("Unauthorized")
       }
-      else if (snapshot.exists() && !snapshot.val().owners.includes(user.uid))
+      else if (snapshot.exists() && !isAdmin(user.uid) &&  !snapshot.val().owners.includes(user.uid))
       {
           res.status(401).send({accessToken: req.user.stsTokenManager.accessToken});
           Log.info("Unauthorized");
       }
       // The Device of associated ID exists.
-      else if (snapshot.exists() && snapshot.val().owners.includes(user.uid)) {
+      else if ((snapshot.exists() && snapshot.val().owners.includes(user.uid)) || isAdmin(user.uid)) {
         var device = snapshot.val();
         var ownersEmails = [];
 
         for (var owner in device.owners) {
-          ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+          if (isAdmin(device.owners[owner])) {
+            if (isAdmin(user.uid)) {
+              ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+            }
+          } else {
+            ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+          }
         }
         device.owners = ownersEmails;
         res.status(200).send({device, accessToken: req.user.stsTokenManager.accessToken});  

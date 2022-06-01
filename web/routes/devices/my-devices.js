@@ -1,5 +1,5 @@
-import {db, auth} from "../../../lib/firebase.js";
-import {getLog} from "../../../lib/config.js";
+import {db} from "../../../lib/firebase.js";
+import {getLog, isAdmin} from "../../../lib/config.js";
 import express from "express";
 import { ref, set, get, push} from "firebase/database";
 
@@ -42,9 +42,11 @@ router.delete("/", async (req, res) => {
 
         var owners = device.owners || [];
 
-        if (owners.indexOf(user.uid) === -1) {
-            unauthorized(res, req);
-            return;
+        if (!isAdmin(user.uid)) {
+            if (owners.indexOf(user.uid) === -1) {
+                unauthorized(res, req);
+                return;
+            }
         }
 
         // get the user
@@ -52,9 +54,11 @@ router.delete("/", async (req, res) => {
 
         var owns = userData.owns || [];
 
-        if (owns.indexOf(deviceId) === -1) {
-            unauthorized(res, req);
-            return;
+        if (!isAdmin(user.uid)) {
+            if (owns.indexOf(deviceId) === -1) {
+                unauthorized(res, req);
+                return;
+            }
         }
 
         // remove device from user and user from device
