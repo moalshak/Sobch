@@ -112,7 +112,7 @@ function Login() {
                 <Form onSubmit={doLoginRequest}>
                     <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email address</Form.Label>
-                        <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value) }/>
+                        <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value.trim()) }/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Password</Form.Label>
