@@ -20,10 +20,8 @@ router.delete('/', async (req, res) => {
         message = "Success"   
 
         set(ref(db, `users/${user.uid}`), null),
-        res.status(200).send(`Account Nuked`);
+        res.status(200).send({error : false, message : `Account Nuked`});
         Log.info(`Success - Account deleted`);
-    
-
     } catch (error){
         code = 400;
         message = "FAILED"
@@ -59,30 +57,30 @@ router.post('/', async (req, res) => {
             Log.info(`Success - Verification email sent`, {user : user.uid});
         }).catch((error) => {
             Log.error(error);
-            res.status(400).send({error : error});
+            res.status(400).send({error : true, message: "Please verify your email in order to login"});
         });
         code = 200;
         message = "Success, please make sure to verify your email in order to login"
         res.status(code).send({message, accessToken : user.stsTokenManager.accessToken});
     } catch(error) {
         const errorCode = error.code;
-        var message = {error : ""};
+        var message;
 
         if(errorCode == "auth/email-already-in-use"){
             code = 200;
-            message.error = "Email already in use"
+            message = "Email already in use"
         } else if (errorCode == "auth/weak-password"){
             code = 200;
-            message.error = "Weak password: Should be at least 6 characters long"
+            message = "Weak password: Should be at least 6 characters long"
         } else if(errorCode == "auth/invalid-email"){
             code = 200;
-            message.error = "Invalid email"
+            message = "Invalid email"
         } else {
             code = 500;
-            message.error = "Internal server error"
+            message = "Internal server error"
         }
         Log.error(error);
-        res.status(code).send(message);
+        res.status(code).send({error : true, message});
     }
 }); 
 
