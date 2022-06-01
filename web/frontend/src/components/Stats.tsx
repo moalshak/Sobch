@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import NavBar from "./NavBar";
+import {isLoggedIn, setLoggedIn} from "../lib/acc";
 
 function Stats() {
     
@@ -129,7 +130,7 @@ function Stats() {
                             <Col>
                                 
                                 <span>
-                                    <b>Room:</b> {device.config.room}
+                                    <b>Room:</b> {device.config.room === '' ? 'No room' : device.config.room}
                                 </span>
                             </Col>
                             <Col>

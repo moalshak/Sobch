@@ -11,6 +11,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import {setLoggedIn} from "../lib/acc";
 
 interface Device {
     id: string,
@@ -90,6 +93,7 @@ function Alter() {
                 setDevice(device);
                 setLoading(false);
             }
+            setLoggedIn(true);
         } catch (err : any) {
             if (err.response.status === 401) {
                 alert("You are not logged in! You will be redirected to the login page");
@@ -104,79 +108,77 @@ function Alter() {
      * Do a request to the server to check for authorization
      */
     useEffect(()=> {
+        setLoggedIn(false);
         getDevice();
     }, []);
 
 
-    if (loading) {
-        return(
+
+        
+    return(
         <div>
             <NavBar/>
+            <Container>
+        {loading ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">
                     <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
                 </div>
             </div>
-        </div>
-        );
-    } else {
-        
-        return(
-            <div>
-            
-            <NavBar/>
-
-            <Container>
-                <h1>Edit Device</h1>
-                <Form onSubmit={handleSubmit}>
-                    <input hidden={true} type="text" value={device.id} readOnly={true}/>
-                    <Form.Group>
-                        <Form.Label>Minimum Temperature</Form.Label>
-                        <Form.Control required type="number" placeholder="Minimum Temperature"  value={device.config.min} onChange={(e) => setDevice({...device, config: {...device.config, min: parseInt(e.target.value)}})}/>
-                        <Form.Text className="text-muted">The minimum temperature at which you will be notified</Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Maximum Temperature</Form.Label>
-                        <Form.Control required type="number" placeholder="Maximum Temperature"  value={device.config.max} onChange={(e) => setDevice({...device, config: {...device.config, max: parseInt(e.target.value)}})}/>
-                        <Form.Text className="text-muted">The maximum temperature at which you will be notified</Form.Text>
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Label>Room</Form.Label>
-                        <Form.Control type="text" placeholder="Room"  value={device.config.room} onChange={(e) => setDevice({...device, config: {...device.config, room: e.target.value}})}/>
-                        <Form.Text className="text-muted">The room in which the device is located</Form.Text>
-                    </Form.Group>
-                    <Row>
-                        <Col>
-                    <Form.Group>
-                        <Form.Label>Active</Form.Label>
-                        <Form.Check type="checkbox" placeholder="Active"  checked={device.config.active} onChange={(e) => setDevice({...device, config: {...device.config, active: e.target.checked}})}/>
-                        <Form.Text className="text-muted">If the device is active you will get real time temperature measures</Form.Text>
-                    </Form.Group>
-                    </Col>
-                    <Col>
-                    <Form.Group>
-                        <Form.Label>Notify Me</Form.Label>
-                        <Form.Check type="checkbox" placeholder="Notify Me"  checked={device.config.wantsToBeNotified} onChange={(e) => setDevice({...device, config: {...device.config, wantsToBeNotified: e.target.checked}})}/>
-                        <Form.Text className="text-muted">If you want to be notified when the temperature of this device is out of bounds</Form.Text>
-                    </Form.Group>
-                    </Col>
-                    </Row>
-                    <br/>
-                    <Button variant="primary" type="submit">
-                        Edit Device's Configuration
-                    </Button>
-                </Form>
-            <br/>
-            {/* TODO: replace with nav */}
-            <Link to={`/my-devices`}><Button>All Devices</Button></Link>
-
-            <Link to={`/stats/${device.id}`}><Button className="ml-3">See this devices Stats</Button></Link>
-            <br/>
-            </Container>
-
-            </div>
-        )
+        :
+            <><h1>Edit Device</h1><Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Device's ID:</Form.Label>
+                            <Form.Control value={device.id} disabled />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Minimum Temperature</Form.Label>
+                            <Form.Control required type="number" placeholder="Minimum Temperature" value={device.config.min} onChange={(e) => setDevice({ ...device, config: { ...device.config, min: parseInt(e.target.value) } })} />
+                            <Form.Text className="text-muted">The minimum temperature at which you will be notified</Form.Text>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Maximum Temperature</Form.Label>
+                            <Form.Control required type="number" placeholder="Maximum Temperature" value={device.config.max} onChange={(e) => setDevice({ ...device, config: { ...device.config, max: parseInt(e.target.value) } })} />
+                            <Form.Text className="text-muted">The maximum temperature at which you will be notified</Form.Text>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Room</Form.Label>
+                            <Form.Control type="text" placeholder="Kitchen" value={device.config.room} onChange={(e) => setDevice({ ...device, config: { ...device.config, room: e.target.value } })} />
+                            <Form.Text className="text-muted">The room in which the device is located</Form.Text>
+                        </Form.Group>
+                        <Row>
+                            <Col>
+                                <Form.Group>
+                                    <Form.Label>Active</Form.Label>
+                                    <ButtonGroup className="ms-3">
+                                        <ToggleButton variant='outline-success' value={device.config.active ? "1" : "0"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, active: e.target.checked } })}>Yes</ToggleButton>
+                                        <ToggleButton variant='outline-danger' value={device.config.active ? "0" : "1"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, active: e.target.checked } })}>No</ToggleButton>
+                                    </ButtonGroup>
+                                    <br />
+                                    <Form.Text className="text-muted">If the device is active you will get real time temperature measures</Form.Text>
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group>
+                                    <Form.Label>Notify Me</Form.Label>
+                                    <ButtonGroup className="ms-3">
+                                        <ToggleButton variant='outline-success' value={device.config.wantsToBeNotified ? "1" : "0"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, wantsToBeNotified: e.target.checked } })}>Yes</ToggleButton>
+                                        <ToggleButton variant='outline-danger' value={device.config.wantsToBeNotified ? "0" : "1"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, wantsToBeNotified: e.target.checked } })}>No</ToggleButton>
+                                    </ButtonGroup>
+                                    <br />
+                                    <Form.Text className="text-muted">If you want to be notified when the temperature of this device is out of bounds</Form.Text>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <br />
+                        <Button variant="primary" type="submit">
+                            Edit Device's Configuration
+                        </Button>
+                    </Form><br /><Link to={`/my-devices`}><Button variant="secondary" className='mt-3 mb-3'>All Devices</Button></Link><Link to={`/stats/${device.id}`}><Button variant="secondary" className="ms-3">See this devices Stats</Button></Link><br /></>
     }
+        </Container>
+        </div>
+    )
 }
 
 export default Alter;

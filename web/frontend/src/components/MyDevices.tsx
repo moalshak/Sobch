@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
 import {Alert, Variant} from './CustomAlert';
-
+import {isLoggedIn, setLoggedIn} from "../lib/acc";
 
 function MyDevices() {
 
@@ -78,6 +78,7 @@ function MyDevices() {
                 setLoading(false);
                 setFirstTime(false);
             }
+            setLoggedIn(true);
         } catch (err : any) {
             if (err.response.status === 401) {
                 setAlertProps({
@@ -108,6 +109,7 @@ function MyDevices() {
      * Watch the updateIndicator state and update the devices list
      */
     useEffect(() => {
+        setLoggedIn(false);
         getDevices();
     }, [updateIndicator]);
 

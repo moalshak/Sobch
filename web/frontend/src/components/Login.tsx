@@ -7,12 +7,14 @@ import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import NavBar from "./NavBar";
 import {Alert, AlertProps, Variant} from './CustomAlert';
-
+import {setLoggedIn, isLoggedIn} from '../lib/acc';
+import {useNavigate} from 'react-router-dom';
 
 function Login() {
 
     const [email, logEmail] = useState('');
     const [password, logPassword] = useState('');
+    const navigate = useNavigate();
     
     /**
      * Custom alert props which looks cleaner than the regular alert
@@ -66,7 +68,8 @@ function Login() {
         // set local storage 
         const accessToken = res.data.accessToken;
         localStorage.setItem('accessToken', accessToken);
-        
+        setLoggedIn(true);
+        navigate('/');
         setTimeout(()=> {
             window.location.href = '/';
         }, 1500);
@@ -83,7 +86,9 @@ function Login() {
 
    }
 
-
+   if (isLoggedIn()) {
+        navigate(-1);
+   }
 
 
     return (
