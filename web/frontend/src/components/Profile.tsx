@@ -15,7 +15,7 @@ function Profile() {
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
 
-    const url = `${BACKEND_BASE_URL}/profile/${id}` 
+    const url = `${BACKEND_BASE_URL}/profile/` 
     const accessToken = getAccessToken();
 
     async function goDelete(e : any) {
@@ -63,7 +63,7 @@ function Profile() {
         return (
             <div>
                 <h1> Profile </h1>
-                <Link to={`/edit-profile/${id}`}>
+                <Link to={`/edit-profile/`}>
                     <button>Edit Profile</button>
                 </Link>
                 <div>

@@ -33,8 +33,32 @@ router.get('/:id', (req, res) => {
     });        
 })
 
+router.get('/', (req, res) => {
+    //to do : testinggggg
+    if (!req.user) {
+        return res.status(401).send({error : "Unauthorized access"});
+    }
 
-router.put('/:id', (req, res) => {
+    const userid = req.user.uid;
+    const meta = req.user.metadata;
+
+    get(ref(db, `users/${userid}`)).then((snapshot) => {
+        if (req.user.uid) {
+            res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
+            Log.info("Profile details returned successfully");
+        } else if (!snapshot.exists()){
+            res.status(401).send({error : "Unauthorized access"});
+        } else {
+            res.status(400).send({error : "Bad Request"});
+        }
+    }).catch((error) => {
+        console.error(error);
+        res.status(400).send({error : error});
+    });        
+})
+
+
+router.put('/', (req, res) => {
     //to do : testinggggg
     
     const reqToken = req.user.stsTokenManager.accessToken;
@@ -45,10 +69,10 @@ router.put('/:id', (req, res) => {
     const user = req.user;
     const newPassword = credentials.password.trim();
     
-    if(req.user.uid !== req.params.id){
+    if(!req.user.uid){
         res.status(401).send({error : "Unauthorized access"});
     }
-    else if (req.user.uid === req.params.id){
+    else {
         get(ref(db, `users/${userid}`)).then((snapshot) => {
             if (snapshot.exists()){
                 if (newPassword !== ""){                   
@@ -91,11 +115,8 @@ router.put('/:id', (req, res) => {
             else {
                 res.status(400).send({error : "Bad Request"});
             }
-    })
-    } else {
-        res.status(400).send({error : "Bad Request"});
-
-    }
+        })
+    } 
 })
 // to do : take care pf errors and check for verification and use maybe verifybeforeupdate 
 export default {
