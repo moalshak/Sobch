@@ -5,6 +5,12 @@ import { getAccessToken } from '../lib/acc';
 import {Link} from "react-router-dom"
 import axios from 'axios';
 import NavBar from "./NavBar";
+import Button from "react-bootstrap/Button";
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import {Alert, Variant} from './CustomAlert';
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 
 function Profile() {
@@ -12,7 +18,8 @@ function Profile() {
     const [address, setAddress] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [metadata, setMetadata] = useState('');
+    const [createdAt, setCreatedAt] = useState('');
+    const [lastLogin, setlastLogin] = useState('');
     const [loading, setLoading] = useState(true);
     const {id} = useParams();
 
@@ -36,7 +43,7 @@ function Profile() {
             alert(`Something went wrong : ${error}`);
         }
     }
-}
+    }
 
 
     async function getProfile() {
@@ -49,7 +56,8 @@ function Profile() {
             })
             setEmail(res.data.profile.credentials.email)
             setAddress(res.data.profile.address)
-            setMetadata(res.data.profile.meta)
+            setCreatedAt(new Intl.DateTimeFormat('en-NL', { timeZone : 'Europe/Amsterdam', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(res.data.meta.createdAt))
+            setlastLogin(new Intl.DateTimeFormat('en-NL', { timeZone : 'Europe/Amsterdam', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(res.data.meta.lastLogin))
             setLoading(false);
             setLoggedIn(true);
         } catch (error) {
@@ -66,16 +74,55 @@ function Profile() {
 
         return (
                 <div>
-                <h1> Profile </h1>
-                <Link to={`/edit-profile/`}>
-                    <button>Edit Profile</button>
-                </Link>
-                <li>Email address : {email}</li>
-                <li>Address/city : {address}</li>
-                <li>Other : {metadata}</li>
-                </div>
-            )
-            
+                <Container>
+                <Card className='mt-3'>
+                    
+                    <div>
+                        <Card.Header>Profile :</Card.Header>
+                            <Card.Body>
+                                <Card.Text>
+                                    <Col>
+                                        <Row>
+                                            <span>
+                                                <b>Email address:</b> {email}
+                                            </span>
+                                        </Row>
+                                        <Row>
+    
+                                            <span>
+                                                <b>Address:</b> {address}
+                                            </span>
+                                        </Row>
+                                        <Row>
+                                            <span>
+                                                <b>Created At:</b> {createdAt}
+                                            </span>
+                                        </Row>
+                                        <Row>
+                                            <span>
+                                                <b>Last logged in at:</b> {lastLogin}
+                                            </span>
+                                        </Row>
+                                    </Col>
+                                
+                                </Card.Text>
+                            </Card.Body>
+                        <div 
+                            className="d-grid"
+                        >
+                            <Button href={`/edit-profile`} variant="outline-primary" className='mt-3 mb-3' size="lg">Edit</Button>
+                        </div>
+                        <div 
+                            className="d-grid"
+                        >
+                            <Button onClick = {goDelete} variant="outline-danger" className='mt-3 mb-3' size="lg">Delete Account</Button>
+                        </div>
+                    </div>
+                </Card>
+                </Container>
+            </div>
+        )
+        
         
     }
     
@@ -90,9 +137,8 @@ function Profile() {
                 </div>
             </div>
             : <RenderProfile/>}
-            <Link to={'/'}>
-                <button onClick={goDelete}>Delete account</button>
-            </Link>
+            <div>
+                    </div>
         </div>
     );
     
