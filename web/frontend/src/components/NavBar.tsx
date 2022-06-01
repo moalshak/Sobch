@@ -1,4 +1,5 @@
 
+import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import { isLoggedIn } from '../lib/acc';
@@ -30,7 +31,7 @@ function NavBar() {
                     <>
                     <Nav.Link href="/my-devices">My Devices</Nav.Link>
                     <Nav.Link href="/profile">Profile</Nav.Link>
-                    <Link to={''}><Button onClick={goLogout}>Logout</Button></Link></>
+                    <Link to={''}><Button variant="outline-secondary" onClick={goLogout}>Logout</Button></Link></>
                     :
                     <>
                     <Nav.Link href="/register">Register</Nav.Link>
