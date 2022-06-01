@@ -5,7 +5,6 @@ import Login from './components/Login';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import EditProfile from './components/EditProfile';
-import Logout from './components/Logout';
 import MyDevices from './components/MyDevices';
 import Stats from './components/Stats';
 import Alter from './components/Alter';
@@ -24,7 +23,6 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/profile/" element={<Profile />} />
         <Route path="/edit-profile/" element={<EditProfile />} />
-        <Route path="/logout" element={<Logout />} />
         <Route path="/my-devices" element={<MyDevices />} />
         <Route path="/add-device" element={<AddDevice />} />
         <Route path="/stats/:deviceId" element={<Stats />} />

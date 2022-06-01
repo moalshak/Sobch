@@ -11,6 +11,7 @@ router.post('/', async (req, res) => {
     const user = req.user;
 
     try {
+        Log.info();
         auth.currentUser = user;
         removeUser(user);
         await signOut(auth);

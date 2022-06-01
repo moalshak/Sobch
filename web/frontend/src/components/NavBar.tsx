@@ -3,6 +3,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import { isLoggedIn } from '../lib/acc';
 import Nav from 'react-bootstrap/Nav';
+import {goLogout} from '../lib/acc';
+
 
 function NavBar() {
     return(
