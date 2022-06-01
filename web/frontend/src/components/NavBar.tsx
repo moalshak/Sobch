@@ -1,10 +1,10 @@
 
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import { isLoggedIn } from '../lib/acc';
 import Nav from 'react-bootstrap/Nav';
 
-function NavBar(props : any) {
+function NavBar() {
     return(
         <Navbar bg="light" expand="lg">
         <Container>
@@ -21,14 +21,20 @@ function NavBar(props : any) {
                 <Nav.Link href="/">Home</Nav.Link>
             </Nav>
             <Nav>
-                {/* TODO : if already logged in do not show this */}
-                <Nav.Link href="/register">Register</Nav.Link>
-                <Nav.Link href="/login">Login</Nav.Link>
+                {
+                    isLoggedIn() ?
 
-                <Nav.Link href="/my-devices">My Devices</Nav.Link>
-                <Nav.Link href="/profile">Profile</Nav.Link>
+                    <>
+                    <Nav.Link href="/my-devices">My Devices</Nav.Link>
+                    <Nav.Link href="/profile">Profile</Nav.Link>
+                    <Nav.Link href="/logout">Logout</Nav.Link></>
+                    :
+                    <>
+                    <Nav.Link href="/register">Register</Nav.Link>
+                    <Nav.Link href="/login">Login</Nav.Link>
+                    </>
+                }
 
-                <Nav.Link href="/logout">Logout</Nav.Link>
             </Nav>
             </Navbar.Collapse>
         </Container>

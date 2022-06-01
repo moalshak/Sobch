@@ -5,6 +5,7 @@ import { getAccessToken } from '../lib/acc';
 import {Link} from "react-router-dom"
 import axios from 'axios';
 import NavBar from "./NavBar";
+import {isLoggedIn, setLoggedIn} from "../lib/acc";
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -50,12 +51,14 @@ function Profile() {
             setAddress(res.data.profile.address)
             setMetadata(res.data.profile.meta)
             setLoading(false);
+            setLoggedIn(true);
         } catch (error) {
             alert (error);
         }
     }
 
     useEffect(()=> {
+        setLoggedIn(false);
         getProfile();
     }, []);
 

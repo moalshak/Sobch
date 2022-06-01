@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 function Home() {
     return (
         <div>
-            <NavBar/>
+            <NavBar />
             <div className="text-center">
                 <h1>Whale Cum!</h1>
             </div>

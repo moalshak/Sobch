@@ -7,7 +7,8 @@ import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import NavBar from "./NavBar";
 import {Alert, AlertProps, Variant} from './CustomAlert';
-
+import {isLoggedIn, setLoggedIn} from '../lib/acc';
+import { useNavigate } from "react-router-dom";
 /***
  * Register component
  * 
@@ -21,6 +22,7 @@ function Register() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [address, setAddress] = useState('');
+    const navigate = useNavigate();
 
     /**
      * Custom alert props which looks cleaner than the regular alert
@@ -98,6 +100,10 @@ function Register() {
                 });
             }
         }
+    }
+
+    if (isLoggedIn()) {
+        navigate(-1);
     }
 
     return (

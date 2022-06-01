@@ -11,6 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "../components/NavBar";
 import {Alert, Variant} from './CustomAlert';
+import {setLoggedIn} from "../lib/acc";
 
 interface Device {
     device: {
@@ -104,7 +105,7 @@ function AddDevice() {
     }
 
 
-    var whatEver = async () => {
+    var authenticate = async () => {
         try {
             await axios.get(`${BACKEND_BASE_URL}/my-devices`, {
                 headers: {
@@ -112,6 +113,7 @@ function AddDevice() {
                 }
             });
             setLoading(false);
+            setLoggedIn(true);
         } catch (err : any) {
             if (err.response.status === 401) {
                 setAlertProps({
@@ -133,7 +135,8 @@ function AddDevice() {
      * Do a request to the server to check for authorization
      */
     useEffect(() => {
-        whatEver();
+        setLoading(false);
+        authenticate();
     }, []);
 
 

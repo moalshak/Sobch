@@ -10,12 +10,12 @@ import MyDevices from './components/MyDevices';
 import Stats from './components/Stats';
 import Alter from './components/Alter';
 import AddDevice from './components/AddDevice';
+import { useState } from 'react';
 
 const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "http://0.0.0.0:8000";
 
 function App() {
- 
-
+  
   return (
     
     <Router>

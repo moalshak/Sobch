@@ -11,6 +11,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
+import {setLoggedIn} from "../lib/acc";
 
 
 
@@ -78,6 +79,7 @@ function EditProfile(){
                 return;
             }
             setLoading(false);
+            setLoggedIn(true);
         } catch (err : any) {
             if (err.response.status === 401) {
                 alert("You are not logged in! You will be redirected to the login page");
@@ -112,24 +114,24 @@ function EditProfile(){
     }
 
     useEffect(() => {
+        setLoggedIn(false);
         getProfile();
     }, []);
 
-    if (loading) {
-        return (
-            <div className="d-flex justify-content-center">
-                <div  role="status">
-                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
-                </div>
-            </div>
-        );
-    }
     return(
         <div>
         <NavBar/>
-
+        
         <Container>
             <h1>Edit Profile</h1>
+        
+        {loading ? 
+            <div className="d-flex justify-content-center">
+            <div  role="status">
+                <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+            </div>
+        </div>
+        :
             <Form onSubmit={handleSubmit}>
                 <Form.Group>
                     <Form.Label>Email</Form.Label>
@@ -169,6 +171,7 @@ function EditProfile(){
                     Save changes
                 </Button>
             </Form>
+        }
         </Container>
 
         </div>

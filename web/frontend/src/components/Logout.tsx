@@ -1,18 +1,14 @@
-import { useState } from "react";
+import {isLoggedIn} from "../lib/acc";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
-import { AnyRecord } from "dns";
-import { database } from "firebase-admin";
 import {Link } from "react-router-dom";
 import {getAccessToken} from "../lib/acc"
 import NavBar from "./NavBar";
-
+import {useNavigate} from "react-router-dom";
+import {setLoggedIn} from "../lib/acc";
 
 function Logout() {
-
-    const styles = { alert: { color: 'red' }};
-
-
+    const navigate = useNavigate();
 
     async function goLogout(e : any) {
         e.preventDefault();
@@ -26,22 +22,22 @@ function Logout() {
                 }
             });    
             data = res.data;
-            window.location.href = '/';
+            localStorage.removeItem('accessToken');
+            setLoggedIn(false);
+            navigate("/");
     } catch(error) {
         if(data.error) {
             alert(data.error);
         } else {
             alert(`Something went wrong : ${error}`);
         }
+    }    
+        
     }
     
-
-        
-        
-        
-   
-        
-    }
+    if (!isLoggedIn()) {
+        navigate(-1);
+   }
 
     return (
         <div>
