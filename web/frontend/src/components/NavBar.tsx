@@ -31,7 +31,7 @@ function NavBar() {
                     <>
                     <Nav.Link href="/my-devices">My Devices</Nav.Link>
                     <Nav.Link href="/profile">Profile</Nav.Link>
-                    <Nav.Link href="/logout"><Button variant="outline-secondary" onClick={goLogout}>Logout</Button></Nav.Link></>
+                    <Nav.Link href="/logout" onClick={goLogout}>Logout</Nav.Link></>
                     :
                     <>
                     <Nav.Link href="/register">Register</Nav.Link>
