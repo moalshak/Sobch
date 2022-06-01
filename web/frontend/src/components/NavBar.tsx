@@ -4,7 +4,8 @@ import Container from 'react-bootstrap/Container';
 import { isLoggedIn } from '../lib/acc';
 import Nav from 'react-bootstrap/Nav';
 import {goLogout} from '../lib/acc';
-
+import {Link} from "react-router-dom";
+import Button from 'react-bootstrap/Button';
 
 function NavBar() {
     return(
@@ -29,12 +30,11 @@ function NavBar() {
                     <>
                     <Nav.Link href="/my-devices">My Devices</Nav.Link>
                     <Nav.Link href="/profile">Profile</Nav.Link>
-                    <Nav.Link href="/logout">Logout</Nav.Link></>
+                    <Link to={''}><Button onClick={goLogout}>Logout</Button></Link></>
                     :
                     <>
                     <Nav.Link href="/register">Register</Nav.Link>
                     <Nav.Link href="/login">Login</Nav.Link>
-                    <Nav.Link href ="/"onSelect={goLogout}>Logout</Nav.Link>
                     </>
                 }
 

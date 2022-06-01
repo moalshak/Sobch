@@ -109,10 +109,10 @@ function Register() {
                  message: "You are already logged in. If you want to make a new account please log out first",
                  variant: Variant.info
              });
+             setTimeout(()=> {
+                  navigate(-1);
+              }, 3000);
         }
-        setTimeout(()=> {
-             navigate(-1);
-         }, 3000);
     }, [])
 
     return (

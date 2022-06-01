@@ -92,10 +92,10 @@ function Login() {
                 message: "You are already logged in, please log out first",
                 variant: Variant.info
             });
+            setTimeout(()=> {
+                 navigate(-1);
+             }, 2000);
        }
-       setTimeout(()=> {
-            navigate(-1);
-        }, 2000);
    }, []);
 
 

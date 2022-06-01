@@ -21,7 +21,8 @@ export async function goLogout(e : any) {
             }
         });    
         data = res.data;
-        localStorage.setItem(`accessToken`, '')
+        localStorage.removeItem(`accessToken`);
+        setLoggedIn(false);
         window.location.href = '/';
     } catch(error) {
         if(data.error) {
