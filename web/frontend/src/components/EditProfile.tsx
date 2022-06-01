@@ -12,6 +12,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
 
+
+
 interface Profile {
     profile :{
         id: string,
@@ -24,6 +26,8 @@ interface Profile {
 }
 
 function EditProfile(){
+
+    const [newPassword, setNewPassword] = useState('');
     const [profile, setProfile] = useState<Profile>({
         profile : {
             id: "",
@@ -44,12 +48,22 @@ function EditProfile(){
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
+        if (profile.profile.credentials.password !== newPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
         try {
             setLoading(true);
             const response = await axios.put(`${BACKEND_BASE_URL}/profile/${id}`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
-                }
+                },
+                credentials : {
+                    email : profile.profile.credentials.email.trim(),
+                    password : newPassword.trim()
+                },
+                address : profile.profile.address.trim()
             });
             if (response.status === 200) {
                 alert("Your profile information has been successfully updated");
@@ -111,6 +125,9 @@ function EditProfile(){
                 <Form.Group>
                     <Form.Label>Email</Form.Label>
                     <Form.Control type="email" placeholder="email@exmaple.com" value={profile.profile.credentials.email} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, email: e.target.value}}})}/>
+                    <Form.Text className="text-muted">
+                        An empty field will preserve the current information.
+                    </Form.Text>
                 </Form.Group>
                 <Row>
                     <Col>
@@ -118,23 +135,29 @@ function EditProfile(){
                     <Form.Label>New Password</Form.Label>
                     <Form.Control type="password" placeholder="Password" value={profile.profile.credentials.password} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, password: e.target.value}}})}/>
                     <Form.Text className="text-muted">
-                        Must be at least 6 characters
+                        For security purposes has to be at least 6 characters, an empty field will preserve the current information.
                     </Form.Text>
                 </Form.Group>
                 </Col>
                 <Col>
                 <Form.Group>
                     <Form.Label>Confirm New Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password"/>
+                    <Form.Control type="password" placeholder="Password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+                    <Form.Text className="text-muted">
+                        Has to be identical to the previously entered password
+                    </Form.Text>
                 </Form.Group>
                 </Col>
                 </Row>
                 <Form.Group>
                     <Form.Label>Address</Form.Label>
                     <Form.Control type="text" placeholder="Address" value={profile.profile.address} onChange={(e) => setProfile({...profile, profile: {...profile.profile, address: e.target.value}})}/>
+                    <Form.Text className="text-muted">
+                        An empty field will preserve the current information.
+                    </Form.Text>
                 </Form.Group>
                 <Button variant="primary" type="submit">
-                    Update Info
+                    Save changes
                 </Button>
             </Form>
         </Container>
