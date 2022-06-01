@@ -72,6 +72,8 @@ function EditProfile(){
             });
             if (response.status === 200) {
                 alert("Your profile information has been successfully updated");
+                navigate(`/profile/${id}`);
+                return;
             }
             setLoading(false);
         } catch (err : any) {
