@@ -5,6 +5,7 @@ import { AnyRecord } from "dns";
 import { database } from "firebase-admin";
 import {Link } from "react-router-dom";
 import {getAccessToken} from "../lib/acc"
+import NavBar from "./NavBar";
 
 
 function Logout() {
@@ -44,6 +45,7 @@ function Logout() {
 
     return (
         <div>
+            <NavBar />
             <Link to={'/'}>
                 <button onClick={goLogout}>Confirm Logout</button>
             </Link>

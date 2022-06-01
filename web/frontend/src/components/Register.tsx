@@ -1,6 +1,11 @@
 import { useState } from "react";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from 'react-bootstrap/Container';
+import NavBar from "./NavBar";
 
 /***
  * Register component
@@ -67,13 +72,41 @@ function Register() {
 
     return (
         <div>
-            <form onSubmit={doRegisterRequest}>
-            <input type="text" value={email} onChange={(e) => setEmail(e.target.value) } placeholder="Email"/>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value) } placeholder="Password"/>
-            <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value) } placeholder="Confirm Password"/>
-            <input type="text" value={address} onChange={(e) => setAddress(e.target.value) } placeholder="Address"/>
-            <button type="submit">Register</button>
-            </form>
+            <NavBar />
+            
+            <Container>
+                <h1>Register</h1>
+                <Form onSubmit={doRegisterRequest}>
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                    <Form.Text className="text-muted">
+                        Must be at least 6 characters
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <Form.Control required type="password" placeholder="Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                    <Form.Text className="text-muted">
+                        Must be the same as the password
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group controlId="formBasicAddress">
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control type="text" placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
+                    <Form.Text className="text-muted">
+                        The address is mainly for you to link the devices to
+                    </Form.Text>
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Register
+                </Button>
+                </Form>
+            </Container>
         </div>
     );
 }

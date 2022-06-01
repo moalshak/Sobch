@@ -2,8 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import {BACKEND_BASE_URL} from "../App";
 import {getAccessToken} from "../lib/acc";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {useParams} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import NavBar from "./NavBar";
 
 interface Profile {
     profile :{
@@ -87,29 +94,51 @@ function EditProfile(){
 
     if (loading) {
         return (
-            <div className="loading">
-                <div className="loading-spinner"></div>
+            <div className="d-flex justify-content-center">
+                <div  role="status">
+                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+                </div>
             </div>
         );
     }
     return(
         <div>
+        <NavBar/>
+
+        <Container>
             <h1>Edit Profile</h1>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Email:
-                    <input type="text" value={profile.profile.credentials.email} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, email: e.target.value}}})}/>
-                </label>
-                <label>
-                    Password:
-                    <input type="password" value={profile.profile.credentials.password} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, password: e.target.value}}})}/>
-                </label>
-                <label>
-                    Address:
-                    <input type="text" value={profile.profile.address} onChange={(e) => setProfile({...profile, profile: {...profile.profile, id: e.target.value}})}/>
-                </label>
-                <input type="submit" value="Submit"/>
-            </form>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group>
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control type="email" placeholder="email@exmaple.com" value={profile.profile.credentials.email} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, email: e.target.value}}})}/>
+                </Form.Group>
+                <Row>
+                    <Col>
+                <Form.Group>
+                    <Form.Label>New Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={profile.profile.credentials.password} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, password: e.target.value}}})}/>
+                    <Form.Text className="text-muted">
+                        Must be at least 6 characters
+                    </Form.Text>
+                </Form.Group>
+                </Col>
+                <Col>
+                <Form.Group>
+                    <Form.Label>Confirm New Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password"/>
+                </Form.Group>
+                </Col>
+                </Row>
+                <Form.Group>
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control type="text" placeholder="Address" value={profile.profile.address} onChange={(e) => setProfile({...profile, profile: {...profile.profile, address: e.target.value}})}/>
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Update Info
+                </Button>
+            </Form>
+        </Container>
+
         </div>
     )
 

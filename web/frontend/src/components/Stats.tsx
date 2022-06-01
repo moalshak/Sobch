@@ -4,6 +4,15 @@ import {useParams} from "react-router-dom";
 import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
 import {Link} from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card';
+import ListGroup from 'react-bootstrap/ListGroup';
+import NavBar from "./NavBar";
 
 function Stats() {
     
@@ -109,36 +118,89 @@ function Stats() {
 
     function RenderStats() {
         return (
+            <Container>
+                <Card className='mt-3'>
+                    {/* TODO: add image of the model */}
+                    <Card.Img/> 
+                <Card.Header>Device with id: {device.id}</Card.Header>
+                <Card.Body>
+                    <Card.Text>
+                        <Row>
+                            <Col>
+                                
+                                <span>
+                                    <b>Room:</b> {device.config.room}
+                                </span>
+                            </Col>
+                            <Col>
+
+                                <span>
+                                    <b>Max:</b> {device.config.max}
+                                </span>
+                            </Col>
+                            <Col>
+                                <span>
+                                    <b>Min:</b> {device.config.min}
+                                </span>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <span>
+                                    <b>Active:</b> {device.config.active ? "Yes" : "No"}
+                                </span>
+                            </Col>
+                            <Col>
+                                <span>
+                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
+                                </span>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <span>
+                                    <b>Current temperature:</b>
+                                <CurrenTemp/>
+                                </span>
+                            </Col>
+                        </Row>
+                    </Card.Text>
+                </Card.Body>
+                <br/>
+                    <Card.Header>Owners</Card.Header>
+                    <ListGroup>
+                        {owners.map((owner) => {
+                            return (
+                                    <ListGroup.Item key={owner}>{owner}</ListGroup.Item>
+                            )
+                        })}
+                    </ListGroup>
+                </Card>
             <div>
-                <li>Current temperature: {<CurrenTemp/>}</li>
-                <li>Room : {device.config.room}</li>
-                <li>Max : {device.config.max}</li>
-                <li>Min : {device.config.min}</li>
-                <li>OTP : {device.otp}</li>
-                <li>Active : {device.config.active ? <span style={{color: "green"}}>YES</span> : <span style={{color: "red"}}>NO</span>}</li>
-                <li>Notify me: {device.config.wantsToBeNotified ? "Yes" : "No"}</li>
-                <h3>OWNERS</h3>
-                {owners.map((owner : any) => {
-                    return (
-                        <li key={owner}>{owner}</li>
-                    )
-                })}
-            <div>
+                <br/>
                 <Link to={`/alter/${deviceId}`}>
-                    <button>Edit This Devices Configuration</button>
+                    <Button variant="secondary">Edit This Devices Configuration</Button>
                 </Link>
+                <br/>
+                <br/>
                 <Link to={`/my-devices`}>
-                    <button>Back to My Devices</button>
+                    <Button variant="secondary">Back to My Devices</Button>
                 </Link>
             </div>
-            </div>
+            </Container>
         );
     }
 
     return (
         <div>
-            <h2>Stats</h2>
-            {loading ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderStats/>}
+            <NavBar/>
+            {loading ? 
+            <div className="d-flex justify-content-center">
+                <div  role="status">
+                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+                </div>
+            </div>
+            : <RenderStats/>}
         </div>
     );
 }

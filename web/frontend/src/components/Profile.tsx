@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import { getAccessToken } from '../lib/acc';
 import {Link} from "react-router-dom"
 import axios from 'axios';
-
+import NavBar from "./NavBar";
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -77,7 +77,14 @@ function Profile() {
 
     return (
         <div>
-            {loading ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderProfile/>}
+            <NavBar />
+            {loading ? 
+            <div className="d-flex justify-content-center">
+                <div  role="status">
+                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+                </div>
+            </div>
+            : <RenderProfile/>}
             <Link to={'/'}>
                 <button onClick={goDelete}>Delete account</button>
             </Link>

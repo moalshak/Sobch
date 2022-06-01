@@ -4,6 +4,12 @@ import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
 import { useNavigate } from "react-router-dom";
 import {Link} from "react-router-dom"
+import Button from "react-bootstrap/Button";
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import NavBar from "./NavBar";
 
 function MyDevices() {
 
@@ -91,37 +97,73 @@ function MyDevices() {
     const RenderDevices = function () {
         return (
             <div>
+            <Container>
                 <h1>MY DEVICES</h1>
                 <div>
                     <Link 
                         to={`/add-device`}
                     >
-                        <button>Add Device</button>
+                        <Button>Add Device</Button>
                     </Link>
                 </div>
                 {devices.map((device : any) => {
                     return (
+                        <div>
+                        <Card className='mb-3 mt-3'>
                         <div key={device.id}>
-                            <h1/>
-                            {device.currentTemp > device.config.max ? <span style={{fontSize: 48, color: "red"}}>🌡️{device.currentTemp} °C 🔥</span> :
-                            device.currentTemp < device.config.min ? <span  style={{fontSize: 48,color: "blue"}}>🌡️{device.currentTemp} °C ❄️</span> : <span style={{fontSize: 48, color: "green"}}>🌡️{device.currentTemp} °C ✅</span>}
-                            <h1/>
-                            <Link to={`/stats/${device.id}`}>
-                            <button>See Stats</button>
-                            </Link>
-                            <Link to={`/alter/${device.id}`}>
-                            <button>Edit Device</button>
-                            </Link>
+                            {/* TODO: add image */}
+                            <Row>
+                            <Card.Title>Device ID: {device.id}</Card.Title>
+                            <br/>
+                            <Card.Img variant="top" src="holder.js/100px180"/>
+                            <br/>
+                            <Col>
+                            <span>Current Temperature:</span>
+                            </Col>
+                            <Col>
+                            {
+                            device.currentTemp > device.config.max ? 
+                                <span style={{fontSize: 28, color: "red"}}>🌡️{device.currentTemp} °C 🔥</span> :
+                            device.currentTemp < device.config.min ?
+                                <span  style={{fontSize: 28,color: "blue"}}>🌡️{device.currentTemp} °C ❄️</span> :
+                            <span style={{fontSize: 28, color: "green"}}>🌡️{device.currentTemp} °C ✅</span>}
+                            </Col>
+                            </Row>
+                            <br/>
+                            <Row>
+                                <Col>
+                                {/* <Link to={`/stats/${device.id}`}>
+                                <Button >See Stats</Button>
+                                </Link> */}
+                                <Card.Link href={`/stats/${device.id}`}>See Stats</Card.Link>
+                                </Col>
+
+                                <Col>
+                                {/* <Link to={`/alter/${device.id}`}>
+                                <Button className="">Edit Device</Button>
+                                </Link> */}
+                                <Card.Link href={`/alter/${device.id}`}>Edit Device</Card.Link>
+                                </Col>
+                            </Row>
+                        </div>
+                        </Card>
                         </div>
                     );
                 })}
+            </Container>
             </div>
         );
     }
 
     return (
         <div>
-            {loading ? (firstTime ? <img src="../loading.gif" style={{width:"55px", height:"55px"}}/> : <RenderDevices/>) : <RenderDevices/>}
+            <NavBar/>
+            {loading ? (firstTime ?
+            <div className="d-flex justify-content-center">
+                <div  role="status">
+                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+                </div>
+            </div> : <RenderDevices/>) : <RenderDevices/>}
         </div>
     );
 

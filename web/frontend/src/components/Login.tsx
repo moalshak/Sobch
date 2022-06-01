@@ -2,6 +2,11 @@ import { useState } from "react";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
 import {Link} from "react-router-dom"
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Container from 'react-bootstrap/Container';
+import NavBar from "./NavBar";
 
 function Login() {
 
@@ -59,14 +64,27 @@ function Login() {
 
     return (
         <div>
-            <Link to={'/'}>
-            <button>Home</button>
-            </Link>
-            <form onSubmit={doLoginRequest}>
-            <input type = "text" value={email} onChange={(e) => logEmail(e.target.value) } placeholder = "Email"/>
-            <input type="password" value={password} onChange={(e) => logPassword(e.target.value) } placeholder="Password"/>
-            <button type="submit">Login </button>
-            </form>
+            {/* <Link to={'/'}>
+            <Button>Home</Button>
+            </Link> */}
+            <NavBar/>
+            
+            <Container>
+            <h1>Login</h1>
+            <Form onSubmit={doLoginRequest}>
+                <Form.Group controlId="formBasicEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value) }/>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
+                </Form.Group>
+                <Button variant="primary" type="submit">
+                    Login
+                </Button>
+            </Form>
+            </Container>
         </div>
     );
 }
