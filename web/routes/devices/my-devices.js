@@ -8,13 +8,13 @@ const router = express.Router(),
 
 
 function alreadyOwned(res) {
-    res.status(200).send({message: "Already Owned"});
+    res.status(200).send({error : false, message: "Already Owned"});
     Log.info("Already Owned device request");
     return;
 }
 
 function unauthorized(res, req) {
-    res.status(403).send({message: "Invalid match (device id / otp)", accessToken: req.user.stsTokenManager.accessToken});
+    res.status(403).send({error : true, message: "Invalid match (device id / otp)", accessToken: req.user.stsTokenManager.accessToken});
     return;
 }
 
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
         otp = device.otp;
         user = req.user;
     } catch(error) {
-        res.status(400).send({error: "Bad Request"});
+        res.status(400).send({error: true, message : "Bad Request"});
         Log.error(error);
         return;
     }
@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
                 return alreadyOwned(res);
             }
 
-            res.status(200).send({message: "device added", device: deviceSnapshot, accessToken: req.user.stsTokenManager.accessToken});
+            res.status(200).send({error : false, message: "device added", device: deviceSnapshot, accessToken: req.user.stsTokenManager.accessToken});
         }
         // otp does not match -> unauthorized
         else {

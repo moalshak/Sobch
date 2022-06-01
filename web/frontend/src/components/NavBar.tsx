@@ -27,6 +27,8 @@ function NavBar(props : any) {
 
                 <Nav.Link href="/my-devices">My Devices</Nav.Link>
                 <Nav.Link href="/profile">Profile</Nav.Link>
+
+                <Nav.Link href="/logout">Logout</Nav.Link>
             </Nav>
             </Navbar.Collapse>
         </Container>
