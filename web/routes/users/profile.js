@@ -1,7 +1,7 @@
 import express from "express";
 import {getLog} from "../../../lib/config.js";
 import { db } from "../../../lib/firebase.js";
-import { ref, get, set, child } from "firebase/database";
+import { ref, get, set, child, update } from "firebase/database";
 import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification, getIdToken } from "firebase/auth";
 
 const router = express.Router(),
@@ -44,6 +44,7 @@ router.get('/', (req, res) => {
 
     get(ref(db, `users/${userid}`)).then((snapshot) => {
         if (req.user.uid) {
+            console.log(snapshot.val())
             res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
             Log.info("Profile details returned successfully");
         } else if (!snapshot.exists()){
@@ -95,7 +96,7 @@ router.put('/', (req, res) => {
                         res.status(400).send({error : error});
                     });
             }
-            set(ref(db, `users/${userid}`),
+            update(ref(db, `users/${userid}`),
             {
                 "address": address
 

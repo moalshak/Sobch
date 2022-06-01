@@ -52,26 +52,32 @@ function EditProfile(){
         if (profile.profile.credentials.password){
             if (profile.profile.credentials.password !== "" || newPassword !== "")
             {
+                if (profile.profile.credentials.password.length < 6){
+                    alert('Password is less than 6 characters!');
+                    return;
+                }
                 if (profile.profile.credentials.password !== newPassword) {
                     alert('Passwords do not match');
                     return;
                 }
             }
         }
+
         
 
         try {
             setLoading(true);
             const response = await axios.put(`${BACKEND_BASE_URL}/profile/`, {
-                headers: {
-                    Authorization: `${getAccessToken()}`
-                },
                 credentials : {
                     email : profile.profile.credentials.email.trim(),
                     password : newPassword.trim()
                 },
                 address : profile.profile.address.trim()
-            });
+            }, {headers: {
+                    Authorization: `${getAccessToken()}`
+                }
+            }
+            );
             if (response.status === 200) {
                 alert("Your profile information has been successfully updated");
                 navigate(`/profile/`);
