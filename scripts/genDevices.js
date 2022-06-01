@@ -46,6 +46,7 @@ function generateID() {
  * @returns {string} One time password
  */
 function generateOTP() {
+
     return generate({ length: 20, numbers: true });
 }
 
