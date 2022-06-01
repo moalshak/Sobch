@@ -10,6 +10,8 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
+import {Alert, Variant} from './CustomAlert';
+
 
 function MyDevices() {
 
@@ -43,6 +45,17 @@ function MyDevices() {
      */
     const [updateIndicator, setUpdateIndicator] = useState(false);
 
+
+    /**
+     * Custom alert props which looks cleaner than the regular alert
+     */
+    const [alertProps, setAlertProps] = useState({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
+
+
     /**
      * Retrieve devices from the server
      */
@@ -67,8 +80,14 @@ function MyDevices() {
             }
         } catch (err : any) {
             if (err.response.status === 401) {
-                alert("You are not logged in! You will be redirected to the login page");
-                navigate("/login");
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in 3 seconds',
+                    variant: Variant.warning
+                });
+                setTimeout(()=> {
+                    navigate("/login");
+                }, 3000);
                 return;
             }
         }
@@ -100,16 +119,16 @@ function MyDevices() {
             <Container>
                 <h1>MY DEVICES</h1>
                 <div>
-                    <Link 
-                        to={`/add-device`}
+                    <div 
+                        className="d-grid"
                     >
-                        <Button>Add Device</Button>
-                    </Link>
+                        <Button href={`/add-device`} variant="outline-primary" className='mt-3 mb-3' size="lg">Add Device</Button>
+                    </div>
                 </div>
                 {devices.map((device : any) => {
                     return (
                         <div>
-                        <Card className='mb-3 mt-3'>
+                        <Card className='mb-3 mt-3 pb-1'>
                         <div key={device.id}>
                             {/* TODO: add image */}
                             <Row>
@@ -132,17 +151,10 @@ function MyDevices() {
                             <br/>
                             <Row>
                                 <Col>
-                                {/* <Link to={`/stats/${device.id}`}>
-                                <Button >See Stats</Button>
-                                </Link> */}
-                                <Card.Link href={`/stats/${device.id}`}>See Stats</Card.Link>
+                                <Button style={{width : "100%"}} variant="outline-primary" size='sm' href={`/stats/${device.id}`}>See Stats</Button>
                                 </Col>
-
                                 <Col>
-                                {/* <Link to={`/alter/${device.id}`}>
-                                <Button className="">Edit Device</Button>
-                                </Link> */}
-                                <Card.Link href={`/alter/${device.id}`}>Edit Device</Card.Link>
+                                <Button style={{width : "100%"}} variant="outline-primary" size='sm' href={`/alter/${device.id}`}>Edit Device</Button>
                                 </Col>
                             </Row>
                         </div>
@@ -158,6 +170,7 @@ function MyDevices() {
     return (
         <div>
             <NavBar/>
+            <Alert {...alertProps}/>
             {loading ? (firstTime ?
             <div className="d-flex justify-content-center">
                 <div  role="status">

@@ -142,21 +142,21 @@ function Alter() {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Room</Form.Label>
-                        <Form.Control required type="text" placeholder="Room"  value={device.config.room} onChange={(e) => setDevice({...device, config: {...device.config, room: e.target.value}})}/>
+                        <Form.Control type="text" placeholder="Room"  value={device.config.room} onChange={(e) => setDevice({...device, config: {...device.config, room: e.target.value}})}/>
                         <Form.Text className="text-muted">The room in which the device is located</Form.Text>
                     </Form.Group>
                     <Row>
                         <Col>
                     <Form.Group>
                         <Form.Label>Active</Form.Label>
-                        <Form.Check required type="checkbox" placeholder="Active"  checked={device.config.active} onChange={(e) => setDevice({...device, config: {...device.config, active: e.target.checked}})}/>
+                        <Form.Check type="checkbox" placeholder="Active"  checked={device.config.active} onChange={(e) => setDevice({...device, config: {...device.config, active: e.target.checked}})}/>
                         <Form.Text className="text-muted">If the device is active you will get real time temperature measures</Form.Text>
                     </Form.Group>
                     </Col>
                     <Col>
                     <Form.Group>
                         <Form.Label>Notify Me</Form.Label>
-                        <Form.Check required type="checkbox" placeholder="Notify Me"  checked={device.config.wantsToBeNotified} onChange={(e) => setDevice({...device, config: {...device.config, wantsToBeNotified: e.target.checked}})}/>
+                        <Form.Check type="checkbox" placeholder="Notify Me"  checked={device.config.wantsToBeNotified} onChange={(e) => setDevice({...device, config: {...device.config, wantsToBeNotified: e.target.checked}})}/>
                         <Form.Text className="text-muted">If you want to be notified when the temperature of this device is out of bounds</Form.Text>
                     </Form.Group>
                     </Col>
