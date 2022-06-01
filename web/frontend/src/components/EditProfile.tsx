@@ -27,7 +27,7 @@ interface Profile {
 
 function EditProfile(){
 
-    const [newPassword, setNewPassword] = useState('');
+    const [newPassword, setNewPassword] = useState("");
     const [profile, setProfile] = useState<Profile>({
         profile : {
             id: "",
@@ -48,10 +48,15 @@ function EditProfile(){
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        if (profile.profile.credentials.password !== newPassword) {
-            alert('Passwords do not match');
-            return;
+
+        if (profile.profile.credentials.password !== "" || newPassword !== "")
+        {
+            if (profile.profile.credentials.password !== newPassword) {
+                alert('Passwords do not match');
+                return;
+            }
         }
+        
 
         try {
             setLoading(true);
