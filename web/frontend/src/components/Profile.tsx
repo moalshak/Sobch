@@ -75,6 +75,8 @@ function Profile() {
         );
     }
 
+    
+
     return (
         <div>
             <NavBar />
@@ -91,5 +93,6 @@ function Profile() {
         </div>
     );
 };
+
 
 export default Profile;

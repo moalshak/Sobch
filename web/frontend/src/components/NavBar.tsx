@@ -3,6 +3,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
+import goLogout from '../lib/acc';
+
 
 function NavBar(props : any) {
     return(
@@ -28,7 +30,7 @@ function NavBar(props : any) {
                 <Nav.Link href="/my-devices">My Devices</Nav.Link>
                 <Nav.Link href="/profile">Profile</Nav.Link>
 
-                <Nav.Link href="/logout">Logout</Nav.Link>
+                <Nav.Link href ="/"onSelect={goLogout}>Logout</Nav.Link>
             </Nav>
             </Navbar.Collapse>
         </Container>

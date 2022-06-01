@@ -7,6 +7,7 @@ import { ref, set } from "firebase/database";
 const router = express.Router(),
     Log = getLog("register");
 
+    
 
 router.delete('/', async (req, res) => {
 
