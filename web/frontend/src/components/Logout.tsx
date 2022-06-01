@@ -6,8 +6,6 @@ import NavBar from './NavBar';
 
 function Logout () {
 
-
-    console.log("HEERERERER");
     const navigate = useNavigate();
     /**
      * Custom alert props which looks cleaner than the regular alert
@@ -17,7 +15,7 @@ function Logout () {
         message: '',
         variant: Variant.nothing
     });
-
+    
      useEffect(()=> {
         if (isLoggedIn() == false) {
              setAlertProps({ 
@@ -26,10 +24,11 @@ function Logout () {
                  variant: Variant.info
              });
              setTimeout(()=> {
-                  
+                navigate("/");
               }, 2000);
         }
     }, []);
+
 
     return (
         <div>
@@ -38,8 +37,6 @@ function Logout () {
         </div>
     );
 }
-
-
 
 
 
