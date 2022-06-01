@@ -8,7 +8,7 @@ function NavBar(props : any) {
     return(
         <Navbar bg="light" expand="lg">
         <Container>
-            <Navbar.Brand href="/1"> <img
+            <Navbar.Brand href="/"> <img
           alt=""
           src="/Sobchlogo.png"
           width="200"

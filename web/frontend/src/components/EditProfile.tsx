@@ -27,7 +27,7 @@ interface Profile {
 
 function EditProfile(){
 
-    const [newPassword, setNewPassword] = useState('');
+    const [newPassword, setNewPassword] = useState("");
     const [profile, setProfile] = useState<Profile>({
         profile : {
             id: "",
@@ -48,14 +48,20 @@ function EditProfile(){
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        if (profile.profile.credentials.password !== newPassword) {
-            alert('Passwords do not match');
-            return;
+        if (profile.profile.credentials.password){
+            if (profile.profile.credentials.password !== "" || newPassword !== "")
+            {
+                if (profile.profile.credentials.password !== newPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+            }
         }
+        
 
         try {
             setLoading(true);
-            const response = await axios.put(`${BACKEND_BASE_URL}/profile/${id}`, {
+            const response = await axios.put(`${BACKEND_BASE_URL}/profile/`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 },
@@ -67,6 +73,8 @@ function EditProfile(){
             });
             if (response.status === 200) {
                 alert("Your profile information has been successfully updated");
+                navigate(`/profile/`);
+                return;
             }
             setLoading(false);
         } catch (err : any) {
@@ -77,7 +85,7 @@ function EditProfile(){
             }
             else if (err.response.status === 500) {
                 alert("Invalid password, must be at least 6 characters!");
-                navigate(`/edit-profile/${id}`);
+                navigate(`/edit-profile/`);
                 return;
             }
         }
@@ -86,7 +94,7 @@ function EditProfile(){
     var getProfile = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${BACKEND_BASE_URL}/profile/${id}`, {
+            const response = await axios.get(`${BACKEND_BASE_URL}/profile/`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }

@@ -1,20 +1,33 @@
 import { useState } from "react";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
-import {Link} from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import NavBar from "./NavBar";
+import {Alert, AlertProps, Variant} from './CustomAlert';
+
 
 function Login() {
 
     const [email, logEmail] = useState('');
     const [password, logPassword] = useState('');
     
-    
+    /**
+     * Custom alert props which looks cleaner than the regular alert
+     */
+    const [alertProps, setAlertProps] = useState<AlertProps>({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
 
+    /***
+     * takes care of the login form
+     * 
+     * @param e event
+    */
    async function doLoginRequest(e: any) {
        e.preventDefault();
        var data : any = {};
@@ -25,37 +38,48 @@ function Login() {
                password : password.trim()
            });
            data = res.data;
+           var error = data.error, message;
 
-           if(data.error) {
+           if(error) {
                if(data.message){
-                   alert({message : data.message, error : data.error});
-               } else {
-                alert(data.error);
-               }
+                   message = data.message;
+                } else {
+                    message = error;
+                }
+                setAlertProps({ 
+                    heading: 'Error',
+                    message: error,
+                    variant: Variant.danger
+                 });
                return;
            }
 
            // message show the message from the server
            if (data.message) {
-            alert(data.message);
-        }
+            setAlertProps({ 
+                heading: 'Success',
+                message: "You have successfully logged in",
+                variant: Variant.success
+             });
+            }
 
         // set local storage 
         const accessToken = res.data.accessToken;
         localStorage.setItem('accessToken', accessToken);
-
         
-        window.location.href = '/';
-    } catch(error) {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            alert(`Something went wrong : ${error}`);
+        setTimeout(()=> {
+            window.location.href = '/';
+        }, 1500);
+
+    } catch(error : any) {
+        if (error.response.data.error) {
+            setAlertProps({ 
+                heading: 'Error',
+                message: error.response.data.message,
+                variant: Variant.danger
+            });   
         }
     }
-       
-
-
 
    }
 
@@ -64,23 +88,21 @@ function Login() {
 
     return (
         <div>
-            {/* <Link to={'/'}>
-            <Button>Home</Button>
-            </Link> */}
             <NavBar/>
-            
-            <Container>
+            <Alert {...alertProps} />
+
+            <Container className='mt-3'>
             <h1>Login</h1>
             <Form onSubmit={doLoginRequest}>
                 <Form.Group controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value) }/>
+                    <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value) }/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
+                    <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                 </Form.Group>
-                <Button variant="primary" type="submit">
+                <Button variant="primary" type="submit" className='mt-3'>
                     Login
                 </Button>
             </Form>
