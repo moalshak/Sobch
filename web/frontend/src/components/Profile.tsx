@@ -63,21 +63,21 @@ function Profile() {
     }, []);
 
     function RenderProfile(){
+
         return (
-            <div>
+                <div>
                 <h1> Profile </h1>
                 <Link to={`/edit-profile/`}>
                     <button>Edit Profile</button>
                 </Link>
-                <div>
                 <li>Email address : {email}</li>
                 <li>Address/city : {address}</li>
                 <li>Other : {metadata}</li>
                 </div>
-            </div>
-        );
+            )
+            
+        
     }
-
     
 
     return (
@@ -95,7 +95,8 @@ function Profile() {
             </Link>
         </div>
     );
-};
+    
+    }
 
 
 export default Profile;

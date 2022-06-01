@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BACKEND_BASE_URL } from "../App";
 
+
 /**
  * @returns {string} The access token
  */
@@ -23,7 +24,7 @@ export async function goLogout(e : any) {
         data = res.data;
         localStorage.removeItem(`accessToken`);
         setLoggedIn(false);
-        window.location.href = '/';
+       window.location.href = '/Logout';
     } catch(error) {
         if(data.error) {
             alert(data.error);
