@@ -14,6 +14,8 @@ import NavBar from "./NavBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {setLoggedIn} from "../lib/acc";
+import {Alert, AlertProps, Variant} from './CustomAlert';
+
 
 interface Device {
     id: string,
@@ -52,6 +54,18 @@ function Alter() {
 
     const {deviceId} = useParams();
 
+
+    const [showForm, setShowForm] = useState(true);
+
+    /**
+     * Custom alert props which looks cleaner than the regular alert
+     */
+    const [alertProps, setAlertProps] = useState<AlertProps>({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
+
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -82,13 +96,12 @@ function Alter() {
 
     var getDevice = async () => {
         try {
-            const response = await axios.get(`${BACKEND_BASE_URL}/my-devices`, {
+            const response = await axios.get(`${BACKEND_BASE_URL}/stats/${deviceId}`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }
             });
-            var devices = response.data.devices;
-            var device = devices.find((d : any) => d.id === deviceId);
+            var device = response.data.device;
             if (device) {
                 setDevice(device);
                 setLoading(false);
@@ -96,8 +109,45 @@ function Alter() {
             setLoggedIn(true);
         } catch (err : any) {
             if (err.response.status === 401) {
-                alert("You are not logged in! You will be redirected to the login page");
-                navigate("/login");
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in 2 seconds',
+                    variant: Variant.danger
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2500);
+                return;
+            }
+        }
+    }
+
+    var deleteDevice = async () => {
+        try {
+            const response = await axios.delete(`${BACKEND_BASE_URL}/alter/${deviceId}`, {
+                headers: {
+                    Authorization: `${getAccessToken()}`
+                }
+            });
+            if (response.status === 200) {
+                setAlertProps({
+                    heading: 'Device Deleted',
+                    message: 'The device has been deleted!',
+                    variant: Variant.success
+                });
+                setTimeout(() => {
+                    navigate("/my-devices");
+                }, 2500);
+                setShowForm(false);
+                return;
+            }
+        } catch (err : any) {
+            if (err.response.data.error) {
+                setAlertProps({
+                    heading: 'Error',
+                    message: err.response.data.message,
+                    variant: Variant.danger
+                });
                 return;
             }
         }
@@ -118,8 +168,9 @@ function Alter() {
     return(
         <div>
             <NavBar/>
+            <Alert {...alertProps}/>
             <Container>
-        {loading ? 
+        {loading || !showForm ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">
                     <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
@@ -129,7 +180,7 @@ function Alter() {
             <><h1>Edit Device</h1><Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Device's ID:</Form.Label>
-                            <Form.Control value={device.id} disabled />
+                            <Form.Control value={deviceId} disabled />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Minimum Temperature</Form.Label>
@@ -143,7 +194,7 @@ function Alter() {
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Room</Form.Label>
-                            <Form.Control type="text" placeholder="Kitchen" value={device.config.room} onChange={(e) => setDevice({ ...device, config: { ...device.config, room: e.target.value } })} />
+                            <Form.Control type="text" value={device.config.room} onChange={(e) => setDevice({ ...device, config: { ...device.config, room: e.target.value } })} />
                             <Form.Text className="text-muted">The room in which the device is located</Form.Text>
                         </Form.Group>
                         <Row>
@@ -172,7 +223,10 @@ function Alter() {
                         </Row>
                         <br />
                         <Button variant="primary" type="submit">
-                            Edit Device's Configuration
+                            Edit This Device's Configuration
+                        </Button>
+                        <Button className="ms-3" variant="danger" onClick={deleteDevice}>
+                            Unlink This Device
                         </Button>
                     </Form><br /><Link to={`/my-devices`}><Button variant="secondary" className='mt-3 mb-3'>All Devices</Button></Link><Link to={`/stats/${device.id}`}><Button variant="secondary" className="ms-3">See this devices Stats</Button></Link><br /></>
     }
