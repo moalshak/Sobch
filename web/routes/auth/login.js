@@ -26,42 +26,35 @@ router.post('/', async (req, res) => {
         addUser(user);
 
         code = 200;
-        message = "Success - Logged in"
+        message = "Logged in!";
         if(!user.emailVerified){
             sendEmailVerification(user)
             .then(() => {
-                console.log("Verification email has been sent")
+                Log.info("Verification email has been sent to ", {user : user.email});
                 message = "Verify email in order to login"
                 code = 401;
-                res.status(code).send({message});
+                res.status(code).send({error : true, message});
             }).catch((error) => {
-                console.error(error);
-                res.status(400).send({error : error});
+                res.status(400).send({error : true, message: "Please verify your email in order to login"});
             });
         } else {
             Log.info("Logged in", {user : user.uid});
-            res.status(code).send({accessToken: user.stsTokenManager.accessToken, message});
+            res.status(code).send({error : false, accessToken: user.stsTokenManager.accessToken, message});
         }
 
     } catch(error) {
          const errorCode = error.code;
-         var message = {error : ""}
+         var message;
 
-        if(errorCode == "auth/user-not-found"){
+        if(errorCode == "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
             code = 400;
-            message.error = "Invalid Email";
-        } else if(errorCode == "auth/wrong-password") {
-            code = 400;
-            message = "Wrong password"
-        } else if(errorCode == "auth/invalid-email"){
-            code = 400;
-            message = "Invalid email"
+            message = "Invalid Credentials";
         } else {
             code = 500;
-            message.error = error.message;
+            message = error.message;
         }
         Log.error("Failed to login", {error, message});
-        res.status(code).send(message);
+        res.status(code).send({error : true, message});
     }
 });
 

@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import NavBar from "./NavBar";
+import {Alert, AlertProps, Variant} from './CustomAlert';
 
 /***
  * Register component
@@ -21,6 +22,15 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [address, setAddress] = useState('');
 
+    /**
+     * Custom alert props which looks cleaner than the regular alert
+    */
+    const [alertProps, setAlertProps] = useState<AlertProps>({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
+
     /***
      * takes care of the register form
      *  - if the passwords don't match, show an error
@@ -30,7 +40,11 @@ function Register() {
         e.preventDefault();
         // check if the passwords match
         if (password !== confirmPassword) {
-            alert('Passwords do not match');
+            setAlertProps({
+                heading: 'Error',
+                message: 'Passwords do not match',
+                variant: Variant.warning
+            });
             return;
         }
 
@@ -49,31 +63,48 @@ function Register() {
             if (data.error) {
                 // there was an error
                 if (data.message) {
-                    alert({message : data.message, error : data.error});
+                    setAlertProps({
+                        heading: 'Error',
+                        message: data.message,
+                        variant: Variant.danger
+                    });                    
                 }
                 return;
             }
             
             // message show the message from the server
             if (data.message) {
-                alert(data.message);
+                setAlertProps({
+                    heading: 'Success',
+                    message: data.message,
+                    variant: Variant.success
+                });
             }
 
             // set local storage with the token
             const accessToken = res.data.accessToken;
             localStorage.setItem('accessToken', accessToken);
 
-            // TODO: what to do here ?
-            window.location.href = '/';
-        } catch(error) {
-            alert(`Something went wrong : ${error}`);
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2300);
+
+        } catch(error : any) {
+            if (error.response.data.error) {
+                setAlertProps({
+                    heading: 'Error',
+                    message: error.response.data.message,
+                    variant: Variant.danger
+                });
+            }
         }
     }
 
     return (
         <div>
             <NavBar />
-            
+            <Alert {...alertProps}/>
+
             <Container>
                 <h1>Register</h1>
                 <Form onSubmit={doRegisterRequest}>
