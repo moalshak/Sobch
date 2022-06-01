@@ -48,14 +48,20 @@ router.get('/:id', async (req, res) => {
       else if ((snapshot.exists() && snapshot.val().owners.includes(user.uid)) || isAdmin(user.uid)) {
         var device = snapshot.val();
         var ownersEmails = [];
-
+        if (isAdmin(user.uid)) {
+          ownersEmails.push(user.uid);
+        }
         for (var owner in device.owners) {
           if (isAdmin(device.owners[owner])) {
             if (isAdmin(user.uid)) {
-              ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+              if (!ownersEmails.includes(device.owners[owner])) {
+                ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+              }
             }
           } else {
-            ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+            if (!ownersEmails.includes(device.owners[owner])) {
+              ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+            }
           }
         }
         device.owners = ownersEmails;
@@ -70,6 +76,7 @@ router.get('/:id', async (req, res) => {
       }
     } catch(error){
       Log.error(error);
+      res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
     }    
 });
 

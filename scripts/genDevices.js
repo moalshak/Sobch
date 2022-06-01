@@ -81,9 +81,7 @@ for (var i = 0; i < 10; i++) {
     devices.push(device.id);
     var devToAdd = {};
     for (var key in device) {
-        if (key !== 'id') {
-            devToAdd[key] = device[key];
-        }
+        devToAdd[key] = device[key];
     }
     set(ref(db, `devices/${device.id}`), devToAdd);
 }

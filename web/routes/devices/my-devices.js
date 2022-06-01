@@ -175,6 +175,25 @@ router.get('/', async (req, res) => {
                 );
             }
 
+            // get all devices
+            var devicesSnap = await get(ref(db, `devices`));
+            if (devicesSnap.exists()) {
+                var devicesSnapshot = devicesSnap.val();
+                for (var i in devicesSnapshot) {
+                    var dev = devicesSnapshot[i];
+                    if (isAdmin(user.uid) || dev.owners.includes(user.uid)) {
+                        if (!devicesIds.includes(dev.id)) {
+                            devices.push (
+                                {
+                                    id : dev.id,
+                                    ...devicesSnapshot[dev.id]
+                                }
+                            );
+                        }
+                    }
+                }
+            }
+
             res.status(200).send({message: "Owned Device List.", devices, accessToken: req.user.stsTokenManager.accessToken})
         }
         else if (user.owns === undefined || snapshot.val().owns.length === 0)
