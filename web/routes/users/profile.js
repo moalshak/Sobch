@@ -69,54 +69,49 @@ router.put('/', (req, res) => {
     const user = req.user;
     const newPassword = credentials.password.trim();
     
-    if(!req.user.uid){
-        res.status(401).send({error : "Unauthorized access"});
-    }
-    else {
-        get(ref(db, `users/${userid}`)).then((snapshot) => {
-            if (snapshot.exists()){
-                if (newPassword !== ""){                   
-                    updatePassword(user, newPassword).then(() => {
-                        Log.info("User's password has been succesfully updated")
+    get(ref(db, `users/${userid}`)).then((snapshot) => {
+        if (snapshot.exists()){
+            if (newPassword !== ""){                   
+                updatePassword(user, newPassword).then(() => {
+                    Log.info("User's password has been succesfully updated")
+                    //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                }).catch((error) => {
+                    console.error(error);
+                    res.status(400).send({error : error});
+                });
+            }
+            
+            if (credentials.email === req.user.email){
+                Log.info("email is same, nothing happens")
+                //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+            }
+            else if(credentials.email !== ""){
+                verifyBeforeUpdateEmail(user, credentials.email)
+                    .then(function() {
+                        Log.info("Verification email has been set, awaiting verification")
                         //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
                     }).catch((error) => {
                         console.error(error);
                         res.status(400).send({error : error});
                     });
-                }
-                
-                if (credentials.email === req.user.email){
-                    Log.info("email is same, nothing happens")
-                    //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                }
-                else if(credentials.email !== ""){
-                    verifyBeforeUpdateEmail(user, credentials.email)
-                        .then(function() {
-                            Log.info("Verification email has been set, awaiting verification")
-                            //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                        }).catch((error) => {
-                            console.error(error);
-                            res.status(400).send({error : error});
-                        });
-                }
-                set(ref(db, `users/${userid}`),
-                {
-                    "address": address
-
-                }).then(() => {
-                    res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                    Log.info("User information updated")
-                }).catch((error) => {
-                    console.error(error);
-                    res.status(400).send({error : error});
-                });
-
             }
-            else {
-                res.status(400).send({error : "Bad Request"});
-            }
-        })
-    } 
+            set(ref(db, `users/${userid}`),
+            {
+                "address": address
+
+            }).then(() => {
+                res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                Log.info("User information updated")
+            }).catch((error) => {
+                console.error(error);
+                res.status(400).send({error : error});
+            });
+
+        }
+        else {
+            res.status(400).send({error : "Bad Request"});
+        }
+    })
 })
 // to do : take care pf errors and check for verification and use maybe verifybeforeupdate 
 export default {
