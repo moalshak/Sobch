@@ -19,6 +19,69 @@ function unauthorized(res, req) {
 }
 
 
+router.delete("/", async (req, res) => {
+    var user, deviceId;
+
+    try {
+        user = req.user;
+        deviceId = req.body.deviceId;
+    } catch (error) {
+        res.status(400).send({error : true, message: "Bad request"});
+        return;
+    }
+
+    var message, code;
+
+    try {
+        // check if device is owned by user
+        const device = await get(ref(db, `devices/${deviceId}`));
+        if (!device) {
+            unauthorized(res, req);
+            return;
+        }
+
+        var owners = device.owners || [];
+
+        if (owners.indexOf(user.uid) === -1) {
+            unauthorized(res, req);
+            return;
+        }
+
+        // get the user
+        const userData = await get(ref(db, `users/${user.uid}`));
+
+        var owns = userData.owns || [];
+
+        if (owns.indexOf(deviceId) === -1) {
+            unauthorized(res, req);
+            return;
+        }
+
+        // remove device from user and user from device
+        device.owners.filter((owner) => {
+            return owner !== user.uid;
+        });
+
+        // remove device from user
+        userData.owns.filter((deviceId) => {
+            return deviceId !== deviceId;
+        });
+
+        await set(ref(db, `devices/${deviceId}`), device);
+        await set(ref(db, `users/${user.uid}`), userData);
+
+        code = 200;
+        message = "Success, device unlinked!";
+        res.status(code).send({error : false, message});
+        Log.info("Success - Device unlinked", {deviceId, user: user.uid});
+    } catch (error) {
+        code = 400;
+        message = "FAILED";
+        res.status(code).send({error : true, message});
+        Log.error(error);
+    }
+});
+
 router.post("/", async (req, res) => {
     var device, otp, user;
     try {
