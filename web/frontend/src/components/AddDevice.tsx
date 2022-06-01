@@ -45,6 +45,8 @@ function AddDevice() {
 
     const [loading, setLoading] = useState(true);
 
+    const [showForm, setShowForm] = useState(true);
+
     /**
      * Custom alert props which looks cleaner than the regular alert
     */
@@ -76,6 +78,10 @@ function AddDevice() {
                         message: 'You already own this device! The configuration has been updated',
                         variant: Variant.info
                     });
+                    setShowForm(false);
+                    setTimeout(() => {
+                        navigate(`/stats/${device.device.id}`);
+                    }, 2000);
                     return;
                 } else if (response.data.message === "device added") {
                     setAlertProps({
@@ -83,6 +89,10 @@ function AddDevice() {
                         message: `The device has been added!`,
                         variant: Variant.success
                     });
+                    setShowForm(false);
+                    setTimeout(() => {
+                        navigate(`/stats/${device.device.id}`);
+                    }, 2000);
                     return;
                 } else {
                     setAlertProps({
@@ -145,7 +155,7 @@ function AddDevice() {
         <NavBar/>
         <Alert {...alertProps}/>
         <Container className="mt-3">
-        {loading ? 
+        {loading || !showForm ? 
             <div  role="status">
                 <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
             </div>

@@ -39,7 +39,7 @@ var ID = 0;
  */
 function generateID() {
     ID++;
-    return ID;
+    return ID.toString();
 }
 
 /**

@@ -47,18 +47,18 @@ router.put('/:deviceId', async (req, res) => {
                     Log.info("Success device updated", {device : deviceVal, user : user.uid});
                     return;
                 } else {
-                    res.status(401).send({error: "Unauthorized"});
+                    res.status(401).send({error: true, message : "Unauthorized"});
                     Log.info("Unauthorized user does not own this device", {user : user.uid});
                     return;
                 }
             } else {
-                res.status(401).send({error: "Unauthorized"});
+                res.status(401).send({error: true, message : "Unauthorized"});
                 Log.info("Unauthorized user does not exist", {user : user.uid});
                 return;
             }
         }
     } catch(error) {
-        res.status(500).send({message: "Internal server error", error: error});
+        res.status(500).send({message: "Internal server error", error: true});
         Log.info("Internal server error", {user: user.uid});
         return;
     }
@@ -70,7 +70,7 @@ router.delete('/:deviceId', async (req, res) => {
         deviceId = req.params.deviceId.trim();
         user = req.user;
     } catch(error) {
-        res.status(400).send({error: "Bad Request"});
+        res.status(400).send({error: true, message : "Bad Request"});
         Log.error(error);
         return;
     }
@@ -82,28 +82,32 @@ router.delete('/:deviceId', async (req, res) => {
             var requester = await get(ref(db, `users/${user.uid}`));
 
             if(requester.exists()) {
-                var owns = requester.val().owns;
-                var owners = deviceSnapshot.val().owners;
-                if (owns.includes(deviceId)) {
-                    //console.log("owns: " + owns);
-                    //console.log("owners: " + owners + "\n\n");
-                    var indexDevice = owns.indexOf(deviceId);
-                    var indexOwner = owners.indexOf(user.uid);
-                    owns.splice(indexDevice, 1);
-                    owners.splice(indexOwner, 1);
-                    //console.log("owns: " + owns);
-                    //console.log("owners: " + owners);
-                    await set(ref(db, `users/${user.uid}/owns`), owns);
-                    await set(ref(db, `devices/${deviceId}/owners`), {"owners": []});  
-
-                    res.status(200).send({message: "Success device deleted",accessToken: req.user.stsTokenManager.accessToken});
-                    Log.info("Success device deleted", {deviceId: deviceId, user : user.uid});
-                    return;
-                } else {
-                    res.status(401).send({error: "Unauthorized"});
-                    Log.info("Unauthorized user does not own this device", {user : user.uid});
+                var owns = requester.val().owns || [];
+                var owners = deviceSnapshot.val().owners || [];
+                
+                if (!owners.includes(user.uid)) {
+                    res.status(401).send({error: true, message : "Unauthorized"});
+                    Log.info("Unauthorized user does not own this device, user is not linked", {user : user.uid});
                     return;
                 }
+
+                if (!owns.includes(deviceId)) {
+                    res.status(401).send({error: true, message : "Unauthorized"});
+                    Log.info("Unauthorized user does not own this device, device is not linked", {user : user.uid});
+                    return;
+                }
+                
+                owns = owns.filter(id => id !== deviceId);
+                owners = owners.filter(id => id !== user.uid);
+
+
+                await set(ref(db, `users/${user.uid}/owns`), owns);
+                await set(ref(db, `devices/${deviceId}/owners`), owners);  
+
+                res.status(200).send({message: "Success device deleted",accessToken: req.user.stsTokenManager.accessToken});
+                Log.info("Success device deleted", {deviceId: deviceId, user : user.uid});
+                return;
+                
             } else {
                 res.status(401).send({error: "Unauthorized"});
                 Log.info("Unauthorized user does not own this device", {user : user.uid});
