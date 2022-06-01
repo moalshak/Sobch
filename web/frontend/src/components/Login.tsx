@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -69,7 +69,6 @@ function Login() {
         const accessToken = res.data.accessToken;
         localStorage.setItem('accessToken', accessToken);
         setLoggedIn(true);
-        navigate('/');
         setTimeout(()=> {
             window.location.href = '/';
         }, 1500);
@@ -86,32 +85,46 @@ function Login() {
 
    }
 
-   if (isLoggedIn()) {
-        navigate(-1);
-   }
+   useEffect(()=> {
+       if (isLoggedIn()) {
+            setAlertProps({ 
+                heading: 'Already logged in!',
+                message: "You are already logged in, please log out first",
+                variant: Variant.info
+            });
+       }
+       setTimeout(()=> {
+            navigate(-1);
+        }, 2000);
+   }, []);
 
 
     return (
         <div>
             <NavBar/>
             <Alert {...alertProps} />
+            {
+                isLoggedIn() ?
+                <></>
+                :
+                <Container className='mt-3'>
+                <h1>Login</h1>
+                <Form onSubmit={doLoginRequest}>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value) }/>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
+                    </Form.Group>
+                    <Button variant="primary" type="submit" className='mt-3'>
+                        Login
+                    </Button>
+                </Form>
+                </Container>
 
-            <Container className='mt-3'>
-            <h1>Login</h1>
-            <Form onSubmit={doLoginRequest}>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value) }/>
-                </Form.Group>
-                <Form.Group>
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
-                </Form.Group>
-                <Button variant="primary" type="submit" className='mt-3'>
-                    Login
-                </Button>
-            </Form>
-            </Container>
+            }
         </div>
     );
 }

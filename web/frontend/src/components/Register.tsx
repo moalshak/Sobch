@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from 'axios';
 import {BACKEND_BASE_URL} from '../App';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -102,15 +102,28 @@ function Register() {
         }
     }
 
-    if (isLoggedIn()) {
-        navigate(-1);
-    }
+    useEffect(()=> {
+        if (isLoggedIn()) {
+             setAlertProps({ 
+                 heading: 'Already logged in!',
+                 message: "You are already logged in. If you want to make a new account please log out first",
+                 variant: Variant.info
+             });
+        }
+        setTimeout(()=> {
+             navigate(-1);
+         }, 3000);
+    }, [])
 
     return (
         <div>
             <NavBar />
             <Alert {...alertProps}/>
-
+            {
+                isLoggedIn() ?
+                <></>
+                :
+            
             <Container>
                 <h1>Register</h1>
                 <Form onSubmit={doRegisterRequest}>
@@ -144,6 +157,7 @@ function Register() {
                 </Button>
                 </Form>
             </Container>
+        }
         </div>
     );
 }
