@@ -49,7 +49,7 @@ router.get('/:id', async (req, res) => {
         var device = snapshot.val();
         var ownersEmails = [];
         if (isAdmin(user.uid)) {
-          ownersEmails.push(user.uid);
+          ownersEmails.push(await get(ref(db, `users/${user.uid}/credentials/email`)));
         }
         for (var owner in device.owners) {
           if (isAdmin(device.owners[owner])) {

@@ -1,5 +1,5 @@
 import express from "express";
-import {db, auth} from "../../../lib/firebase.js";
+import {auth, sendPasswordResetEmail} from "../../../lib/firebase.js";
 import {signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
 import {getLog, addUser} from "../../../lib/config.js";
 
@@ -57,6 +57,33 @@ router.post('/', async (req, res) => {
         res.status(code).send({error : true, message});
     }
 });
+
+
+router.put('/', (req, res) => {
+    var email = '';
+    try {
+        email = req.body.email.trim();
+    } catch(err) {
+        Log.error("Bad request", {error : err.message});
+        res.status(400).send({error : true, message : "Bad request", method: "PUT"});
+    }
+
+    sendPasswordResetEmail(auth, email)
+    .then(() => {
+        res.status(200).send({error : false, message: "If the email exists, a password reset email has been sent!"});
+    })
+    .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if(errorCode == "auth/user-not-found"){
+            // spoof response for email not found
+            res.status(200).send({error : false, message: "If the email exists, a password reset email has been sent!"});
+        } else {
+            res.status(400).send({error : true, message: errorMessage});
+            Log.error(errorMessage, {error, errorCode});
+        }
+    })
+})
 
 export default {
     router: router

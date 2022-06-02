@@ -15,6 +15,8 @@ function Login() {
     const [email, logEmail] = useState('');
     const [password, logPassword] = useState('');
     const navigate = useNavigate();
+
+    const [setPass, setSetPass] = useState(false);
     
     /**
      * Custom alert props which looks cleaner than the regular alert
@@ -98,6 +100,29 @@ function Login() {
        }
    }, []);
 
+   function sendReset(e : any) {
+        e.preventDefault();
+
+        var email = e.target.email;
+        axios.put(`${BACKEND_BASE_URL}/login`, {
+            email : email.value
+        }).then(res => {
+            setAlertProps({ 
+                heading: 'Success',
+                message: res.data.message,
+                variant: Variant.success
+            });
+        }
+        ).catch(err => {
+            setAlertProps({ 
+                heading: 'Error',
+                message: err.response.data.message,
+                variant: Variant.danger
+            });
+        }
+        );
+   }
+
 
     return (
         <div>
@@ -106,6 +131,22 @@ function Login() {
             {
                 isLoggedIn() ?
                 <></>
+                :
+                setPass ?
+                <Container className='mt-3'>
+                <Form onSubmit={sendReset}>
+                    <Form.Group controlId="formBasicEmail">
+                        <Form.Label>Email address</Form.Label>
+                        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e)=> {logEmail(e.target.value)}}/>
+                        <Form.Text className="text-muted">
+                            Email address associated with your account
+                        </Form.Text>
+                    </Form.Group>
+                    <Button variant="primary" type="submit">
+                        Send reset email
+                    </Button>
+                </Form>
+                </Container>
                 :
                 <Container className='mt-3'>
                 <h1>Login</h1>
@@ -118,9 +159,8 @@ function Login() {
                         <Form.Label>Password</Form.Label>
                         <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                     </Form.Group>
-                    <Button variant="primary" type="submit" className='mt-3'>
-                        Login
-                    </Button>
+                    <Button variant="primary" type="submit" className='mt-3'>Login</Button>
+                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?</Button>
                 </Form>
                 </Container>
 

@@ -136,12 +136,12 @@ function Stats() {
                             <Col>
 
                                 <span>
-                                    <b>Max:</b> {device.config.max}
+                                    <b>Max:</b> {device.config.max} °C
                                 </span>
                             </Col>
                             <Col>
                                 <span>
-                                    <b>Min:</b> {device.config.min}
+                                    <b>Min:</b> {device.config.min} °C
                                 </span>
                             </Col>
                         </Row>

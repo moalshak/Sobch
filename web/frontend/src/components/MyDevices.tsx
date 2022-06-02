@@ -146,7 +146,7 @@ function MyDevices() {
                             <br/>
                             <Col>
                             </Col>
-                            <span>Current Temperature:
+                            <span><b style={{fontSize: 24}}>Current Temperature:</b>
                             {
                             device.currentTemp > device.config.max ? 
                                 <span style={{fontSize: 24, color: "red"}}> {device.currentTemp}°C <span style={{fontSize: 20, color: "green"}}>🔥</span></span> :
