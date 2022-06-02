@@ -57,10 +57,10 @@ function How(){
     </div>
 
     <div className="col-md-6 col-lg-4 mb-4">
-      <h6 className="mb-3 text-primary"><i className="fas fa-book-open text-primary pe-2"></i> Another
-        question that is longer than usual</h6>
+      <h6 className="mb-3 text-primary"><i className="fas fa-book-open text-primary pe-2"></i> Can I have more than one person registered to a single device?</h6>
       <p>
-        Of course! We’re happy to offer a free plan to anyone who wants to try our service.
+        Of course! You can register as many people as you want to a single device. Just register the device with the one-time Password
+        of the person you want to register.
       </p>
     </div>
   </div>
