@@ -39,16 +39,41 @@ function Profile() {
         var data : any = {};
         
         try {
+            setLoading(true);
             const res = await axios.delete(`${BACKEND_BASE_URL}/register`, {
-            });    
+            });
+            if (res.status === 200) {
+                //alert("Your profile information has been successfully updated");
+                setAlertProps({
+                    heading: 'Your profile information has been deleted successfully!',
+                    message: 'You will now be redirected to the home page',
+                    variant: Variant.success
+                });
+                
+                setTimeout(() => {
+                    navigate("/");
+                }, 2500);
+                setLoading(false);
+                return;
+            }    
 
             data = res.data;
-            window.location.href = '/';
+            // window.location.href = '/';
     } catch(error) {
         if(data.error) {
-            alert(data.error);
+            //alert(data.error);
+            setAlertProps({
+                heading: 'There was a problem deleting your account',
+                message: `${data.error}`,
+                variant: Variant.danger
+            });
         } else {
-            alert(`Something went wrong : ${error}`);
+            setAlertProps({
+                heading: 'There was a problem deleting your account',
+                message: `${error}`,
+                variant: Variant.danger
+            });
+            //alert(`Something went wrong : ${error}`);
         }
     }
     }

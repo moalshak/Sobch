@@ -78,16 +78,30 @@ function Alter() {
             });
             if (response.status === 200) {
                 if (response.data.message === "Already Owned") {
-                    alert("The config has been updated");
+                    setAlertProps({
+                        heading: 'Your device has been updated',
+                        message: 'Device preferences changed',
+                        variant: Variant.success
+                    });
                 } else {
-                    alert(response.data.message);
+                    setAlertProps({
+                        heading: "Something went wrong",
+                        message: response.data.message,
+                        variant: Variant.danger
+                    });
                 }
             }
             setLoading(false);
         } catch (err : any) {
             if (err.response.status === 401) {
-                alert("You are not logged in! You will be redirected to the login page");
-                navigate("/login");
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in 2 seconds',
+                    variant: Variant.danger
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2500);
                 return;
             }
         }
