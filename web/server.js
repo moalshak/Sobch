@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import {PORT, getLog, getUser} from '../lib/config.js';
 import {db, auth, admin_auth, app} from '../lib/firebase.js';
+import subdomain from 'express-subdomain';
 
 /**
  * the routes
