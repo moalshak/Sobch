@@ -130,27 +130,32 @@ function MyDevices() {
                 {devices.map((device : any) => {
                     return (
                         <div>
-                        <Card className='mb-3 mt-3 pb-1'>
+                        <Card className='mb-3 mt-3 pb-1 center'>
                         <div key={device.id}>
                             {/* TODO: add image */}
                             <Row>
-                            <Card.Title>Device ID: {device.id}</Card.Title>
+                            <Card.Title >Device ID: {device.id}</Card.Title>
                             <br/>
-                            <img src="./images/.them1.jpg" className="img-thumbnail"></img>
-                                
+
+                            <Row className="justify-content-md-center">
+                                <Col xs={12} sm={4} md={4}>
+                                <Card.Img  src="./images/them2.jpg"></Card.Img>
+                                </Col>
+                            </Row>
+                            <br/>
                             <br/>
                             <Col>
-                            <span>Current Temperature:</span>
                             </Col>
-                            <Col>
+                            <span>Current Temperature:
                             {
                             device.currentTemp > device.config.max ? 
-                                <span style={{fontSize: 28, color: "red"}}>🌡️{device.currentTemp} °C 🔥</span> :
+                                <span style={{fontSize: 24, color: "red"}}> {device.currentTemp}°C <span style={{fontSize: 20, color: "green"}}>🔥</span></span> :
                             device.currentTemp < device.config.min ?
-                                <span  style={{fontSize: 28,color: "blue"}}>🌡️{device.currentTemp} °C ❄️</span> :
-                            <span style={{fontSize: 28, color: "green"}}>🌡️{device.currentTemp} °C ✅</span>}
-                            </Col>
+                                <span  style={{fontSize: 24,color: "blue"}}> {device.currentTemp} °C <span style={{fontSize: 20, color: "green"}}>❄️</span></span> :
+                            <span style={{fontSize: 24, color: "green"}}> {device.currentTemp} °C <span style={{fontSize: 20, color: "green"}}>✅</span></span>}
+                            </span>
                             </Row>
+
                             <br/>
                             <Row>
                                 <Col>
