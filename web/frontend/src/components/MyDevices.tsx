@@ -115,6 +115,30 @@ function MyDevices() {
     }, [updateIndicator]);
 
 
+    function getModelImg(model){
+        if(model == "Sobch DHT-11"){
+            <Card.Img  src="./images/therm1.jpg"></Card.Img>
+            return <Card.Img  src="./images/therm1.jpg"></Card.Img>
+        }
+        if(model == "Sobch DHT-22"){
+            <Card.Img  src="./images/therm2.jpg"></Card.Img>
+            return <Card.Img  src="./images/therm2.jpg"></Card.Img>
+        }
+        if(model == "Sobch DHT-33"){
+            <Card.Img  src="./images/therm3.jpg"></Card.Img>
+            return  <Card.Img  src="./images/therm3.jpg"></Card.Img>
+        }
+        if(model == "Sobch DHT-44"){
+            <Card.Img  src="./images/therm4.jpg"></Card.Img>
+            return <Card.Img  src="./images/therm4.jpg"></Card.Img>
+        }
+        if(model == "Sobch DHT-55"){
+            <Card.Img  src="./images/therm5.jpg"></Card.Img>
+            return <Card.Img  src="./images/therm5.jpg"></Card.Img>
+        }
+        
+    }
+
 
     const RenderDevices = function () {
         return (
@@ -140,21 +164,7 @@ function MyDevices() {
 
                             <Row className="justify-content-md-center">
                                 <Col xs={12} sm={4} md={4}>
-                                    if(device.model == "Sobch DHT-11"){
-                                        <Card.Img  src="./images/therm1.jpg"></Card.Img>
-                                    }
-                                    if(device.model == "Sobch DHT-22"){
-                                        <Card.Img  src="./images/therm2.jpg"></Card.Img>
-                                    }
-                                    if(device.model == "Sobch DHT-33"){
-                                        <Card.Img  src="./images/therm3.jpg"></Card.Img>
-                                    }
-                                    if(device.model == "Sobch DHT-44"){
-                                        <Card.Img  src="./images/therm4.jpg"></Card.Img>
-                                    }
-                                    if(device.model == "Sobch DHT-55"){
-                                        <Card.Img  src="./images/therm5.jpg"></Card.Img>
-                                    }
+                                  <img src="{getModelImg(device.model)}" />  
                                 </Col>
                             </Row>
                             <br/>
