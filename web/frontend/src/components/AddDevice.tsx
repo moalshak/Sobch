@@ -12,35 +12,33 @@ import Col from 'react-bootstrap/Col';
 import NavBar from "../components/NavBar";
 import {Alert, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
 interface Device {
-    device: {
-        id: string,
-        config: {
-            min: number,
-            max: number,
-            room: string,
-            active: boolean,
-            wantsToBeNotified: boolean
-        },
-        otp: string
-    }
+    id: string,
+    config: {
+        min: number,
+        max: number,
+        room: string,
+        active: boolean,
+        wantsToBeNotified: boolean
+    },
+    otp: string
 }
 
 function AddDevice() {
 
     const [device, setDevice] = useState<Device>({
-        device: {
-            id: "",
-            config: {
-                min: 0,
-                max: 0,
-                room: "",
-                active: false,
-                wantsToBeNotified: false
-            },
-            otp: ""
-        }
+        id: "",
+        config: {
+            min: 0,
+            max: 0,
+            room: "",
+            active: true,
+            wantsToBeNotified: true
+        },
+        otp: ""
     });
 
     const [loading, setLoading] = useState(true);
@@ -80,7 +78,7 @@ function AddDevice() {
                     });
                     setShowForm(false);
                     setTimeout(() => {
-                        navigate(`/stats/${device.device.id}`);
+                        navigate(`/stats/${device.id}`);
                     }, 2000);
                     return;
                 } else if (response.data.message === "device added") {
@@ -91,7 +89,7 @@ function AddDevice() {
                     });
                     setShowForm(false);
                     setTimeout(() => {
-                        navigate(`/stats/${device.device.id}`);
+                        navigate(`/stats/${device.id}`);
                     }, 2000);
                     return;
                 } else {
@@ -161,43 +159,59 @@ function AddDevice() {
             <><h1>Add Device</h1><Form onSubmit={handleSubmit}>
                         <Form.Group>
                             <Form.Label>Device ID:</Form.Label>
-                            <Form.Control required type="text" placeholder="Device's Identification Number" onChange={(e) => setDevice({ ...device, device: { ...device.device, id: e.target.value } })} />
+                            <Form.Control required type="text" placeholder="Device's Identification Number" onChange={(e) => setDevice({ ...device, id: e.target.value } )} />
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Minimum Temperature</Form.Label>
-                            <Form.Control type="number" placeholder="Minimum Temperature" value={device.device.config.min} onChange={(e) => setDevice({ ...device, device: { ...device.device, config: { ...device.device.config, min: Number(e.target.value) } } })} />
+                            <Form.Control type="number" placeholder="Minimum Temperature" value={device.config.min} onChange={(e) => setDevice({ ...device, config: { ...device.config, min: Number(e.target.value) } } )} />
                             <Form.Text className="text-muted">The minimum temperature at which you will be notified</Form.Text>
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Maximum Temperature</Form.Label>
-                            <Form.Control type="number" placeholder="Maximum Temperature" value={device.device.config.max} onChange={(e) => setDevice({ ...device, device: { ...device.device, config: { ...device.device.config, max: Number(e.target.value) } } })} />
+                            <Form.Control type="number" placeholder="Maximum Temperature" value={device.config.max} onChange={(e) => setDevice({ ...device, config: { ...device.config, max: Number(e.target.value) } } )} />
                             <Form.Text className="text-muted">The maximum temperature at which you will be notified</Form.Text>
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Room</Form.Label>
-                            <Form.Control type="text" value={device.device.config.room} onChange={(e) => setDevice({ ...device, device: { ...device.device, config: { ...device.device.config, room: e.target.value } } })} />
+                            <Form.Control type="text" value={device.config.room} onChange={(e) => setDevice({ ...device,  config: { ...device.config, room: e.target.value } })} />
                             <Form.Text className="text-muted">The room in which the device is located</Form.Text>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>OTP</Form.Label>
-                            <Form.Control required type="text" value={device.device.otp} onChange={(e) => setDevice({ ...device, device: { ...device.device, otp: e.target.value } })} />
+                            <Form.Control required type="text" value={device.otp} onChange={(e) => setDevice({ ...device,  otp: e.target.value } )} />
                             <Form.Text className="text-muted">The OTP is a one time password that is used to authorize the device</Form.Text>
                         </Form.Group>
                         <Row>
-                            <Col>
+                        <Col>
                                 <Form.Group>
                                     <Form.Label>Active</Form.Label>
-                                    <Form.Check type="checkbox" checked={device.device.config.active} onChange={(e: any) => setDevice({ ...device, device: { ...device.device, config: { ...device.device.config, active: e.target.checked } } })} />
+                                    <ToggleButtonGroup id="ToggleButtonGroup-1" defaultValue={device.config.active ? 1 : 2} className="ms-3" type="radio" name="options-1" onChange={(value) => setDevice({ ...device, config: { ...device.config,  active: value === 1} })}>
+                                    <ToggleButton variant='outline-success' checked={device.config.active} id="tbg-radio-1" value={1}>
+                                    Yes
+                                    </ToggleButton>
+                                    <ToggleButton variant='outline-danger' checked={!device.config.active} id="tbg-radio-2" value={2}>
+                                    No
+                                    </ToggleButton>
+                                    </ToggleButtonGroup>
+                                    <br />
                                     <Form.Text className="text-muted">If the device is active you will get real time temperature measures</Form.Text>
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Notify Me</Form.Label>
-                                    <Form.Check type="checkbox" checked={device.device.config.wantsToBeNotified} onChange={(e: any) => setDevice({ ...device, device: { ...device.device, config: { ...device.device.config, wantsToBeNotified: e.target.checked } } })} />
+                                    <ToggleButtonGroup id="ToggleButtonGroup-2" defaultValue={device.config.wantsToBeNotified ? 3 : 4} className="ms-3" type="radio" name="options-2" onChange={(value) => setDevice({ ...device, config: { ...device.config,  wantsToBeNotified: value === 3} })}>
+                                    <ToggleButton variant='outline-success' checked={device.config.wantsToBeNotified} id="tbg-radio-3" value={3}>
+                                    Yes
+                                    </ToggleButton>
+                                    <ToggleButton variant='outline-danger' checked={!device.config.wantsToBeNotified} id="tbg-radio-4" value={4}>
+                                    No
+                                    </ToggleButton>
+                                    </ToggleButtonGroup>
+                                    <br />
                                     <Form.Text className="text-muted">If you want to be notified when the temperature of this device is out of bounds</Form.Text>
                                 </Form.Group>
                             </Col>

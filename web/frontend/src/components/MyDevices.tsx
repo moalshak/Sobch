@@ -73,6 +73,19 @@ function MyDevices() {
                 }
             });
             var ids = response.data.devices || [];
+
+            if (ids.length === 0) {
+                setAlertProps({
+                    heading: 'No Devices Found',
+                    message: 'You have no devices yet. Please add a device to your account.',
+                    variant: Variant.info
+                });
+                setLoggedIn(true);
+                setLoading(false);
+                setFirstTime(false);
+                return;
+            }
+
             setDevices(ids);
             
             if (firstTime) {
@@ -99,10 +112,12 @@ function MyDevices() {
      * Update the update indicator every x seconds to show the user that the current temp
      */
     setTimeout(()=> {
-        if (updateIndicator) {
-            setUpdateIndicator(false);
-        } else {
-            setUpdateIndicator(true);
+        if (devices.length > 0) {
+            if (updateIndicator) {
+                setUpdateIndicator(false);
+            } else {
+                setUpdateIndicator(true);
+            }
         }
     }, 5000);
     
@@ -115,27 +130,27 @@ function MyDevices() {
     }, [updateIndicator]);
 
 
-    function getModelImg(model){
-        if(model == "Sobch DHT-11"){
-            <Card.Img  src="./images/therm1.jpg"></Card.Img>
-            return <Card.Img  src="./images/therm1.jpg"></Card.Img>
+    function ModelImg(model){
+        model = model.model; // JS being JS
+        var link;
+        if(model === "Sobch DHT-11"){
+            link = "./images/therm1.jpg";
         }
-        if(model == "Sobch DHT-22"){
-            <Card.Img  src="./images/therm2.jpg"></Card.Img>
-            return <Card.Img  src="./images/therm2.jpg"></Card.Img>
+        if(model === "Sobch DHT-22"){
+            link = "./images/therm2.jpg";
         }
-        if(model == "Sobch DHT-33"){
-            <Card.Img  src="./images/therm3.jpg"></Card.Img>
-            return  <Card.Img  src="./images/therm3.jpg"></Card.Img>
+        if(model === "Sobch DHT-33"){
+            link = "./images/therm3.jpg";
         }
-        if(model == "Sobch DHT-44"){
-            <Card.Img  src="./images/therm4.jpg"></Card.Img>
-            return <Card.Img  src="./images/therm4.jpg"></Card.Img>
+        if(model === "Sobch DHT-44"){
+            link = "./images/therm4.jpg";
         }
-        if(model == "Sobch DHT-55"){
-            <Card.Img  src="./images/therm5.jpg"></Card.Img>
-            return <Card.Img  src="./images/therm5.jpg"></Card.Img>
+        if(model === "Sobch DHT-55"){
+            link = "./images/therm5.jpg";
         }
+        return (
+            <Card.Img  src={link}></Card.Img>
+        );
         
     }
 
@@ -157,14 +172,13 @@ function MyDevices() {
                         <div>
                         <Card className='mb-3 mt-3 pb-1 center'>
                         <div key={device.id}>
-                            {/* TODO: add image */}
                             <Row>
                             <Card.Title >Device ID: {device.id}</Card.Title>
                             <br/>
 
                             <Row className="justify-content-md-center">
                                 <Col xs={12} sm={4} md={4}>
-                                  <img src="{getModelImg(device.model)}" />  
+                                  <ModelImg model={device.model}/>
                                 </Col>
                             </Row>
                             <br/>

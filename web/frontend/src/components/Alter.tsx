@@ -12,10 +12,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
-import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Spinner from "react-bootstrap/Spinner";
 
 interface Device {
