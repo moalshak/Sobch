@@ -9,17 +9,15 @@ function Team(){
         <div>
             <NavBar />
             <div className="container">
-            
                 <div className="text-center">
                     <div className="row">
                         <div className="col-6 col-sm-4">
-
                         <Card border="dark" style={{ width: '18rem' }}>
                             <Card.Header>Mohammad</Card.Header>
                                 <Card.Body>
-                                    <Card.Title>Technical Officer</Card.Title>
-                                    <Card.Text>
-                                    Some quick description and photo....
+                                <Card.Text>
+                                    <img src="./images/me.jpg" className="img-thumbnail"></img>
+                                    <Card.Footer>Technical Officer</Card.Footer>
                                     </Card.Text>
                                 </Card.Body>
                         </Card>
@@ -27,27 +25,26 @@ function Team(){
         <br />
         </div>
 
-        <div className="col-6 col-sm-4">
+    <div className="col-6 col-sm-4">
         <Card border="dark" style={{ width: '18rem' }}>
             <Card.Header>Fergal</Card.Header>
             <Card.Body>
-            <img className="card-img-top" src="https://source.unsplash.com/daily" alt="Card Image Top"></img>
-                <Card.Title>Project Leader</Card.Title>
                 <Card.Text>
-                Some quick description and photo....
+                <img src="./images/me.jpg" className="img-thumbnail"></img>
+                <Card.Footer>Project Leader</Card.Footer>
                 </Card.Text>
           </Card.Body>
         </Card>
         <br />
-        </div>
+    </div>
 
         <div className="col-6 col-sm-4">
         <Card border="dark" style={{ width: '18rem' }}>
             <Card.Header>Carmen</Card.Header>
             <Card.Body>
-                <Card.Title>Architecture Officer</Card.Title>
-                <Card.Text>
-                Some quick description and photo....
+            <Card.Text>
+                <img src="./images/me.jpg" className="img-thumbnail"></img>
+                <Card.Footer>Architecture Officer</Card.Footer>
                 </Card.Text>
           </Card.Body>
         </Card>
@@ -59,11 +56,11 @@ function Team(){
         <Card border="dark" style={{ width: '18rem' }}>
             <Card.Header>Selim</Card.Header>
             <Card.Body>
-                <Card.Title>Documentation Officer</Card.Title>
                 <Card.Text>
-                Some quick description and photo....
+                <img src="./images/me.jpg" className="img-thumbnail"></img>
+                <Card.Footer>Documentation Officer</Card.Footer>
                 </Card.Text>
-          </Card.Body>
+            </Card.Body>
         </Card>
         <br />
         </div>
@@ -72,9 +69,9 @@ function Team(){
         <Card border="dark" style={{ width: '18rem' }}>
             <Card.Header>Dhruv</Card.Header>
             <Card.Body>
-                <Card.Title>Communication Officer</Card.Title>
                 <Card.Text>
-                Some quick description and photo....
+                <img src="./images/dhruv.jpg" className="img-thumbnail"></img>
+                <Card.Footer>Communication Officer</Card.Footer>
                 </Card.Text>
           </Card.Body>
         </Card>
