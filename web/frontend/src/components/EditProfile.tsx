@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
 import {setLoggedIn} from "../lib/acc";
+import {Alert, AlertProps, Variant} from './CustomAlert';
 
 
 
@@ -46,6 +47,12 @@ function EditProfile(){
 
     const {id} = useParams();
 
+    const [alertProps, setAlertProps] = useState<AlertProps>({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
+
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
@@ -53,11 +60,21 @@ function EditProfile(){
             if (profile.profile.credentials.password !== "" || newPassword !== "")
             {
                 if (profile.profile.credentials.password.length < 6){
-                    alert('Password is less than 6 characters!');
+                    //alert('Password is less than 6 characters!');
+                    setAlertProps({
+                        heading: 'Invalid password!',
+                        message: 'Make sure it is at least 6 characters..',
+                        variant: Variant.danger
+                    });
                     return;
                 }
                 if (profile.profile.credentials.password !== newPassword) {
-                    alert('Passwords do not match');
+                    //alert('Passwords do not match');
+                    setAlertProps({
+                        heading: 'Passwords do not match!',
+                        message: 'Make sure you typed your password correctly twice..',
+                        variant: Variant.danger
+                    });
                     return;
                 }
             }
@@ -79,8 +96,16 @@ function EditProfile(){
             }
             );
             if (response.status === 200) {
-                alert("Your profile information has been successfully updated");
-                navigate(`/profile/`);
+                //alert("Your profile information has been successfully updated");
+                setAlertProps({
+                    heading: 'Your profile information has been successfully updated!',
+                    message: 'You will now be redirected to your pfrofile overview',
+                    variant: Variant.success
+                });
+                
+                setTimeout(() => {
+                    navigate("/profile/");
+                }, 2500);
                 setLoading(false);
                 return;
             }
@@ -88,13 +113,26 @@ function EditProfile(){
             setLoggedIn(true);
         } catch (err : any) {
             if (err.response.status === 401) {
-                alert("You are not logged in! You will be redirected to the login page");
-                navigate("/login");
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in 2 seconds',
+                    variant: Variant.danger
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2500);
                 return;
             }
             else if (err.response.status === 500) {
-                alert("Invalid password, must be at least 6 characters!");
-                navigate(`/edit-profile/`);
+                //alert("Invalid password, must be at least 6 characters!");
+                setAlertProps({
+                    heading: 'Invalid password!',
+                    message: 'It must be at least 6 characters!',
+                    variant: Variant.danger
+                });
+                setTimeout(() => {
+                    navigate("/edit-profile/");
+                }, 2500);
                 return;
             }
         }
@@ -112,8 +150,14 @@ function EditProfile(){
             setLoading(false)
         } catch (err : any) {
             if (err.response.status === 401) {
-                alert("You are not logged in! You will be redirected to the login page");
-                navigate("/login");
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in 2 seconds',
+                    variant: Variant.danger
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2500);
                 return;
             }
         }
@@ -127,7 +171,7 @@ function EditProfile(){
     return(
         <div>
         <NavBar/>
-        
+        <Alert {...alertProps}/>
         <Container>
             <h1>Edit Profile</h1>
         
