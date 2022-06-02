@@ -12,23 +12,24 @@ function Home() {
             <div className="container">
             
             <div className="text-center">
-                <div className="row">
+                    <div className="row">
                     <div className="col-6 col-sm-4">
 
-                    <Card border="dark" style={{ width: '20rem' }}>
+                    <Card border="dark" style={{ width: '18rem' }}>
                         <Card.Header>Meet the team</Card.Header>
                             <Card.Body>
                                 <Card.Title>Memebers of Bosch</Card.Title>
                                 <a href="/team" className="card-link">See More</a>
                             </Card.Body>
                     </Card>
+                    </div>
                     
     <br />
     </div>
 
             <div className="col-6 col-sm-4">
-
-                <Card border="dark" style={{ width: '20rem' }}>
+            <div className="col d-flex justify-content-center">
+                <Card border="dark" style={{ width: '18rem' }}>
                     <Card.Header>FAQ</Card.Header>
                         <Card.Body>
                             <Card.Title>Need help?</Card.Title>
@@ -37,11 +38,12 @@ function Home() {
                 </Card>
 
                 <br />
+                </div>
             </div>
         </div>
         </div>
         </div>
-        </div>
+
         
     );
 }
