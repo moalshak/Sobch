@@ -105,7 +105,7 @@ function Login() {
 
         var email = e.target.email;
         axios.put(`${BACKEND_BASE_URL}/login`, {
-            email : email.value
+            email
         }).then(res => {
             setAlertProps({ 
                 heading: 'Success',
