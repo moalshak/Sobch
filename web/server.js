@@ -161,9 +161,12 @@ function init() {
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-    app.use(cors({origin: true}))
+    app.use(cors())
 
     initRoutes(app);
+    
+    var router = express.Router();
+    app.use(subdomain('api', router));
 
     app.listen(PORT, () => {
         Log.info(`Server is running on port ${PORT}`, {url : `http://0.0.0.0:${PORT}/`});

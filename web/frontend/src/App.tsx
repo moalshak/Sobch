@@ -11,7 +11,7 @@ import Alter from './components/Alter';
 import AddDevice from './components/AddDevice';
 import Logout from './components/Logout';
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "http://0.0.0.0:8000";
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://api.sobch.xyz";
 
 function App() {
   
