@@ -136,7 +136,8 @@ function MyDevices() {
                             <Row>
                             <Card.Title>Device ID: {device.id}</Card.Title>
                             <br/>
-                            <Card.Img variant="top" src="holder.js/100px180"/>
+                            <img className="card-img-top" src="https://source.unsplash.com/daily" alt="Card Image Top"></img>
+                                
                             <br/>
                             <Col>
                             <span>Current Temperature:</span>

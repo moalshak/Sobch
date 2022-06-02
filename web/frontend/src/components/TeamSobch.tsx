@@ -9,6 +9,7 @@ function Team(){
         <div>
             <NavBar />
             <div className="container">
+            
                 <div className="text-center">
                     <div className="row">
                         <div className="col-6 col-sm-4">
@@ -30,6 +31,7 @@ function Team(){
         <Card border="dark" style={{ width: '18rem' }}>
             <Card.Header>Fergal</Card.Header>
             <Card.Body>
+            <img className="card-img-top" src="https://source.unsplash.com/daily" alt="Card Image Top"></img>
                 <Card.Title>Project Leader</Card.Title>
                 <Card.Text>
                 Some quick description and photo....
@@ -83,6 +85,7 @@ function Team(){
         </div>
         </div>
         </div>
+    
 
 
 
