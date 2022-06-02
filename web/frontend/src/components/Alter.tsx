@@ -13,7 +13,7 @@ import Col from 'react-bootstrap/Col';
 import NavBar from "./NavBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Modal from "react-bootstrap/Modal";
 import {setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
@@ -58,6 +58,19 @@ function Alter() {
 
     const [showForm, setShowForm] = useState(true);
 
+
+    const [showDialog, setShowDialog] = useState(false);
+
+    const [isEdit, setIsEdit] = useState(false);
+
+    function handleClose() {
+        setShowDialog(false);
+    }
+
+    function handleShowDialog() {
+        setShowDialog(true);
+    }
+
     /**
      * Custom alert props which looks cleaner than the regular alert
      */
@@ -67,9 +80,7 @@ function Alter() {
         variant: Variant.nothing
     });
 
-    async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-
+    async function handleSubmit() {
         try {
             setLoading(true);
             const response = await axios.post(`${BACKEND_BASE_URL}/my-devices`, {device}, {
@@ -188,7 +199,27 @@ function Alter() {
                 <Spinner className='mt-3' animation="grow" />
             </div>
         :
-            <><h1>Edit Device</h1><Form onSubmit={handleSubmit}>
+            <> 
+            <Modal show={showDialog} onHide={handleClose}>
+                <Modal.Header closeButton>
+                <Modal.Title>Delete Device</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Are you sure you want to {isEdit ? "edit" : "unlink"} this device?
+                    <br/>
+                    {!isEdit ? "This will remove the device from your account and you will no longer be able to view it's stats. In order to add it again you will need the OTP" : ""}
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                    Cancel
+                </Button>
+                <Button variant="primary" onClick={isEdit ? handleSubmit : deleteDevice}>
+                    Confirm
+                </Button>
+                </Modal.Footer>
+            </Modal>
+            
+            <h1>Edit Device</h1><Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Device's ID:</Form.Label>
                             <Form.Control value={deviceId} disabled />
@@ -241,10 +272,16 @@ function Alter() {
                             </Col>
                         </Row>
                         <br />
-                        <Button variant="primary" type="submit">
+                        <Button variant="primary" onClick={(_) => {
+                            setIsEdit(true);
+                            handleShowDialog();
+                        }}>
                             Edit This Device's Configuration
                         </Button>
-                        <Button className="ms-3" variant="danger" onClick={deleteDevice}>
+                        <Button className="ms-3" variant="danger" onClick={(_) => {
+                            setIsEdit(false);
+                            handleShowDialog();
+                        }}>
                             Unlink This Device
                         </Button>
                     </Form><br /><Link to={`/my-devices`}><Button variant="secondary" className='mt-3 mb-3'>All Devices</Button></Link><Link to={`/stats/${device.id}`}><Button variant="secondary" className="ms-3">See this devices Stats</Button></Link><br /></>
