@@ -15,7 +15,7 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
-
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 
 interface Device {
     id: string,
@@ -176,8 +176,6 @@ function Alter() {
         getDevice();
     }, []);
 
-
-
         
     return(
         <div>
@@ -215,10 +213,14 @@ function Alter() {
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Active</Form.Label>
-                                    <ButtonGroup className="ms-3">
-                                        <ToggleButton variant='outline-success' value={device.config.active ? "1" : "0"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, active: e.target.checked } })}>Yes</ToggleButton>
-                                        <ToggleButton variant='outline-danger' value={device.config.active ? "0" : "1"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, active: e.target.checked } })}>No</ToggleButton>
-                                    </ButtonGroup>
+                                    <ToggleButtonGroup id="ToggleButtonGroup-1" defaultValue={device.config.active ? 1 : 2} className="ms-3" type="radio" name="options-1" onChange={(value) => setDevice({ ...device, config: { ...device.config,  active: value === 1} })}>
+                                    <ToggleButton variant='outline-success' checked={device.config.active} id="tbg-radio-1" value={1}>
+                                    Yes
+                                    </ToggleButton>
+                                    <ToggleButton variant='outline-danger' checked={!device.config.active} id="tbg-radio-2" value={2}>
+                                    No
+                                    </ToggleButton>
+                                    </ToggleButtonGroup>
                                     <br />
                                     <Form.Text className="text-muted">If the device is active you will get real time temperature measures</Form.Text>
                                 </Form.Group>
@@ -226,10 +228,14 @@ function Alter() {
                             <Col>
                                 <Form.Group>
                                     <Form.Label>Notify Me</Form.Label>
-                                    <ButtonGroup className="ms-3">
-                                        <ToggleButton variant='outline-success' value={device.config.wantsToBeNotified ? "1" : "0"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, wantsToBeNotified: e.target.checked } })}>Yes</ToggleButton>
-                                        <ToggleButton variant='outline-danger' value={device.config.wantsToBeNotified ? "0" : "1"} type="radio" onChange={(e) => setDevice({ ...device, config: { ...device.config, wantsToBeNotified: e.target.checked } })}>No</ToggleButton>
-                                    </ButtonGroup>
+                                    <ToggleButtonGroup id="ToggleButtonGroup-2" defaultValue={device.config.wantsToBeNotified ? 3 : 4} className="ms-3" type="radio" name="options-2" onChange={(value) => setDevice({ ...device, config: { ...device.config,  wantsToBeNotified: value === 3} })}>
+                                    <ToggleButton variant='outline-success' checked={device.config.wantsToBeNotified} id="tbg-radio-3" value={3}>
+                                    Yes
+                                    </ToggleButton>
+                                    <ToggleButton variant='outline-danger' checked={!device.config.wantsToBeNotified} id="tbg-radio-4" value={4}>
+                                    No
+                                    </ToggleButton>
+                                    </ToggleButtonGroup>
                                     <br />
                                     <Form.Text className="text-muted">If you want to be notified when the temperature of this device is out of bounds</Form.Text>
                                 </Form.Group>
