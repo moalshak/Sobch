@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {BACKEND_BASE_URL} from "../App";
-import {getAccessToken} from "../lib/acc";
+import {getAccessToken, isLoggedIn} from "../lib/acc";
 import { Link, useNavigate } from "react-router-dom";
 import {useParams} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -196,7 +196,7 @@ function Alter() {
             <NavBar/>
             <Alert {...alertProps}/>
             <Container>
-        {loading || !showForm ? 
+        {loading || !showForm || !isLoggedIn() ? 
             <div className="d-flex justify-content-center">
                 <Spinner className='mt-3' animation="grow" />
             </div>

@@ -156,9 +156,14 @@ function MyDevices() {
 
     // not that kind of head u freak!
     function GetHead() {
+        if (!isLoggedIn()) {
+            return (
+                <></>
+            );
+        }
         return (
-            <div>
-            <h1>MY DEVICES</h1>
+                <div>
+                <h1>MY DEVICES</h1>
                 <div 
                     className="d-grid"
                 >

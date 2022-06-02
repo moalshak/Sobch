@@ -102,7 +102,7 @@ function Profile() {
                 setAlertProps({
                     heading: 'You are not logged in!',
                     message: 'You will be redirected to the login page in 2 seconds',
-                    variant: Variant.danger
+                    variant: Variant.warning
                 });
                 setTimeout(() => {
                     navigate("/login");

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {BACKEND_BASE_URL} from "../App";
-import {getAccessToken, setLoggedIn} from "../lib/acc";
+import {getAccessToken, setLoggedIn, isLoggedIn} from "../lib/acc";
 import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
@@ -153,7 +153,7 @@ function AddDevice() {
         <NavBar/>
         <Alert {...alertProps}/>
         <Container className="mt-3">
-        {loading || !showForm ? 
+        {loading || !showForm || !isLoggedIn() ? 
             <Spinner className='mt-3' animation="grow" />
             :
             <><h1>Add Device</h1><Form onSubmit={handleSubmit}>

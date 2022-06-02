@@ -13,10 +13,10 @@ function Team(){
                     <div className="row">
                         <div className="col-6 col-sm-4">
                         <Card border="dark" style={{ width: '18rem' }}>
-                            <Card.Header>Mohammad</Card.Header>
+                            <Card.Header>Mohammad Al Shakoush</Card.Header>
                                 <Card.Body>
                                 <Card.Text>
-                                    <img src="./images/me.jpg" className="img-thumbnail"></img>
+                                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
                                     <Card.Footer>Technical Officer</Card.Footer>
                                     </Card.Text>
                                 </Card.Body>
