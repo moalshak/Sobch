@@ -26,14 +26,14 @@ const Log = getLog('main');
  *  - an object with the endpoint as key and the js file as value
  */
 const routes = {
-    "/" : index,
-    "/register": register,
-    "/login": login,
-    "/logout": logout,
-    "/profile": profile,
-    "/my-devices": my_devices,
-    "/stats": stats,
-    "/alter": alter
+    "/api" : index,
+    "/api/register": register,
+    "/api/login": login,
+    "/api/logout": logout,
+    "/api/profile": profile,
+    "/api/my-devices": my_devices,
+    "/api/stats": stats,
+    "/api/alter": alter
 }
 
 /**
@@ -71,7 +71,7 @@ const getAuthToken = (req) => {
  * @returns 
  */
 const middleWare = async (req, res, next) => {
-    const endPoint = "/" + req.url.split("/")[1];
+    const endPoint = "/" + req.url.split("/")[2];
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     if (whiteList.includes(endPoint) && req.method !== "DELETE") {
         next();

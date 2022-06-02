@@ -78,7 +78,7 @@ function Register() {
             if (data.message) {
                 setAlertProps({
                     heading: 'Success',
-                    message: data.message,
+                    message: "Please remember to verify your email in order to be able to login",
                     variant: Variant.success
                 });
             }
