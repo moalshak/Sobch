@@ -14,6 +14,7 @@ import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import NavBar from "./NavBar";
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
+import Spinner from "react-bootstrap/Spinner";
 
 function Stats() {
     
@@ -91,7 +92,7 @@ function Stats() {
 
         } else {
             return (
-                <img src="../loading.gif" style={{width:"16px", height:"16px"}}/>
+                <Spinner className='mt-3' animation="grow" />
             )
         }
     }
@@ -198,7 +199,7 @@ function Stats() {
             {loading ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">
-                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+                <Spinner className='mt-3' animation="grow" />
                 </div>
             </div>
             : <RenderStats/>}

@@ -16,6 +16,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import Spinner from "react-bootstrap/Spinner";
 
 interface Device {
     id: string,
@@ -184,9 +185,7 @@ function Alter() {
             <Container>
         {loading || !showForm ? 
             <div className="d-flex justify-content-center">
-                <div  role="status">
-                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
-                </div>
+                <Spinner className='mt-3' animation="grow" />
             </div>
         :
             <><h1>Edit Device</h1><Form onSubmit={handleSubmit}>

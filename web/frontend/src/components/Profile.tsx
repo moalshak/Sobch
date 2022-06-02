@@ -12,6 +12,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
+import Spinner from "react-bootstrap/Spinner";
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -182,7 +183,7 @@ function Profile() {
             {loading ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">
-                    <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
+                <Spinner className='mt-3' animation="grow" />
                 </div>
             </div>
             : <RenderProfile/>}

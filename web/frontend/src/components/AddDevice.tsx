@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {BACKEND_BASE_URL} from "../App";
-import {getAccessToken} from "../lib/acc";
+import {getAccessToken, setLoggedIn} from "../lib/acc";
 import { Link, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
@@ -11,7 +11,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import NavBar from "../components/NavBar";
 import {Alert, Variant} from './CustomAlert';
-import {setLoggedIn} from "../lib/acc";
+import Spinner from "react-bootstrap/Spinner";
 
 interface Device {
     device: {
@@ -156,9 +156,7 @@ function AddDevice() {
         <Alert {...alertProps}/>
         <Container className="mt-3">
         {loading || !showForm ? 
-            <div  role="status">
-                <img alt= "loading..." src="../loading.gif" style={{width:"55px", height:"55px"}}/>
-            </div>
+            <Spinner className='mt-3' animation="grow" />
             :
             <><h1>Add Device</h1><Form onSubmit={handleSubmit}>
                         <Form.Group>
