@@ -154,19 +154,23 @@ function MyDevices() {
         
     }
 
+    // not that kind of head u freak!
+    function GetHead() {
+        return (
+            <div>
+            <h1>MY DEVICES</h1>
+                <div 
+                    className="d-grid"
+                >
+                    <Button href={`/add-device`} variant="outline-primary" className='mt-3 mb-3' size="lg">Add Device</Button>
+                </div>
+            </div>
+        )
+    }
 
     const RenderDevices = function () {
         return (
             <div>
-            <Container>
-                <h1>MY DEVICES</h1>
-                <div>
-                    <div 
-                        className="d-grid"
-                    >
-                        <Button href={`/add-device`} variant="outline-primary" className='mt-3 mb-3' size="lg">Add Device</Button>
-                    </div>
-                </div>
                 {devices.map((device : any) => {
                     return (
                         <div>
@@ -209,7 +213,6 @@ function MyDevices() {
                         </div>
                     );
                 })}
-            </Container>
             </div>
         );
     }
@@ -218,12 +221,15 @@ function MyDevices() {
         <div>
             <NavBar/>
             <Alert {...alertProps}/>
+            <Container>
+            <GetHead/>
             {loading ? (firstTime ?
             <div className="d-flex justify-content-center">
                 <div  role="status">
                 <Spinner className='mt-3' animation="grow" />
                 </div>
             </div> : <RenderDevices/>) : <RenderDevices/>}
+            </Container>
         </div>
     );
 

@@ -104,6 +104,7 @@ function Alter() {
                 }
             }
             setLoading(false);
+            setShowDialog(false);
         } catch (err : any) {
             if (err.response.status === 401) {
                 setAlertProps({
@@ -133,6 +134,7 @@ function Alter() {
                 setLoading(false);
             }
             setLoggedIn(true);
+            setShowDialog(false);
         } catch (err : any) {
             if (err.response.status === 401) {
                 setAlertProps({
@@ -202,7 +204,7 @@ function Alter() {
             <> 
             <Modal show={showDialog} onHide={handleClose}>
                 <Modal.Header closeButton>
-                <Modal.Title>Delete Device</Modal.Title>
+                <Modal.Title>{isEdit ? "Edit" : "Delete"} Device</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     Are you sure you want to {isEdit ? "edit" : "unlink"} this device?

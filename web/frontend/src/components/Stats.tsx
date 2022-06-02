@@ -157,6 +157,11 @@ function Stats() {
                                     <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
                                 </span>
                             </Col>
+                            <Col>
+                                <span>
+                                    <b>OTP:</b> {device.otp}
+                                </span>
+                            </Col>
                         </Row>
                         <Row>
                             <Col>
@@ -199,7 +204,7 @@ function Stats() {
             {loading ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">
-                <Spinner className='mt-3' animation="grow" />
+                <Spinner className='mt-3' animation="grow" size="sm" />
                 </div>
             </div>
             : <RenderStats/>}
