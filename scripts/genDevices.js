@@ -45,11 +45,18 @@ function generateID() {
 /**
  * @returns {string} One time password
  */
-function generateOTP() {
-
-    return generate({ length: 20, numbers: true });
+ function generateOTP() {
+    var length = 16;
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   result = result.match(/.{1,4}/g).join("-");
+   return result;
 }
-
 
 const ROOMS = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Garage"];
 
