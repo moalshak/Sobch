@@ -136,7 +136,7 @@ function MyDevices() {
                             <Row>
                             <Card.Title>Device ID: {device.id}</Card.Title>
                             <br/>
-                            <img className="card-img-top" src="./images/them1.jpg" alt="Card Image Top"></img>
+                            <img src="./images/.them1.jpg" className="img-thumbnail"></img>
                                 
                             <br/>
                             <Col>
