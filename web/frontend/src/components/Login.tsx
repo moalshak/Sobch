@@ -102,8 +102,6 @@ function Login() {
 
    function sendReset(e : any) {
         e.preventDefault();
-
-        var email = e.target.email;
         axios.put(`${BACKEND_BASE_URL}/login`, {
             email
         }).then(res => {
