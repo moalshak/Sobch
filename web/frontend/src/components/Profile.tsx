@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react';
 import {BACKEND_BASE_URL} from '../App';
 import {useParams} from "react-router-dom"; 
 import { getAccessToken } from '../lib/acc';
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import axios from 'axios';
 import NavBar from "./NavBar";
 import Button from "react-bootstrap/Button";
@@ -10,8 +10,8 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {Alert, Variant} from './CustomAlert';
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
+import {Alert, AlertProps, Variant} from './CustomAlert';
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -25,6 +25,14 @@ function Profile() {
 
     const url = `${BACKEND_BASE_URL}/profile/` 
     const accessToken = getAccessToken();
+
+    const [alertProps, setAlertProps] = useState<AlertProps>({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
+
+    const navigate = useNavigate();
 
     async function goDelete(e : any) {
         e.preventDefault();
@@ -45,6 +53,8 @@ function Profile() {
     }
     }
 
+    
+
 
     async function getProfile() {
         try{
@@ -60,7 +70,19 @@ function Profile() {
             setlastLogin(new Intl.DateTimeFormat('en-NL', { timeZone : 'Europe/Amsterdam', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(res.data.meta.lastLogin))
             setLoading(false);
             setLoggedIn(true);
-        } catch (error) {
+        } catch (error : any) {
+            if (error.response.status === 401)
+            {
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in 2 seconds',
+                    variant: Variant.danger
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2500);
+                return;
+            }
             alert (error);
         }
     }
@@ -74,6 +96,7 @@ function Profile() {
 
         return (
                 <div>
+                
                 <Container>
                 <Card className='mt-3'>
                     
@@ -130,6 +153,7 @@ function Profile() {
     return (
         <div>
             <NavBar />
+            <Alert {...alertProps}/>
             {loading ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">

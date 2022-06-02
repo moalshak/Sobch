@@ -10,6 +10,8 @@ import Stats from './components/Stats';
 import Alter from './components/Alter';
 import AddDevice from './components/AddDevice';
 import Logout from './components/Logout';
+import TeamSobch from './components/TeamSobch';
+import Help from './components/Help';
 
 const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://api.sobch.xyz";
 
@@ -29,6 +31,8 @@ function App() {
         <Route path="/add-device" element={<AddDevice />} />
         <Route path="/stats/:deviceId" element={<Stats />} />
         <Route path="/alter/:deviceId" element={<Alter />} />
+        <Route path="/team" element={<TeamSobch />} />
+        <Route path="/help" element={<Help />} />
       </Routes>
     </Router>
   );
