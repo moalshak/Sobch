@@ -1,7 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/esm/Card';
-import NavBar from "../components/NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
+
 
 function Home() {
     return (

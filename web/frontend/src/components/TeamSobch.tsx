@@ -30,7 +30,7 @@ function Team(){
             <Card.Header>Fergal</Card.Header>
             <Card.Body>
                 <Card.Text>
-                <img src="./images/me.jpg" className="img-thumbnail"></img>
+                <img src="./images/me3.jpeg" className="img-thumbnail"></img>
                 <Card.Footer>Project Leader</Card.Footer>
                 </Card.Text>
           </Card.Body>
