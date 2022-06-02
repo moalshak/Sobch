@@ -59,6 +59,7 @@ function generateID() {
 }
 
 const ROOMS = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Garage"];
+const MODELS = ["Sobch DHT-11", "Sobch DHT-22", "Sobch DHT-33", "Sobch DHT-44", "Sobch DHT-55"];
 
 /**
  * 
@@ -77,6 +78,7 @@ function generateDevice() {
     device.config.active = true;
     device.config.wantsToBeNotified = true;
     device.owners = ADMINS;
+    device.model = MODELS[Math.floor(Math.random() * MODELS.length)];
     device.otp = generateOTP();
     return device;
 }
