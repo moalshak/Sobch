@@ -26,7 +26,7 @@ function Home() {
     <br />
     </div>
 
-    <div className="col-6 col-sm-4">
+            <div className="col-6 col-sm-4">
 
                 <Card border="dark" style={{ width: '20rem' }}>
                     <Card.Header>FAQ</Card.Header>
