@@ -24,41 +24,35 @@ function How(){
     </div>
 
     <div className="col-md-6 col-lg-4 mb-4">
-      <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i> A question
-        that
-        is longer then the previous one?</h6>
+      <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i> How do I register?</h6>
       <p>
-        <strong><u>Yes, it is possible!</u></strong> You can cancel your subscription anytime in
-        your
-        account. Once the subscription is
-        cancelled, you will not be charged next month.
+        At the top of your screen if youre on PC or in the navigation menu on mobile, click on the <a href="/register" className="card-link">Register</a> button and it
+        will bring you to the registration page. Where you fill in the required fields.
       </p>
     </div>
 
     <div className="col-md-6 col-lg-4 mb-4">
-      <h6 className="mb-3 text-primary"><i className="fas fa-user text-primary pe-2"></i> A simple
-        question?
+      <h6 className="mb-3 text-primary"><i className="fas fa-user text-primary pe-2"></i> How do I add a device?
       </h6>
       <p>
-        Currently, we only offer monthly subscription. You can upgrade or cancel your monthly
-        account at any time with no further obligation.
+        Once you are logged in you can go to the <a href="/add-device" className="card-link">Add Device</a> page and
+        click on the <strong>Add Device</strong> button.
       </p>
     </div>
 
     <div className="col-md-6 col-lg-4 mb-4">
-      <h6 className="mb-3 text-primary"><i className="bi bi-envelope"></i> A simple
-        question?
+      <h6 className="mb-3 text-primary"><i className="bi bi-envelope"></i> I registered but still cant log in.
       </h6>
       <p>
-        Yes. Go to the billing section of your dashboard and update your payment information.
+        Make sure you have verified you account by checking your email and clicking on the verification link.
+        If you have already done this, please contact us at <p className="font-italic">help@sobch.xyz</p>
       </p>
     </div>
 
     <div className="col-md-6 col-lg-4 mb-4">
-      <h6 className="mb-3 text-primary"><i className="fas fa-home text-primary pe-2"></i> A simple
-        question?
+      <h6 className="mb-3 text-primary"><i className="fas fa-home text-primary pe-2"></i> Where can I find my One-Time Password?
       </h6>
-      <p><strong><u>Unfortunately no</u>.</strong> We do not issue full or partial refunds for any
+      <p> Inside the box of your purchashed thermometer, you will find the One-Time Password that is in the form of a 16 digit serial number.
         reason.</p>
     </div>
 
