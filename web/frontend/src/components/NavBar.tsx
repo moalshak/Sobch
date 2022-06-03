@@ -62,7 +62,10 @@ export function NavBarBot() {
                 
             </Nav>
             <Nav>
+                <>
              <Nav.Link href="/corporate">Corporate Info</Nav.Link>
+             <Nav.Link href="/help">FAQs</Nav.Link>
+                </>
             </Nav>
         </Container>
         </Navbar>
