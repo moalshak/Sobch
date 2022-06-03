@@ -3,7 +3,6 @@ import {useState, useEffect} from 'react';
 import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
 import { useNavigate } from "react-router-dom";
-import {Link} from "react-router-dom"
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';

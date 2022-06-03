@@ -1,6 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container } from 'react-bootstrap';
-import Card from 'react-bootstrap/esm/Card';
 import NavBar, {NavBarBot} from "../components/NavBar";
 
 function How(){

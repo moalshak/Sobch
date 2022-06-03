@@ -1,12 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar, {NavBarBot} from "../components/NavBar";
-import Container from 'react-bootstrap/Container';
-import { isLoggedIn } from '../lib/acc';
-import Nav from 'react-bootstrap/Nav';
-import {goLogout} from '../lib/acc';
-import {Link} from "react-router-dom";
-import Button from 'react-bootstrap/Button';
+
 
 function Corparate() {
 
