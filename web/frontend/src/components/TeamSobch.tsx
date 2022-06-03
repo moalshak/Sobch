@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/esm/Card';
-import NavBar from "../components/NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 
 function Team(){
 
@@ -81,6 +81,7 @@ function Team(){
         </div>
         </div>
         </div>
+        <NavBarBot />
         </div>
     
 
