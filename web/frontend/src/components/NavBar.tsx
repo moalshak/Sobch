@@ -56,16 +56,14 @@ export function NavBarBot() {
         <Navbar bg="light" expand="lg">
         <Container>
 
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
+            
             <Nav className="me-auto">
                 <p> © Sobch 2022, all rights reserved</p>
-                <Nav.Link href="/corporate">Corporate Info</Nav.Link>
+                
             </Nav>
             <Nav>
-               
+             <Nav.Link href="/corporate">Corporate Info</Nav.Link>
             </Nav>
-            </Navbar.Collapse>
         </Container>
         </Navbar>
         </div>
