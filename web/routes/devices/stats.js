@@ -1,16 +1,88 @@
 import express from "express";
-import config from "../../../lib/config.js";
-import { db } from "../../server.js";
+import {getLog, isAdmin} from "../../../lib/config.js";
+import { db, auth } from "../../../lib/firebase.js";
+import { ref, get } from "firebase/database";
+
 
 const router = express.Router(),
-    Log = config.getLog("stats");
+    Log = getLog("stats");
 
+
+
+//Bad Request
 router.get('/', (req, res) => {
-    res.status(200).send("Request received");
-    Log.info(`Request received`)
+  const datainf = req;
+  const user = auth.user;
+  //using this 'user' variable for now.
+  get(ref(db, `devices/${datainf.id}`)).then((snapshot) => {
+          res.status(400).send({device : req.body, accessToken: req.user.stsTokenManager.accessToken},"Bad Request");
+          console.log("Bad Request")
+    }).catch((error) => {
+      console.error(error);
+    });
+      
 })
+ 
+router.get('/:id', async (req, res) => {
+  const datainf = req.params;
+  //using this 'user' variable for now.
+  const user = req.user;
 
+  const dataId = datainf.id.trim();
+
+
+  
+  try{
+    var snapshot = await get(ref(db, `devices/${dataId}`));
+    
+    if (!snapshot.exists()) {
+          res.status(401).send({error : "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
+          Log.info("Unauthorized")
+      }
+      else if (snapshot.exists() && !isAdmin(user.uid) &&  !snapshot.val().owners.includes(user.uid))
+      {
+          res.status(401).send({accessToken: req.user.stsTokenManager.accessToken});
+          Log.info("Unauthorized");
+      }
+      // The Device of associated ID exists.
+      else if ((snapshot.exists() && snapshot.val().owners.includes(user.uid)) || isAdmin(user.uid)) {
+        var device = snapshot.val();
+        var ownersEmails = [];
+        if (isAdmin(user.uid)) {
+          ownersEmails.push(await get(ref(db, `users/${user.uid}/credentials/email`)));
+        }
+        for (var owner in device.owners) {
+          if (isAdmin(device.owners[owner])) {
+            if (isAdmin(user.uid)) {
+              if (!ownersEmails.includes(device.owners[owner])) {
+                ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+              }
+            }
+          } else {
+            if (!ownersEmails.includes(device.owners[owner])) {
+              ownersEmails.push(await get(ref(db, `users/${device.owners[owner]}/credentials/email`)));
+            }
+          }
+        }
+        device.owners = ownersEmails;
+        res.status(200).send({device, accessToken: req.user.stsTokenManager.accessToken});  
+        Log.info(snapshot.val());
+      }
+      //Internal Server error
+      else 
+      {
+          res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
+          Log.info("Internal server error")
+      }
+    } catch(error){
+      Log.error(error);
+      res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
+    }    
+});
 
 export default {
-    router: router
-}
+  router: router
+}    
+
+
+

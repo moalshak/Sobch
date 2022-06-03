@@ -30,6 +30,6 @@ jobs:
       run: |
         touch .env
         echo "${{ secrets.ENV }}" > .env
-    - run: npm ci
+    - run: npm i
     - run: npm run build --if-present
     - run: npm test --if-present

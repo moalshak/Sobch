@@ -18,3 +18,6 @@
 ## More registration options
 
 - Mobile number, Github, Facebook ...etc
+
+
+## Email verification
