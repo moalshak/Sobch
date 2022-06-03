@@ -208,7 +208,7 @@ function MyDevices() {
                             </Row>
                             <br/>
                             <ProgressBar
-                            label={device.currentTemp <= device.config.min ? `Lower than min by ${Math.round(((device.config.min - device.currentTemp)*100))/100}` : device.currentTemp >= device.config.max ? `Higher than max by ${Math.round(((device.config.max - device.currentTemp)*100))/100}` : "Normal"}
+                            label={device.currentTemp <= device.config.min ? `Lower than min by ${Math.round(((device.config.min - device.currentTemp)*100))/100}` : device.currentTemp >= device.config.max ? `Higher than max by ${Math.round(((device.currentTemp - device.config.max)*100))/100}` : "Normal"}
                             variant={device.currentTemp >= device.config.max || device.currentTemp <= device.config.min ? 'danger' : 'info'}
                             max={device.config.max + 3}
                             min={device.config.min - 4}
