@@ -164,13 +164,13 @@ function AddDevice() {
 
                         <Form.Group>
                             <Form.Label>Minimum Temperature</Form.Label>
-                            <Form.Control type="number" placeholder="Minimum Temperature" value={device.config.min} onChange={(e) => setDevice({ ...device, config: { ...device.config, min: Number(e.target.value) } } )} />
+                            <Form.Control type="number" step={0.1} placeholder="Minimum Temperature" value={device.config.min} onChange={(e) => setDevice({ ...device, config: { ...device.config, min: Number(e.target.value) } } )} />
                             <Form.Text className="text-muted">The minimum temperature at which you will be notified</Form.Text>
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label>Maximum Temperature</Form.Label>
-                            <Form.Control type="number" placeholder="Maximum Temperature" value={device.config.max} onChange={(e) => setDevice({ ...device, config: { ...device.config, max: Number(e.target.value) } } )} />
+                            <Form.Control type="number" placeholder="Maximum Temperature" step={0.1} value={device.config.max} onChange={(e) => setDevice({ ...device, config: { ...device.config, max: Number(e.target.value) } } )} />
                             <Form.Text className="text-muted">The maximum temperature at which you will be notified</Form.Text>
                         </Form.Group>
 
