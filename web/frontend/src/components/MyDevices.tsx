@@ -231,10 +231,9 @@ function MyDevices() {
             </div>
         );
     }
-
+    
     return (
         <div>
-            <NavBar/>
             <Alert {...alertProps}/>
             <Container>
             <GetHead/>
