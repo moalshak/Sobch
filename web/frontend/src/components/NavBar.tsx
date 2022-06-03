@@ -14,14 +14,15 @@ import {IoInformationCircleOutline, IoHelpCircleOutline} from 'react-icons/io5';
 
 function NavBar() {
     return(
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" className="fluid" >
         <Container>
             <Navbar.Brand href="/"> <img
           alt=""
           src="/Sobchlogo.png"
           width="200"
           height="110"
-          className="d-inline-block align-top"/></Navbar.Brand>
+          className="d-inline-block align-top" /></Navbar.Brand>
+
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -45,15 +46,19 @@ function NavBar() {
 
                
             </Nav>
+            
             </Navbar.Collapse>
+
         </Container>
+        
         </Navbar>
     );
 } 
 
 export function NavBarBot() {
     return (
-        <div className="bottom">
+        <div className="sticky-bottom">
+            <div className="sticky-onscroll">
         <Navbar bg="light" expand="lg">
         <Container>
 
@@ -70,6 +75,7 @@ export function NavBarBot() {
             </Nav>
         </Container>
         </Navbar>
+        </div>
         </div>
     )
         
