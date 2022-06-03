@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import { getAccessToken } from '../lib/acc';
 import {Link, useNavigate} from "react-router-dom"
 import axios from 'axios';
-import NavBar from "./NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
@@ -191,6 +191,7 @@ function Profile() {
             : <RenderProfile/>}
             <div>
                     </div>
+            <NavBarBot />
         </div>
     );
     
