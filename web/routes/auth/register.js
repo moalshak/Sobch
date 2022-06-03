@@ -7,8 +7,11 @@ import { ref, set } from "firebase/database";
 const router = express.Router(),
     Log = getLog("register");
 
-    
-
+    /**
+     * @api {DELETE} /auth/register Register
+     *  request to delete a user
+     * */
+     
 router.delete('/', async (req, res) => {
 
     const user = req.user;
@@ -29,6 +32,11 @@ router.delete('/', async (req, res) => {
         res.status(code).send({message});
     }
 });
+
+/**
+ * @api {POST} /auth/register Register
+ * request to create a user
+ */
 
 router.post('/', async (req, res) => {
     const credentials = req.body.credentials,
