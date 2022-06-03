@@ -48,11 +48,11 @@ function NavBar() {
         </Container>
         </Navbar>
     );
-}
+} 
 
 export function NavBarBot() {
     return (
-        <div className="fixed-bottom">
+        <div className="bottom">
         <Navbar bg="light" expand="lg">
         <Container>
 
