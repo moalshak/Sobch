@@ -24,7 +24,7 @@ function Logout () {
                  variant: Variant.info
              });
              setTimeout(()=> {
-                navigate("/");
+                navigate("/login");
               }, 2000);
         }
     }, []);
