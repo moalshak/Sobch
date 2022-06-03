@@ -53,12 +53,6 @@ export function NavBarBot() {
         <div className="fixed-bottom">
         <Navbar bg="light" expand="lg">
         <Container>
-            <Navbar.Brand href=""> <img
-          alt=""
-          
-          width="200"
-          height="50"
-          className="d-inline-block align-bottom"/></Navbar.Brand>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">

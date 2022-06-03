@@ -146,7 +146,7 @@ function MyDevices() {
             link = "./images/therm4.jpg";
         }
         if(model === "Sobch DHT-55"){
-            link = "./images/therm5.jpg";
+            link = "./images/therm5.jpeg";
         }
         return (
             <Card.Img  src={link}></Card.Img>
