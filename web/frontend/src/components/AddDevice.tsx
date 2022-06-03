@@ -9,7 +9,7 @@ import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar from "../components/NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 import {Alert, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
 import ToggleButton from "react-bootstrap/ToggleButton";
@@ -222,6 +222,7 @@ function AddDevice() {
                     </Form></>
         }
         </Container>
+        <NavBarBot />
         </div>
     )
 }

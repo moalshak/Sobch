@@ -2,7 +2,7 @@ import {Alert, AlertProps, Variant} from './CustomAlert';
 import {useEffect, useState} from 'react';
 import { isLoggedIn } from '../lib/acc';
 import {useNavigate} from 'react-router-dom';
-import NavBar from './NavBar';
+import NavBar, {NavBarBot} from "../components/NavBar";
 
 function Logout () {
 
@@ -34,6 +34,7 @@ function Logout () {
         <div>
             <NavBar/>
             <Alert {...alertProps} />
+            <NavBarBot/>
         </div>
     );
 }

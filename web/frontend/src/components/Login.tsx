@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
-import NavBar from "./NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import {setLoggedIn, isLoggedIn} from '../lib/acc';
 import {useNavigate} from 'react-router-dom';
@@ -163,6 +163,7 @@ function Login() {
                 </Container>
 
             }
+            <NavBarBot/>
         </div>
     );
 }

@@ -25,6 +25,7 @@ function Home() {
                 </Card.Body>
             </Card>
         </Container>
+        <NavBarBot />
         </div>
     );
 }

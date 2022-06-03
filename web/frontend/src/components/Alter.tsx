@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar from "./NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Modal from "react-bootstrap/Modal";
@@ -289,6 +289,7 @@ function Alter() {
                     </Form><br /><Link to={`/my-devices`}><Button variant="secondary" className='mt-3 mb-3'>All Devices</Button></Link><Link to={`/stats/${device.id}`}><Button variant="secondary" className="ms-3">See this devices Stats</Button></Link><br /></>
     }
         </Container>
+        <NavBarBot />
         </div>
     )
 }

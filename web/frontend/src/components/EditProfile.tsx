@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar from "./NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 import {setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";

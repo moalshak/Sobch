@@ -9,7 +9,7 @@ import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar from "./NavBar";
+import NavBar, {NavBarBot} from "../components/NavBar";
 import {Alert, Variant} from './CustomAlert';
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 import Spinner from "react-bootstrap/Spinner";
@@ -137,7 +137,7 @@ function MyDevices() {
             link = "./images/therm1.jpg";
         }
         if(model === "Sobch DHT-22"){
-            link = "./images/therm2.jpg";
+            link = "./images/them2.jpg";
         }
         if(model === "Sobch DHT-33"){
             link = "./images/therm3.jpg";
@@ -235,6 +235,7 @@ function MyDevices() {
                 </div>
             </div> : <RenderDevices/>) : <RenderDevices/>}
             </Container>
+            <NavBarBot />
         </div>
     );
 

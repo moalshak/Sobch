@@ -7,6 +7,7 @@ import Nav from 'react-bootstrap/Nav';
 import {goLogout} from '../lib/acc';
 import {Link} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
+import Corparate from './Company';
 
 function NavBar() {
     return(
@@ -49,19 +50,21 @@ function NavBar() {
 
 export function NavBarBot() {
     return (
-        <Navbar bg="gray" expand="lg">
+        <div className="fixed-bottom">
+        <Navbar bg="light" expand="lg">
         <Container>
-            <Navbar.Brand href="/"> <img
+            <Navbar.Brand href=""> <img
           alt=""
-          src="/copyright.png"
+          
           width="200"
-          height="110"
-          className="d-inline-block align-top"/></Navbar.Brand>
+          height="50"
+          className="d-inline-block align-bottom"/></Navbar.Brand>
 
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-                <Nav.Link href="/help">FAQ</Nav.Link>
+                <p> © Sobch 2022, all rights reserved</p>
+                <Nav.Link href="/corporate">Corporate Info</Nav.Link>
             </Nav>
             <Nav>
                
@@ -69,6 +72,7 @@ export function NavBarBot() {
             </Navbar.Collapse>
         </Container>
         </Navbar>
+        </div>
     )
         
 }
