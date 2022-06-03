@@ -2,7 +2,6 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Register from './components/Register';
 import Login from './components/Login';
-import Home from './components/Home';
 import Profile from './components/Profile';
 import EditProfile from './components/EditProfile';
 import MyDevices from './components/MyDevices';
@@ -22,7 +21,7 @@ function App() {
     
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<MyDevices />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout/>} />
