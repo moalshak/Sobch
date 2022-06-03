@@ -54,6 +54,8 @@ function NavBar() {
 export function NavBarBot() {
     return (
         <div className="bottom">
+            <div className="navbar-collapse collapse">
+      <ul className="nav navbar-nav pull-right mainNav"></ul>
         <Navbar bg="light" expand="lg">
         <Container>
 
@@ -70,6 +72,7 @@ export function NavBarBot() {
             </Nav>
         </Container>
         </Navbar>
+        </div>
         </div>
     )
         
