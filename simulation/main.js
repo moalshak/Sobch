@@ -70,13 +70,17 @@ var simulateEnvironment = async (devices) => {
             device.currentTemp = Math.round(generateChange(device.currentTemp) * aggressiveness.decimals * 50) / (aggressiveness.decimals * 50);
             // device has gone beyond the limits set by the owner
             var beyondLimit = device.currentTemp >= device.config.max || device.currentTemp <= device.config.min;
-            if (beyondLimit && device.config.wantsToBeNotified) {
+            if (beyondLimit && device.config.wantsToBeNotified && device.config.wantsToBeNotified.length > 0) {
                 // notify the owners
                 var owners_ids = device.owners || [];
                 var owners = [];
                 for(var owner_id of owners_ids) {
-                    var owner = (await get(ref(db, `users/${owner_id}`))).val();
-                    owners.push(owner);
+                    if (device.config.wantsToBeNotified.includes(owner_id)) {
+                        var owner = (await get(ref(db, `users/${owner_id}`))).val();
+                        owners.push(owner);
+                        // remove the email from the list
+                        device.config.wantsToBeNotified.splice(device.config.wantsToBeNotified.indexOf(owner.credentials.email), 1);
+                    }
                 }
                 for (var owner of owners) {
                     if (owner && owner.credentials && owner.credentials.email) {
@@ -84,10 +88,10 @@ var simulateEnvironment = async (devices) => {
                         Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
                     }
                 }
-                device.config.wantsToBeNotified = false;
-            } else if (!beyondLimit && !device.config.wantsToBeNotified) {
-                device.config.wantsToBeNotified = true;
-            }
+            } 
+            // else if (!beyondLimit && !device.config.wantsToBeNotified) {
+            //     device.config.wantsToBeNotified = true;
+            // }
             // update the database
             await set(ref(db, `devices/${id}`), device);
         }

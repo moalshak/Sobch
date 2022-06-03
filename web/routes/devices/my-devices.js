@@ -115,7 +115,21 @@ router.post("/", async (req, res) => {
                 deviceSnapshot.owners.push(user.uid);
             }
             if (device.config) {
-                deviceSnapshot.config = device.config;
+                deviceSnapshot.config.min = device.config.min;
+                deviceSnapshot.config.max = device.config.max;
+                deviceSnapshot.config.active = device.config.active;
+                deviceSnapshot.config.room = device.config.room;
+                if (device.config.wantsToBeNotified) {
+                    if (deviceSnapshot.config.wantsToBeNotified === undefined) {
+                        deviceSnapshot.config.wantsToBeNotified = [user.uid];
+                    }
+                    if (!deviceSnapshot.config.wantsToBeNotified.includes(user.uid)) {
+                        deviceSnapshot.config.wantsToBeNotified.push(user.uid);
+                    }
+                } else {
+                    // remove user from wantsToBeNotified
+                    deviceSnapshot.config.wantsToBeNotified.splice(deviceSnapshot.config.wantsToBeNotified.indexOf(user.uid), 1);
+                }
             }
             await set(ref(db, `devices/${deviceId}`), deviceSnapshot);
             var userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();

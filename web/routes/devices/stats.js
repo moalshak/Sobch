@@ -65,6 +65,12 @@ router.get('/:id', async (req, res) => {
           }
         }
         device.owners = ownersEmails;
+        
+        // remove all ids except the user.uid from the device.config.wantsToBeNotified
+        if (device.config.wantsToBeNotified !== undefined) {
+          device.config.wantsToBeNotified = device.config.wantsToBeNotified.includes(user.uid);
+        }
+
         res.status(200).send({device, accessToken: req.user.stsTokenManager.accessToken});  
         Log.info(snapshot.val());
       }
