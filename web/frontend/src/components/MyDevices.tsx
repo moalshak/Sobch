@@ -13,6 +13,10 @@ import NavBar, {NavBarBot} from "../components/NavBar";
 import {Alert, Variant} from './CustomAlert';
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 import Spinner from "react-bootstrap/Spinner";
+import {AiOutlineEdit} from "react-icons/ai";
+import {ImStatsBars} from 'react-icons/im';
+import {BiAddToQueue} from 'react-icons/bi';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 function MyDevices() {
 
@@ -167,7 +171,7 @@ function MyDevices() {
                 <div 
                     className="d-grid"
                 >
-                    <Button href={`/add-device`} variant="outline-primary" className='mt-3 mb-3' size="lg">Add Device</Button>
+                    <Button href={`/add-device`} variant="outline-primary" className='mt-3 mb-3' size="lg">Add Device <BiAddToQueue/></Button>
                 </div>
             </div>
         )
@@ -203,14 +207,21 @@ function MyDevices() {
                             <span style={{fontSize: 24, color: "green"}}> {device.currentTemp} °C <span style={{fontSize: 20, color: "green"}}>✅</span></span>}
                             </span>
                             </Row>
+                            <br/>
+                            <ProgressBar
+                            label={device.currentTemp <= device.config.min ? `Lower than min by ${Math.round(((device.config.min - device.currentTemp)*100))/100}` : device.currentTemp >= device.config.max ? `Higher than max by ${Math.round(((device.config.max - device.currentTemp)*100))/100}` : "Normal"}
+                            variant={device.currentTemp >= device.config.max || device.currentTemp <= device.config.min ? 'danger' : 'info'}
+                            max={device.config.max + 3}
+                            min={device.config.min - 4}
+                            now={device.currentTemp} />
 
                             <br/>
                             <Row>
                                 <Col>
-                                <Button style={{width : "100%"}} variant="outline-primary" size='sm' href={`/stats/${device.id}`}>See Stats</Button>
+                                <Button style={{width : "100%"}} variant="outline-primary" size='sm' href={`/stats/${device.id}`}>See Stats <ImStatsBars/></Button>
                                 </Col>
                                 <Col>
-                                <Button style={{width : "100%"}} variant="outline-primary" size='sm' href={`/alter/${device.id}`}>Edit Device</Button>
+                                <Button style={{width : "100%"}} variant="outline-primary" size='sm' href={`/alter/${device.id}`}>Edit Device <AiOutlineEdit/></Button>
                                 </Col>
                             </Row>
                         </div>

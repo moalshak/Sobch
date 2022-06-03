@@ -17,6 +17,9 @@ import Modal from "react-bootstrap/Modal";
 import {setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
+import { AiOutlineEdit } from "react-icons/ai";
+import {ImStatsBars} from "react-icons/im";
+import {BiDevices, BiUnlink} from "react-icons/bi";
 
 interface Device {
     id: string,
@@ -278,15 +281,15 @@ function Alter() {
                             setIsEdit(true);
                             handleShowDialog();
                         }}>
-                            Edit This Device's Configuration
+                            Edit This Device's Configuration <AiOutlineEdit/>
                         </Button>
                         <Button className="ms-3" variant="danger" onClick={(_) => {
                             setIsEdit(false);
                             handleShowDialog();
                         }}>
-                            Unlink This Device
+                            Unlink This Device <BiUnlink/>
                         </Button>
-                    </Form><br /><Link to={`/my-devices`}><Button variant="secondary" className='mt-3 mb-3'>All Devices</Button></Link><Link to={`/stats/${device.id}`}><Button variant="secondary" className="ms-3">See this devices Stats</Button></Link><br /></>
+                    </Form><br /><Link to={`/my-devices`}><Button variant="secondary" className='mt-3 mb-3'>All Devices <BiDevices/></Button></Link><Link to={`/stats/${device.id}`}><Button variant="secondary" className="ms-3">See this devices Stats <ImStatsBars/></Button></Link><br /></>
     }
         </Container>
         <NavBarBot />

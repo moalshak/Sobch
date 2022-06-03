@@ -15,6 +15,9 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import NavBar from "./NavBar";
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 import Spinner from "react-bootstrap/Spinner";
+import {AiOutlineEdit} from "react-icons/ai";
+import {BiDevices} from "react-icons/bi";
+import ProgressBar from 'react-bootstrap/ProgressBar';
 
 function Stats() {
     
@@ -87,7 +90,18 @@ function Stats() {
                 {currentTemp > device.config.max ? <span style={{fontSize: 16, color: "red"}}>🌡️{currentTemp} °C 🔥</span> :
                 currentTemp < device.config.min ? <span  style={{fontSize: 16,color: "blue"}}>🌡️{currentTemp} °C ❄️</span> :
                 <span style={{fontSize: 16, color: "green"}}>🌡️{currentTemp} °C ✅</span>}
+                <div>
+                <br/>
+                <ProgressBar
+                label={device.currentTemp <= device.config.min ? `Lower than min by ${Math.round(((device.config.min - device.currentTemp)*100))/100}` : device.currentTemp >= device.config.max ? `Higher than max by ${Math.round(((device.config.max - device.currentTemp)*100))/100}` : "Normal"}
+                variant={device.currentTemp >= device.config.max || device.currentTemp <= device.config.min ? 'danger' : 'info'}
+                max={device.config.max + 3}
+                min={device.config.min - 4}
+                now={device.currentTemp} />
+                </div>
+                
                 </span>
+                
             )
 
         } else {
@@ -186,12 +200,12 @@ function Stats() {
             <div>
                 <br/>
                 <Link to={`/alter/${deviceId}`}>
-                    <Button variant="secondary">Edit This Devices Configuration</Button>
+                    <Button variant="secondary">Edit This Devices Configuration <AiOutlineEdit/></Button>
                 </Link>
                 <br/>
                 <br/>
                 <Link to={`/my-devices`}>
-                    <Button variant="secondary">Back to My Devices</Button>
+                    <Button variant="secondary">Back to My Devices <BiDevices/></Button>
                 </Link>
             </div>
             </Container>

@@ -8,6 +8,11 @@ import {goLogout} from '../lib/acc';
 import {Link} from "react-router-dom";
 import Button from 'react-bootstrap/Button';
 import Corparate from './Company';
+import {IoIosLogOut} from 'react-icons/io';
+import {HiOutlineLogin} from 'react-icons/hi';
+import {BiDevices} from 'react-icons/bi';
+import {CgProfile} from 'react-icons/cg';
+import {AiFillHome} from 'react-icons/ai';
 
 function NavBar() {
     return(
@@ -23,20 +28,20 @@ function NavBar() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-                <Nav.Link href="/">Home</Nav.Link>
+                <Nav.Link href="/">Home <AiFillHome/></Nav.Link>
             </Nav>
             <Nav>
                 {
                     isLoggedIn() ?
 
                     <>
-                    <Nav.Link href="/my-devices">My Devices</Nav.Link>
-                    <Nav.Link href="/profile">Profile</Nav.Link>
-                    <Nav.Link href="/logout" onClick={goLogout}>Logout</Nav.Link></>
+                    <Nav.Link href="/my-devices">My Devices <BiDevices/></Nav.Link>
+                    <Nav.Link href="/profile">Profile <CgProfile/></Nav.Link>
+                    <Nav.Link href="/logout" onClick={goLogout}>Logout <IoIosLogOut/></Nav.Link></>
                     :
                     <>
                     <Nav.Link href="/register">Register</Nav.Link>
-                    <Nav.Link href="/login">Login</Nav.Link>
+                    <Nav.Link href="/login">Login <HiOutlineLogin/></Nav.Link>
                     </>
                 }
 

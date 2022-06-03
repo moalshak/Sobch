@@ -13,6 +13,8 @@ import Col from 'react-bootstrap/Col';
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
+import {AiOutlineEdit} from "react-icons/ai";
+import {TiUserDeleteOutline} from "react-icons/ti";
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -159,12 +161,12 @@ function Profile() {
                         <div 
                             className="d-grid"
                         >
-                            <Button href={`/edit-profile`} variant="outline-primary" className='mt-3 mb-3' size="lg">Edit</Button>
+                            <Button href={`/edit-profile`} variant="outline-primary" className='mt-3 mb-3' size="lg">Edit <AiOutlineEdit/></Button>
                         </div>
                         <div 
                             className="d-grid"
                         >
-                            <Button onClick = {goDelete} variant="outline-danger" className='mt-3 mb-3' size="lg">Delete Account</Button>
+                            <Button onClick = {goDelete} variant="outline-danger" className='mt-3 mb-3' size="lg">Delete Account <TiUserDeleteOutline/></Button>
                         </div>
                     </div>
                 </Card>
