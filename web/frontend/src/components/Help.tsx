@@ -35,7 +35,7 @@ function How(){
       <h6 className="mb-3 text-primary"><i className="fas fa-user text-primary pe-2"></i> How do I add a device?
       </h6>
       <p>
-        Once you are logged in you can go to the <a href="/add-device" className="card-link">Add Device</a> page and
+        Once you are <a href="/login" className="card-link">logged in</a> you can go to the <a href="/add-device" className="card-link">Add Device</a> page and
         click on the <strong>Add Device</strong> button.
       </p>
     </div>
@@ -53,7 +53,7 @@ function How(){
       <h6 className="mb-3 text-primary"><i className="fas fa-home text-primary pe-2"></i> Where can I find my One-Time Password?
       </h6>
       <p> Inside the box of your purchashed thermometer, you will find the One-Time Password that is in the form of a 16 digit serial number.
-        reason.</p>
+          reason.</p>
     </div>
 
     <div className="col-md-6 col-lg-4 mb-4">
