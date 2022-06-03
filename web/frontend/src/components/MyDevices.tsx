@@ -234,6 +234,7 @@ function MyDevices() {
     
     return (
         <div>
+            <NavBar/>
             <Alert {...alertProps}/>
             <Container>
             <GetHead/>
