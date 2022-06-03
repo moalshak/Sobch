@@ -10,6 +10,7 @@ import {HiOutlineLogin} from 'react-icons/hi';
 import {BiDevices} from 'react-icons/bi';
 import {CgProfile} from 'react-icons/cg';
 import {AiFillHome} from 'react-icons/ai';
+import {IoInformationCircleOutline, IoHelpCircleOutline} from 'react-icons/io5';
 
 function NavBar() {
     return(
@@ -63,8 +64,8 @@ export function NavBarBot() {
             </Nav>
             <Nav>
                 <>
-             <Nav.Link href="/corporate">Corporate Info</Nav.Link>
-             <Nav.Link href="/help">FAQs</Nav.Link>
+             <Nav.Link href="/corporate">Corporate Info<IoInformationCircleOutline/></Nav.Link>
+             <Nav.Link href="/help">FAQs<IoHelpCircleOutline/></Nav.Link>
                 </>
             </Nav>
         </Container>
