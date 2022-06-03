@@ -64,7 +64,7 @@ function AddDevice() {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`${BACKEND_BASE_URL}/my-devices`, device, {
+            const response = await axios.post(`${BACKEND_BASE_URL}/my-devices`, {device : device}, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }
