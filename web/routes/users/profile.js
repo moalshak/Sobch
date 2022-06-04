@@ -102,7 +102,7 @@ router.get('/', async (req, res) => {
             }
         }
     } catch(error){
-        Log.error(error);
+        console.error(error);
         res.status(400).send({error : error});
     }      
 })
