@@ -72,6 +72,9 @@ router.get('/', async (req, res) => {
                     }
                 });
                 snapshot = await get(ref(db, `users/${userid}`));
+                while (!snapshot.exists()) {
+                    snapshot = await get(ref(db, `users/${userid}`));
+                }
                 if (req.user.uid) {
                     res.status(200).send({profile: snapshot_.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully");
