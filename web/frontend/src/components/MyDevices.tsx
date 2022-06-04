@@ -237,7 +237,8 @@ function MyDevices() {
     
     return (
         <div>
-            <NavBar/>
+        <NavBar/>
+        <div>
             <Alert {...alertProps}/>
             <Container>
             <GetHead/>
@@ -248,7 +249,8 @@ function MyDevices() {
                 </div>
             </div> : <RenderDevices/>) : <RenderDevices/>}
             </Container>
-            <NavBarBot />
+        </div>
+        <NavBarBot />
         </div>
     );
 
