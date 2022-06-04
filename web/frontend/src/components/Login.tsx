@@ -10,6 +10,10 @@ import {Alert, AlertProps, Variant} from './CustomAlert';
 import {setLoggedIn, isLoggedIn} from '../lib/acc';
 import {useNavigate} from 'react-router-dom';
 
+/**
+ * The login page for the frontend
+ */
+
 function Login() {
 
     const [email, logEmail] = useState('');
@@ -58,7 +62,9 @@ function Login() {
                return;
            }
 
-           // message show the message from the server
+           /**
+            * message shown in server
+            */
            if (data.message) {
             setAlertProps({ 
                 heading: 'Success',
@@ -67,7 +73,9 @@ function Login() {
              });
             }
 
-        // set local storage 
+        /**
+         * set the access token in the local storage
+         */
         const accessToken = res.data.accessToken;
         localStorage.setItem('accessToken', accessToken);
         setLoggedIn(true);

@@ -13,14 +13,13 @@ router.get('/', (req, res) => {
 
 router.post('/', async (req, res) => {
     const credentials = req.body,
-        email = credentials.email.trim(),
-        password = credentials.password;
+    email = credentials.email.trim(),
+    password = credentials.password;
 
     var code,message;
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        
         const user = userCredential.user;
         
         addUser(user);
@@ -31,12 +30,13 @@ router.post('/', async (req, res) => {
             sendEmailVerification(user)
             .then(() => {
                 Log.info("Verification email has been sent to ", {user : user.email});
-                message = "Verify email in order to login"
+                message = "Verify email in order to login";
                 code = 401;
                 res.status(code).send({error : true, message});
             }).catch((error) => {
                 res.status(400).send({error : true, message: "Please verify your email in order to login"});
             });
+
         } else {
             Log.info("Logged in", {user : user.uid});
             res.status(code).send({error : false, accessToken: user.stsTokenManager.accessToken, message});
@@ -49,6 +49,7 @@ router.post('/', async (req, res) => {
         if(errorCode == "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
             code = 400;
             message = "Invalid Credentials";
+
         } else {
             code = 500;
             message = error.message;
@@ -61,8 +62,10 @@ router.post('/', async (req, res) => {
 
 router.put('/', (req, res) => {
     var email = '';
+
     try {
         email = req.body.email.trim();
+
     } catch(err) {
         Log.error("Bad request", {error : err.message});
         res.status(400).send({error : true, message : "Bad request", method: "PUT"});
@@ -72,12 +75,17 @@ router.put('/', (req, res) => {
     .then(() => {
         res.status(200).send({error : false, message: "If the email exists, a password reset email has been sent!"});
     })
+
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        
+        /**
+         * spoof response for email not found
+         */
         if(errorCode == "auth/user-not-found"){
-            // spoof response for email not found
             res.status(200).send({error : false, message: "If the email exists, a password reset email has been sent!"});
+
         } else {
             res.status(400).send({error : true, message: errorMessage});
             Log.error(errorMessage, {error, errorCode});

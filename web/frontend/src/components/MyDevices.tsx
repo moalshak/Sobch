@@ -182,6 +182,8 @@ function MyDevices() {
                 {devices.map((device : any) => {
                     return (
                         <div>
+                        <NavBar />
+                        <div>
                         <Card className='mb-3 mt-3 pb-1 center'>
                         <div key={device.id}>
                             <Row>
@@ -225,6 +227,7 @@ function MyDevices() {
                             </Row>
                         </div>
                         </Card>
+                        </div>
                         </div>
                     );
                 })}
