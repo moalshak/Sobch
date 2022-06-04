@@ -162,16 +162,21 @@ function Profile() {
                                 
                                 </Card.Text>
                             </Card.Body>
-                        <div 
-                            className="d-grid"
-                        >
-                            <Button href={`/edit-profile`} variant="outline-primary" className='mt-3 mb-3' size="lg">Edit <AiOutlineEdit/></Button>
-                        </div>
-                        <div 
-                            className="d-grid"
-                        >
-                            <Button onClick = {goDelete} variant="outline-danger" className='mt-3 mb-3' size="lg">Delete Account <TiUserDeleteOutline/></Button>
-                        </div>
+                            {!id ?                 
+                            <div>
+                            <div 
+                                className="d-grid"
+                            >
+                                <Button href={`/edit-profile`} variant="outline-primary" className='mt-3 mb-3' size="lg">Edit <AiOutlineEdit/></Button>
+                            </div>
+                            <div 
+                                className="d-grid"
+                            >
+                                <Button onClick = {goDelete} variant="outline-danger" className='mt-3 mb-3' size="lg">Delete Account <TiUserDeleteOutline/></Button>
+                            </div>
+                            </div>
+                            : null
+                            }
                     </div>
                 </Card>
                 </Container>
