@@ -8,12 +8,13 @@ const router = express.Router(),
     Log = getLog("profile");
 
 router.get('/:id', (req, res) => {
+    
     if (!req.user) {
         return res.status(401).send({error : "Unauthorized access"});
-    } else if (!isAdmin(requester) || req.user.uid !== req.params.id) {
+    } else if (!isAdmin(req.user.uid) || req.user.uid !== req.params.id) {
         return res.status(401).send({error : "Unauthorized access"});
     }
-
+    
     const requester = req.user.uid;
     const requested = req.params.id;
     const meta = req.user.metadata;
