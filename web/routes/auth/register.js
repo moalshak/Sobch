@@ -7,10 +7,30 @@ import { ref, set } from "firebase/database";
 const router = express.Router(),
     Log = getLog("register");
 
+<<<<<<< HEAD
 /**
  * @api {delete} /auth/register Register
  * request to delete account
  */
+=======
+    /**
+     * @api {DELETE} /auth/register Register
+     *  request to delete a user
+     * */
+     
+<<<<<<< Updated upstream
+>>>>>>> 280e6cc229b10ae2e3b0b50184d0371e79c7a3f6
+=======
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> c56e3d46495cf934660db6d8d2b089c08a52fe00
+=======
+>>>>>>> 8b39a79f56449daaafa61f3273e511f0d566014e
+>>>>>>> Stashed changes
+=======
+>>>>>>> 8b39a79f56449daaafa61f3273e511f0d566014e
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 router.delete('/', async (req, res) => {
     const user = req.user;
     var message, code;
@@ -32,9 +52,28 @@ router.delete('/', async (req, res) => {
 });
 
 /**
+<<<<<<< HEAD
  * @api {post} /auth/register Register
  * request to register account
  */
+=======
+ * @api {POST} /auth/register Register
+ * request to create a user
+ */
+
+<<<<<<< Updated upstream
+>>>>>>> 280e6cc229b10ae2e3b0b50184d0371e79c7a3f6
+=======
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> c56e3d46495cf934660db6d8d2b089c08a52fe00
+=======
+>>>>>>> 8b39a79f56449daaafa61f3273e511f0d566014e
+>>>>>>> Stashed changes
+=======
+>>>>>>> 8b39a79f56449daaafa61f3273e511f0d566014e
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 router.post('/', async (req, res) => {
     const credentials = req.body.credentials,
         email = credentials.email.trim(),

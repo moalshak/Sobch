@@ -11,12 +11,20 @@ router.get('/', (req, res) => {
     res.status(200).send("Request received");
 })
 
+/**
+ * @api {post} /auth/login Login
+ */
 router.post('/', async (req, res) => {
     const credentials = req.body,
     email = credentials.email.trim(),
     password = credentials.password;
 
     var code,message;
+
+    /**
+     * post request passes email and password to auth if 
+     * email and password are valid response is 200
+     */
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -59,7 +67,9 @@ router.post('/', async (req, res) => {
     }
 });
 
-
+/**
+ * @api {post} /auth/forgotPassword Forgot Password
+ */
 router.put('/', (req, res) => {
     var email = '';
 

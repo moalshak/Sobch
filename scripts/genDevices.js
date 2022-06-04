@@ -96,7 +96,7 @@ function generateDevice() {
     device.config.max = genRandomTemperature(25, 30, 2);
     device.config.room = ROOMS[Math.floor(Math.random() * ROOMS.length)];
     device.config.active = true;
-    device.config.wantsToBeNotified = true;
+    device.config.wantsToBeNotified = ADMINS;
     device.owners = ADMINS;
     device.model = MODELS[Math.floor(Math.random() * MODELS.length)];
     device.otp = generateOTP();
