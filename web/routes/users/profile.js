@@ -67,7 +67,7 @@ router.get('/', (req, res) => {
                 credentials : {
                     email : req.user.email
                 }
-            }).then(() => {
+            }).then((snapshot) => {
                 if (req.user.uid) {
                     res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully");
