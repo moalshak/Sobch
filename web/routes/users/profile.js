@@ -72,21 +72,15 @@ router.get('/', async (req, res) => {
                     }
                 });
                 snapshot = await get(ref(db, `users/${userid}`));
-<<<<<<< Updated upstream
+
                 while (!snapshot.exists()) {
                     snapshot = await get(ref(db, `users/${userid}`));
                 }
-=======
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
                 while (!snapshot.exists()) {
                     snapshot = await get(ref(db, `users/${userid}`));
                 }
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
+
                 if (req.user.uid) {
                     res.status(200).send({profile: snapshot_.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully");
@@ -114,11 +108,10 @@ router.get('/', async (req, res) => {
             }
         }
     } catch(error){
-<<<<<<< Updated upstream
         console.error(error);
-=======
         Log.error(error);
->>>>>>> Stashed changes
+
+        Log.error(error);
         res.status(400).send({error : error});
     }      
 })

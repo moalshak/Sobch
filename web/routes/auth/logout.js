@@ -16,9 +16,12 @@ const router = express.Router(),
      */
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 >>>>>>> 280e6cc229b10ae2e3b0b50184d0371e79c7a3f6
 =======
 <<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
 <<<<<<< Updated upstream
 >>>>>>> c56e3d46495cf934660db6d8d2b089c08a52fe00
 =======
@@ -27,6 +30,9 @@ const router = express.Router(),
 =======
 >>>>>>> 8b39a79f56449daaafa61f3273e511f0d566014e
 >>>>>>> Stashed changes
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 router.post('/', async (req, res) => {
     const user = req.user;
