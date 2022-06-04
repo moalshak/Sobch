@@ -13,7 +13,7 @@ import TeamSobch from './components/TeamSobch';
 import Help from './components/Help';
 import Corparate from './components/Company';
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "http://localhost:8000/api" || "https://www.sobch.xyz/api" || "http://172.104.242.242:8000";
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://www.sobch.xyz/api" || "http://172.104.242.242:8000";
 
 function App() {
   
