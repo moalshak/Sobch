@@ -80,6 +80,15 @@ router.get('/', (req, res) => {
                 console.error(error);
                 res.status(400).send({error : error});
             });
+        } else {
+            if (req.user.uid) {
+                res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
+                Log.info("Profile details returned successfully");
+            } else if (!snapshot.exists()){
+                res.status(401).send({error : "Unauthorized access"});
+            } else {
+                res.status(400).send({error : "Bad Request"});
+            }
         }
     }).catch((error) => {
         console.error(error);
