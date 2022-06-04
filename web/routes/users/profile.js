@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
             if (!snapshot.exists()) {
                 set(ref(db, `users/${requested}`), {
                     credentials : {
-                        email : requested.email
+                        email : ""
                     }
                 }).then(() => {
                     if (requester && requested) {
@@ -65,7 +65,7 @@ router.get('/', (req, res) => {
         if (!snapshot.exists()) {
             set(ref(db, `users/${userid}`), {
                 credentials : {
-                    email : meta.email
+                    email : req.user.email
                 }
             }).then(() => {
                 if (req.user.uid) {
