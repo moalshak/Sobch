@@ -34,7 +34,6 @@ router.delete('/', async (req, res) => {
 });
 
 /**
-<<<<<<< HEAD
  * @api {post} /auth/register Register
  * request to register account
  */

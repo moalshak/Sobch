@@ -24,9 +24,9 @@ function Profile() {
     const [createdAt, setCreatedAt] = useState('');
     const [lastLogin, setlastLogin] = useState('');
     const [loading, setLoading] = useState(true);
+
     const {id} = useParams();
 
-    const url = `${BACKEND_BASE_URL}/profile/` 
     const accessToken = getAccessToken();
 
     const [alertProps, setAlertProps] = useState<AlertProps>({
@@ -87,6 +87,10 @@ function Profile() {
     async function getProfile() {
         try{
             setLoading(true);
+            var url = `${BACKEND_BASE_URL}/profile/`;
+            if (id) {
+                url += id;
+            }
             const res = await axios.get(url, {
                 headers: {
                     Authorization : `${accessToken}`

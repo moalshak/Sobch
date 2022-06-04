@@ -26,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout/>} />
         <Route path="/profile/" element={<Profile />} />
+        <Route path="/profile/:id" element={<Profile />} />
         <Route path="/edit-profile/" element={<EditProfile />} />
         <Route path="/my-devices" element={<MyDevices />} />
         <Route path="/add-device" element={<AddDevice />} />
