@@ -22,7 +22,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MyDevices />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register/" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout/>} />
         <Route path="/profile/" element={<Profile />} />

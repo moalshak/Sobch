@@ -20,7 +20,7 @@ router.delete('/', async (req, res) => {
     try{
         deleteUser(user);
         code = 200;
-        message = "Success"   
+        message = "Success"  
 
         set(ref(db, `users/${user.uid}`), null),
         res.status(200).send({error : false, message : `Account Nuked`});

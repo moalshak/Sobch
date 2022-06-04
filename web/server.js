@@ -40,6 +40,8 @@ const routes = {
  * the white listed endpoints (allowed to be accessed without authentication)
  */
 const whiteList = [
+    "/api/login",
+    "/api/register",
     "/login",
     "/register"
 ]

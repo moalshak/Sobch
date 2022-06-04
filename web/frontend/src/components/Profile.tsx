@@ -15,6 +15,7 @@ import {Alert, AlertProps, Variant} from './CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
 import {AiOutlineEdit} from "react-icons/ai";
 import {TiUserDeleteOutline} from "react-icons/ti";
+import Modal from "react-bootstrap/Modal";
 
 function Profile() {
     const [email, setEmail] = useState('');
@@ -26,6 +27,7 @@ function Profile() {
     const [loading, setLoading] = useState(true);
 
     const {id} = useParams();
+    
 
     const accessToken = getAccessToken();
 
@@ -37,6 +39,16 @@ function Profile() {
 
     const navigate = useNavigate();
 
+    const [showPopUp, setShowPopUp] = useState(false);
+
+    function handleClosePopUp() {
+        setShowPopUp(false);
+    }
+
+    function handleShowPopUp() {
+        setShowPopUp(true);
+    }
+
     async function goDelete(e : any) {
         e.preventDefault();
         var data : any = {};
@@ -44,9 +56,11 @@ function Profile() {
         try {
             setLoading(true);
             const res = await axios.delete(`${BACKEND_BASE_URL}/register`, {
+                headers: {
+                    Authorization: `${getAccessToken()}`
+                }
             });
             if (res.status === 200) {
-                //alert("Your profile information has been successfully updated");
                 setAlertProps({
                     heading: 'Your profile information has been deleted successfully!',
                     message: 'You will now be redirected to the home page',
@@ -54,14 +68,15 @@ function Profile() {
                 });
                 
                 setTimeout(() => {
-                    navigate("/");
+                    navigate("/register");
                 }, 2500);
                 setLoading(false);
+                setShowPopUp(false);
+                setLoggedIn(false);
                 return;
             }    
 
             data = res.data;
-            // window.location.href = '/';
     } catch(error) {
         if(data.error) {
             //alert(data.error);
@@ -102,6 +117,8 @@ function Profile() {
             setlastLogin(new Intl.DateTimeFormat('en-NL', { timeZone : 'Europe/Amsterdam', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(res.data.meta.lastLogin))
             setLoading(false);
             setLoggedIn(true);
+            setShowPopUp(false);
+            
         } catch (error : any) {
             if (error.response.status === 401)
             {
@@ -115,7 +132,14 @@ function Profile() {
                 }, 2500);
                 return;
             }
-            alert (error);
+            else if (error.response.data.error) {
+                setAlertProps({
+                    heading: 'Error',
+                    message: error.response.data.message,
+                    variant: Variant.danger
+                });
+                return;
+            }
         }
     }
 
@@ -128,42 +152,55 @@ function Profile() {
 
         return (
                 <div>
-                
                 <Container>
-                <Card className='mt-3'>
-                    
-                    <div>
-                        <Card.Header>Profile :</Card.Header>
-                            <Card.Body>
-                                <Card.Text>
-                                    <Col>
-                                        <Row>
-                                            <span>
-                                                <b>Email address:</b> {email}
-                                            </span>
-                                        </Row>
-                                        <Row>
-    
-                                            <span>
-                                                <b>Address:</b> {address}
-                                            </span>
-                                        </Row>
-                                        <Row>
-                                            <span>
-                                                <b>Created At:</b> {createdAt}
-                                            </span>
-                                        </Row>
-                                        <Row>
-                                            <span>
-                                                <b>Last logged in at:</b> {lastLogin}
-                                            </span>
-                                        </Row>
-                                    </Col>
-                                
-                                </Card.Text>
-                            </Card.Body>
-                            {!id ?                 
-                            <div>
+                        <>
+                    <Modal show={showPopUp} onHide={handleClosePopUp}>
+                        <Modal.Header closeButton>
+                        <Modal.Title> Delete Profile</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            Are you sure you want to permanently delete this account?
+                            <br/>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClosePopUp}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" onClick={goDelete}>
+                            Confirm
+                        </Button>
+                        </Modal.Footer>
+                    </Modal>
+                    <Card className='mt-3'>    
+                        <div>
+                            <Card.Header>Profile :</Card.Header>
+                                <Card.Body>
+                                    <Card.Text>
+                                        <Col>
+                                            <Row>
+                                                <span>
+                                                    <b>Email address:</b> {email}
+                                                </span>
+                                            </Row>
+                                            <Row>
+        
+                                                <span>
+                                                    <b>Address:</b> {address}
+                                                </span>
+                                            </Row>
+                                            <Row>
+                                                <span>
+                                                    <b>Created At:</b> {createdAt}
+                                                </span>
+                                            </Row>
+                                            <Row>
+                                                <span>
+                                                    <b>Last logged in at:</b> {lastLogin}
+                                                </span>
+                                            </Row>
+                                        </Col> 
+                                    </Card.Text>
+                                </Card.Body>
                             <div 
                                 className="d-grid"
                             >
@@ -172,18 +209,17 @@ function Profile() {
                             <div 
                                 className="d-grid"
                             >
-                                <Button onClick = {goDelete} variant="outline-danger" className='mt-3 mb-3' size="lg">Delete Account <TiUserDeleteOutline/></Button>
+                                <Button variant="danger" onClick={(_) => {
+                                    handleShowPopUp();
+                                }}>
+                                    Delete <AiOutlineEdit/>
+                                </Button>
                             </div>
-                            </div>
-                            : null
-                            }
-                    </div>
-                </Card>
+                        </div>
+                    </Card></>
                 </Container>
             </div>
-        )
-        
-        
+        )   
     }
     
 
