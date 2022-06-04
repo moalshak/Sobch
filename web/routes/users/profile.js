@@ -40,6 +40,19 @@ router.get('/:id', (req, res) => {
                     return;
                 }
             });
+        } else {
+            if (requester && requested) {
+                res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
+                Log.info("Profile details returned successfully ", {requester, requested});
+                return;
+            } else if (!snapshot.exists()){
+                res.status(401).send({error : "Unauthorized access"});
+                return;
+            } else {
+                res.status(400).send({error : "Bad Request"});
+                return;
+            }
+        });
         }
     }).catch((error) => {
         console.error(error);
