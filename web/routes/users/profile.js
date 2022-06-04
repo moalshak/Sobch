@@ -52,8 +52,7 @@ router.get('/:id', (req, res) => {
                 res.status(400).send({error : "Bad Request"});
                 return;
             }
-        });
-        }
+        };
     }).catch((error) => {
         console.error(error);
         res.status(401).send({error : true, message : "Unauthorized access"});
