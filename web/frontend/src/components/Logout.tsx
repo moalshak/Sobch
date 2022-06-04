@@ -4,6 +4,11 @@ import { isLoggedIn } from '../lib/acc';
 import {useNavigate} from 'react-router-dom';
 import NavBar, {NavBarBot} from "../components/NavBar";
 
+
+/**
+ * Logout page for the frontend that shows alerts depending on 
+ * response code from backend
+ */
 function Logout () {
 
     const navigate = useNavigate();

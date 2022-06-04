@@ -72,9 +72,15 @@ router.get('/', async (req, res) => {
                     }
                 });
                 snapshot = await get(ref(db, `users/${userid}`));
+
                 while (!snapshot.exists()) {
                     snapshot = await get(ref(db, `users/${userid}`));
                 }
+
+                while (!snapshot.exists()) {
+                    snapshot = await get(ref(db, `users/${userid}`));
+                }
+
                 if (req.user.uid) {
                     res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully");
@@ -103,6 +109,9 @@ router.get('/', async (req, res) => {
         }
     } catch(error){
         console.error(error);
+        Log.error(error);
+
+        Log.error(error);
         res.status(400).send({error : error});
     }      
 })
