@@ -8,7 +8,6 @@ const router = express.Router(),
     Log = getLog("profile");
 
 router.get('/:id', (req, res) => {
-    //to do : testinggggg
     if (!req.user) {
         return res.status(401).send({error : "Unauthorized access"});
     } else if (req.user.uid !== req.params.id) {
@@ -19,13 +18,21 @@ router.get('/:id', (req, res) => {
     const meta = req.user.metadata;
 
     get(ref(db, `users/${userid}`)).then((snapshot) => {
-        if (req.user.uid === req.params.id) {
-            res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
-            Log.info("Profile details returned successfully");
-        } else if (!snapshot.exists()){
-            res.status(401).send({error : "Unauthorized access"});
-        } else {
-            res.status(400).send({error : "Bad Request"});
+        if (!snapshot.exists()) {
+            set(ref(db, `users/${userid}`), {
+                credentials: {
+                    email: meta.email,
+                }
+            }).then(() => {
+                if (req.user.uid === req.params.id) {
+                    res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
+                    Log.info("Profile details returned successfully");
+                } else if (!snapshot.exists()){
+                    res.status(401).send({error : "Unauthorized access"});
+                } else {
+                    res.status(400).send({error : "Bad Request"});
+                }
+            });
         }
     }).catch((error) => {
         console.error(error);

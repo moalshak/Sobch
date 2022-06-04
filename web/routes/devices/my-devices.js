@@ -135,7 +135,9 @@ router.post("/", async (req, res) => {
             var userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();
             if (!userSnapshot) {
                 await set(ref(db, `users/${user.uid}`), {
-                    credentials : user.email
+                    credentials : {
+                        email : user.email
+                    }
                 });
                 Log.error("User does not exist, just added ", {user: user.uid});
                 userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();
