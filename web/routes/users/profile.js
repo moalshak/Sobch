@@ -12,8 +12,8 @@ router.get('/:id', (req, res) => {
     if (!req.user) {
         Log.error("No user");
         return res.status(401).send({error : "Unauthorized access not logged in"});
-    } else if (!isAdmin(req.user.uid) || req.user.uid !== req.params.id) {
-        Log.error("Unauthorized user", {isAdmin : isAdmin(req.user.uid), sameUser : req.user.uid !== req.params.id});
+    } else if (!isAdmin(req.user.uid) && req.user.uid !== req.params.id) {
+        Log.error("Unauthorized user", {isAdmin : isAdmin(req.user.uid), sameUser : req.user.uid === req.params.id});
         return res.status(401).send({error : "Unauthorized access"});
     }
     
