@@ -52,7 +52,7 @@ router.get('/:id', (req, res) => {
     }
 })
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
     //to do : testinggggg
     if (!req.user) {
         return res.status(401).send({error : "Unauthorized access"});
@@ -61,13 +61,17 @@ router.get('/', (req, res) => {
     const userid = req.user.uid;
     const meta = req.user.metadata;
 
-    get(ref(db, `users/${userid}`)).then((snapshot) => {
+    var snapshot = await get(ref(db, `users/${userid}`));
+    
+    try {
         if (!snapshot.exists()) {
-            set(ref(db, `users/${userid}`), {
-                credentials : {
-                    email : req.user.email
-                }
-            }).then((snapshot_) => {
+            try {
+                await set(ref(db, `users/${userid}`), {
+                    credentials : {
+                        email : req.user.email
+                    }
+                });
+                snapshot = await get(ref(db, `users/${userid}`));
                 if (req.user.uid) {
                     res.status(200).send({profile: snapshot_.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully");
@@ -79,11 +83,12 @@ router.get('/', (req, res) => {
                     res.status(400).send({error : "Bad Request"});
                     return;
                 }
-            }).catch((error) => {
-                console.error(error);
+            } catch (error) {
+                Log.error(error);
                 res.status(400).send({error : error});
-            });
-        } else {
+            }
+
+        } else if (snapshot.exists()) {
             if (req.user.uid) {
                 res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                 Log.info("Profile details returned successfully");
@@ -93,10 +98,10 @@ router.get('/', (req, res) => {
                 res.status(400).send({error : "Bad Request"});
             }
         }
-    }).catch((error) => {
-        console.error(error);
+    } catch(error){
+        Log.error(error);
         res.status(400).send({error : error});
-    });        
+    }      
 })
 
 
