@@ -214,7 +214,7 @@ function Profile() {
                                 <Button variant="outline-danger" className='mt-3 mb-3' size="lg" onClick={(_) => {
                                     handleShowPopUp();
                                 }}>
-                                    Delete <AiOutlineEdit/>
+                                    Delete <TiUserDeleteOutline/>
                                 </Button>
                             </div>
                             </div>
