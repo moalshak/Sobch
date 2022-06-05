@@ -31,7 +31,7 @@ function Team(){
                 <Card.Header>Fergal McCollam</Card.Header>
                     <Card.Body>
                     <Card.Text>
-                        <img src="./images/me3.jpeg" className="img-thumbnail"></img>
+                        <img src="./images/profile.jpg" className="img-thumbnail"></img>
                         <Card.Footer>Project Leader</Card.Footer>
                     </Card.Text>
                     </Card.Body>
@@ -71,7 +71,7 @@ function Team(){
                 <Card.Header>Dhruv Ghosh</Card.Header>
                 <Card.Body>
                 <Card.Text>
-                    <img src="./images/dhruv1.jpg" className="img-thumbnail"></img>
+                    <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
                     <Card.Footer>Communication Officer</Card.Footer>
                 </Card.Text>
                 </Card.Body>
