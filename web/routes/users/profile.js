@@ -1,8 +1,8 @@
 import express from "express";
 import {getLog, isAdmin} from "../../../lib/config.js";
 import { db } from "../../../lib/firebase.js";
-import { ref, get, set, child, update } from "firebase/database";
-import { updateEmail, updatePassword, updateProfile, verifyBeforeUpdateEmail, sendEmailVerification, getIdToken } from "firebase/auth";
+import { ref, get, set, update } from "firebase/database";
+import {  updatePassword, verifyBeforeUpdateEmail} from "firebase/auth";
 
 const router = express.Router(),
     Log = getLog("profile");

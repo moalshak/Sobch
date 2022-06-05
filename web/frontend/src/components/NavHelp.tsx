@@ -1,6 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar, {NavBarBot} from "../components/NavBar";
-import Card from 'react-bootstrap/esm/Card';
 
 function NavHelp() {
 
