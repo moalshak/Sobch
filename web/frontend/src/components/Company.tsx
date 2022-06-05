@@ -33,7 +33,7 @@ function Corparate() {
                 <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Contact us</h6>
                 <span>
                         Contact us by phone or email <br/>
-                    <strong>Phone:</strong> +31 6 12345678<br/>
+                    <strong>Phone:</strong> +33643193801<br/>
                     <strong>Email:</strong> help@sobch.xyz
                 </span>
             </div>
