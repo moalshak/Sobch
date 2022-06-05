@@ -71,9 +71,8 @@ function Team(){
                 <Card.Header>Dhruv Ghosh</Card.Header>
                 <Card.Body>
                 <Card.Text>
-                    <p> Pay us 1 million euros and you will get your son back!</p>
                     <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
-                    <Card.Footer>Our hostage</Card.Footer>
+                    <Card.Footer>Communication Officer</Card.Footer>
                 </Card.Text>
                 </Card.Body>
                 </Card>
