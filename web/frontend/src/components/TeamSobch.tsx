@@ -44,7 +44,7 @@ function Team(){
                 <Card.Header>Carmen Jica</Card.Header>
                     <Card.Body>
                     <Card.Text>
-                        <img src="./images/me.jpg" className="img-thumbnail"></img>
+                        <img src="./images/carmenimg.jpg" className="img-thumbnail"></img>
                         <Card.Footer>Architecture Officer</Card.Footer>
                     </Card.Text>
                     </Card.Body>
@@ -58,7 +58,7 @@ function Team(){
                     <Card.Header>Selim EL Sayed Aly</Card.Header>
                         <Card.Body>
                         <Card.Text>
-                            <img src="./images/me.jpg" className="img-thumbnail"></img>
+                            <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
                             <Card.Footer>Documentation Officer</Card.Footer>
                         </Card.Text>
                         </Card.Body>
@@ -71,8 +71,9 @@ function Team(){
                 <Card.Header>Dhruv Ghosh</Card.Header>
                 <Card.Body>
                 <Card.Text>
+                    <p> Pay us 1 million euros and you will get your son back!</p>
                     <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
-                    <Card.Footer>Communication Officer</Card.Footer>
+                    <Card.Footer>Our hostage</Card.Footer>
                 </Card.Text>
                 </Card.Body>
                 </Card>

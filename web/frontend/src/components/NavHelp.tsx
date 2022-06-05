@@ -9,9 +9,6 @@ return(
     <NavBar />
     <div className="container">
     <section>
-        <p className="text-center mb-5">
-        Everything you need!
-        </p>
 
         <div className="row">
         <div className="col-md-6 col-lg-4 mb-4">
