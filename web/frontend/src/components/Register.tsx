@@ -157,6 +157,8 @@ function Register() {
                 </Button>
                 </Form>
                 <br/>
+                <span style={{color : 'red'}}>*</span> required field
+                <br/>
                 <span>Already have an account ? <a href="/login">Login</a></span>
             </Container>
         }

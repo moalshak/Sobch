@@ -153,6 +153,7 @@ function Login() {
                     </Button>
                     <Button className='ms-3' onClick={(_) => setSetPass(false)} >Go Back</Button>
                 </Form>
+                <span style={{color : 'red'}}>*</span> required field
                 </Container>
                 :
                 <Container className='mt-3'>
@@ -169,6 +170,7 @@ function Login() {
                     <Button variant="primary" type="submit" className='mt-3'>Login</Button>
                     <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?</Button>
                 </Form>
+                <span style={{color : 'red'}}>*</span> required field
                 </Container>
 
             }
