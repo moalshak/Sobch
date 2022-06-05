@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import NavBar, {NavBarBot} from "../components/NavBar";
-import { IoIosHelpCircleOutline, IoMdTrash,IoIosPersonAdd,IoMdAddCircleOutline,IoMdSad, IoMdFingerPrint,IoIosBody} from "react-icons/io";
+import { IoMdTrash,IoIosPersonAdd,IoMdAddCircleOutline,IoMdSad, IoMdFingerPrint,IoIosBody} from "react-icons/io";
 
 function How(){
     return (

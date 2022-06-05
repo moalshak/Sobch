@@ -19,6 +19,7 @@ import {AiOutlineEdit} from "react-icons/ai";
 import {BiDevices} from "react-icons/bi";
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import {Alert, AlertProps, Variant} from './CustomAlert';
+import {MdOutlineNotificationImportant} from "react-icons/md";
 
 function Stats() {
     
@@ -215,9 +216,9 @@ function Stats() {
                                     <b>Active:</b> {device.config.active ? "Yes" : "No"}
                                 </span>
                             </Col>
-                            <Col className="btn btn-secondary">
+                            <Col>
                                 <span>
-                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
+                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"} <MdOutlineNotificationImportant/>
                                 </span>
                             </Col>
                             <Col>

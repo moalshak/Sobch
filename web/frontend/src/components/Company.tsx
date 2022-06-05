@@ -38,6 +38,19 @@ function Corparate() {
                 </span>
             </div>
         </div>
+
+        <div className="container">
+            <div className="col-md-6 col-lg-4 mb-4">
+                <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Products</h6>
+                <p>
+                       <strong>Sobch DHT-11</strong> <img src="./images/therm1.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-22</strong> <img src="./images/them2.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-33</strong> <img src="./images/therm3.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-44</strong> <img src="./images/therm4.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-55</strong> <img src="./images/therm5.jpeg" className="img-thumbnail"></img> <br/>
+                </p>
+            </div>
+        </div>
         
         <div className="container">
             <div className="col-md-6 col-lg-4 mb-4">
