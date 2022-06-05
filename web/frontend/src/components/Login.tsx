@@ -139,11 +139,11 @@ function Login() {
                 <></>
                 :
                 setPass ?
-                <Container className='mt-3'>
+                <Container className='required'>
                 <Form onSubmit={sendReset}>
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e)=> {logEmail(e.target.value)}}/>
+                        <Form.Label >Email address <span style={{color : 'red'}}>*</span></Form.Label>
+                        <Form.Control required type="email" placeholder="Enter email" value={email} onChange={(e)=> {logEmail(e.target.value)}}/>
                         <Form.Text className="text-muted">
                             Email address associated with your account
                         </Form.Text>
@@ -151,6 +151,7 @@ function Login() {
                     <Button variant="primary" type="submit">
                         Send reset email
                     </Button>
+                    <Button className='ms-3' onClick={(_) => setSetPass(false)} >Go Back</Button>
                 </Form>
                 </Container>
                 :
@@ -158,11 +159,11 @@ function Login() {
                 <h1>Login</h1>
                 <Form onSubmit={doLoginRequest}>
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email address <span style={{color : 'red'}}>*</span></Form.Label>
                         <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value.trim()) }/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Password <span style={{color : 'red'}}>*</span></Form.Label>
                         <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                     </Form.Group>
                     <Button variant="primary" type="submit" className='mt-3'>Login</Button>

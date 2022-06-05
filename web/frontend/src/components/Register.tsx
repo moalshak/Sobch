@@ -128,18 +128,18 @@ function Register() {
                 <h1>Register</h1>
                 <Form onSubmit={doRegisterRequest}>
                 <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Email address</Form.Label>
+                    <Form.Label >Email address <span style={{color : 'red'}}>*</span></Form.Label>
                     <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                 </Form.Group>
                 <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
+                    <Form.Label >Password <span style={{color : 'red'}}>*</span></Form.Label>
                     <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     <Form.Text className="text-muted">
                         Must be at least 6 characters
                     </Form.Text>
                 </Form.Group>
-                <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Confirm Password</Form.Label>
+                <Form.Group  controlId="formBasicPassword">
+                    <Form.Label>Confirm Password <span style={{color : 'red'}}>*</span></Form.Label>
                     <Form.Control required type="password" placeholder="Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                     <Form.Text className="text-muted">
                         Must be the same as the password
@@ -156,6 +156,8 @@ function Register() {
                     Register
                 </Button>
                 </Form>
+                <br/>
+                <span>Already have an account ? <a href="/login">Login</a></span>
             </Container>
         }
         </div>
