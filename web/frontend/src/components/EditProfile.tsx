@@ -169,7 +169,7 @@ function EditProfile(){
             if (err.response.status === 401) {
                 setAlertProps({
                     heading: 'You are not logged in!',
-                    message: 'You will be redirected to the login page in 2 seconds',
+                    message: 'You will be redirected to the login page in a few seconds',
                     variant: Variant.danger
                 });
                 setTimeout(() => {

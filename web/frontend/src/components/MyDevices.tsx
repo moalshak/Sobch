@@ -100,7 +100,7 @@ function MyDevices() {
             if (err.response.status === 401) {
                 setAlertProps({
                     heading: 'You are not logged in!',
-                    message: 'You will be redirected to the login page in 3 seconds',
+                    message: 'You will be redirected to the login page in a few seconds',
                     variant: Variant.warning
                 });
                 setTimeout(()=> {

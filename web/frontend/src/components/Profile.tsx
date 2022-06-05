@@ -124,7 +124,7 @@ function Profile() {
             {
                 setAlertProps({
                     heading: 'You are not logged in!',
-                    message: 'You will be redirected to the login page in 2 seconds',
+                    message: 'You will be redirected to the login page in a few seconds',
                     variant: Variant.warning
                 });
                 setTimeout(() => {
@@ -201,6 +201,8 @@ function Profile() {
                                         </Col> 
                                     </Card.Text>
                                 </Card.Body>
+                                {!id ? <div>
+
                             <div 
                                 className="d-grid"
                             >
@@ -215,6 +217,9 @@ function Profile() {
                                     Delete <AiOutlineEdit/>
                                 </Button>
                             </div>
+                            </div>
+                            :
+                            null }
                         </div>
                     </Card></>
                 </Container>
