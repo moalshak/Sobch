@@ -211,7 +211,7 @@ function Profile() {
                             <div 
                                 className="d-grid"
                             >
-                                <Button variant="outline-danger" onClick={(_) => {
+                                <Button variant="outline-danger" className='mt-3 mb-3' size="lg" onClick={(_) => {
                                     handleShowPopUp();
                                 }}>
                                     Delete <AiOutlineEdit/>
