@@ -71,7 +71,10 @@ function Stats() {
             });
             setDevice(res.data.device);
             setCurrentTemp(res.data.currentTemp);
-            setOwners(res.data.device.owners);
+            // filter duplicates from owners
+            setOwners(res.data.device.owners.filter((c, index) => {
+                return res.data.device.owners.indexOf(c) === index;
+            }));
             setLoading(false);
             setLoggedIn(true);
         } catch (err : any) {
@@ -218,7 +221,7 @@ function Stats() {
                             </Col>
                             <Col>
                                 <span style={{textDecoration: 'underline'}}>
-                                    <b><MdOutlineNotificationImportant/> Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
+                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"} <MdOutlineNotificationImportant/>
                                 </span>
                             </Col>
                             <Col>
@@ -241,9 +244,11 @@ function Stats() {
                     <Card.Header>Owners</Card.Header>
                     <ListGroup>
                         {owners.map((owner) => {
-                            return (
-                                    <ListGroup.Item key={owner}>{owner}</ListGroup.Item>
-                            )
+                            if (owner) {
+                                return (
+                                        <ListGroup.Item key={owner}>{owner}</ListGroup.Item>
+                                )
+                            }
                         })}
                     </ListGroup>
                 </Card>
