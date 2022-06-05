@@ -9,7 +9,7 @@ import NavBar, {NavBarBot} from "../components/NavBar";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import {setLoggedIn, isLoggedIn} from '../lib/acc';
 import {useNavigate} from 'react-router-dom';
-import { FaDoorOpen } from "react-icons/fa";
+import { FaFingerprint } from "react-icons/fa";
 
 /**
  * The login page for the frontend
@@ -169,7 +169,7 @@ function Login() {
                         <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                     </Form.Group>
                     <Button variant="primary" type="submit" className='mt-3'>Login</Button>
-                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?<FaDoorOpen/></Button>
+                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?<FaFingerprint/></Button>
                 </Form>
                 <span style={{color : 'red'}}>*</span> required field
                 </Container>
