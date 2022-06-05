@@ -15,18 +15,23 @@ return(
 
         <div className="row">
         <div className="col-md-6 col-lg-4 mb-4">
-        <h6 className="mb-3 text-primary"><i className="far fa-paper-plane text-primary pe-2"></i> Can you delete a user?</h6>
+        <h6 className="mb-3 text-primary"><i className="far fa-paper-plane text-primary pe-2"></i> FAQ</h6>
         <p>
-            Absolutely! Go to the <a href="/profile" className="card-link">Profile</a> page
-            and click on the <strong>Delete Account</strong> button.
+            Find all the FAQs <a href="/help" className="card-link">here!</a>
         </p>
         </div>
 
         <div className="col-md-6 col-lg-4 mb-4">
-        <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i> How do I register?</h6>
+        <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i> About us</h6>
         <p>
-            At the top of your screen if youre on PC or in the navigation menu on mobile, click on the <a href="/register" className="card-link">Register</a> button and it
-            will bring you to the registration page. Where you fill in the required fields.
+           Meet the team behind Sobch <a href="/team" className="card-link">here</a>
+        </p>
+        </div>
+
+        <div className="col-md-6 col-lg-4 mb-4">
+        <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i> Corporate Info</h6>
+        <p>
+           Find our corporate info <a href="/corporate" className="card-link">here</a> which includes contact addres, HQ address ect.
         </p>
         </div>
     </div>
