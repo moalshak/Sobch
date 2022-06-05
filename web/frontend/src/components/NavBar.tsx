@@ -11,6 +11,7 @@ import {BiDevices} from 'react-icons/bi';
 import {CgProfile} from 'react-icons/cg';
 import {AiFillHome} from 'react-icons/ai';
 import {IoInformationCircleOutline, IoHelpCircleOutline} from 'react-icons/io5';
+import { IoIosHelpCircleOutline } from "react-icons/io";
 
 function NavBar() {
     return(
@@ -41,6 +42,7 @@ function NavBar() {
                     <>
                     <Nav.Link href="/register">Register</Nav.Link>
                     <Nav.Link href="/login">Login <HiOutlineLogin/></Nav.Link>
+                    <Nav.Link href="/navhelp">Help <IoIosHelpCircleOutline/></Nav.Link>
                     </>
                 }
 

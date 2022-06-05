@@ -12,6 +12,7 @@ import Logout from './components/Logout';
 import TeamSobch from './components/TeamSobch';
 import Help from './components/Help';
 import Corparate from './components/Company';
+import NavHelp from './components/NavHelp';
 
 const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://www.sobch.xyz/api" || "http://172.104.242.242:8000";
 
@@ -35,6 +36,7 @@ function App() {
         <Route path="/team" element={<TeamSobch />} />
         <Route path="/help" element={<Help />} />
         <Route path="/corporate" element={<Corparate />} />
+        <Route path="/navhelp" element={<NavHelp />} />
       </Routes>
     </Router>
   );
