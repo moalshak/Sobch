@@ -215,7 +215,7 @@ function Stats() {
                                     <b>Active:</b> {device.config.active ? "Yes" : "No"}
                                 </span>
                             </Col>
-                            <Col>
+                            <Col className="btn btn-secondary">
                                 <span>
                                     <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
                                 </span>

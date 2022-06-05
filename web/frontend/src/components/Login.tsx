@@ -169,7 +169,7 @@ function Login() {
                         <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                     </Form.Group>
                     <Button variant="primary" type="submit" className='mt-3'>Login</Button>
-                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?<FaFingerprint/></Button>
+                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?  <FaFingerprint/></Button>
                 </Form>
                 <span style={{color : 'red'}}>*</span> required field
                 </Container>
