@@ -100,7 +100,7 @@ function MyDevices() {
             if (err.response.status === 401) {
                 setAlertProps({
                     heading: 'You are not logged in!',
-                    message: 'You will be redirected to the login page in 3 seconds',
+                    message: 'You will be redirected to the login page in a few seconds',
                     variant: Variant.warning
                 });
                 setTimeout(()=> {
@@ -181,6 +181,7 @@ function MyDevices() {
             <div>
                 {devices.map((device : any) => {
                     return (
+                        
                         <div>
                         <Card className='mb-3 mt-3 pb-1 center'>
                         <div key={device.id}>
@@ -231,10 +232,11 @@ function MyDevices() {
             </div>
         );
     }
-
+    
     return (
         <div>
-            <NavBar/>
+        <NavBar/>
+        <div>
             <Alert {...alertProps}/>
             <Container>
             <GetHead/>
@@ -245,7 +247,8 @@ function MyDevices() {
                 </div>
             </div> : <RenderDevices/>) : <RenderDevices/>}
             </Container>
-            <NavBarBot />
+        </div>
+        <NavBarBot />
         </div>
     );
 

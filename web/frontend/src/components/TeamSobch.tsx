@@ -6,6 +6,7 @@ function Team(){
 
 
     return (
+
         <div>
             <NavBar />
             <div className="container">
@@ -18,80 +19,72 @@ function Team(){
                                 <Card.Text>
                                     <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
                                     <Card.Footer>Technical Officer</Card.Footer>
-                                    </Card.Text>
+                                </Card.Text>
                                 </Card.Body>
                         </Card>
                         
         <br />
         </div>
 
-    <div className="col-6 col-sm-4">
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>Fergal</Card.Header>
-            <Card.Body>
-                <Card.Text>
-                <img src="./images/me3.jpeg" className="img-thumbnail"></img>
-                <Card.Footer>Project Leader</Card.Footer>
-                </Card.Text>
-          </Card.Body>
-        </Card>
+        <div className="col-6 col-sm-4">
+            <Card border="dark" style={{ width: '18rem' }}>
+                <Card.Header>Fergal McCollam</Card.Header>
+                    <Card.Body>
+                    <Card.Text>
+                        <img src="./images/profile.jpg" className="img-thumbnail"></img>
+                        <Card.Footer>Project Leader</Card.Footer>
+                    </Card.Text>
+                    </Card.Body>
+            </Card>
         <br />
-    </div>
+        </div>
 
         <div className="col-6 col-sm-4">
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>Carmen</Card.Header>
-            <Card.Body>
-            <Card.Text>
-                <img src="./images/me.jpg" className="img-thumbnail"></img>
-                <Card.Footer>Architecture Officer</Card.Footer>
-                </Card.Text>
-          </Card.Body>
-        </Card>
+            <Card border="dark" style={{ width: '18rem' }}>
+                <Card.Header>Carmen Jica</Card.Header>
+                    <Card.Body>
+                    <Card.Text>
+                        <img src="./images/carmenimg.jpg" className="img-thumbnail"></img>
+                        <Card.Footer>Architecture Officer</Card.Footer>
+                    </Card.Text>
+                    </Card.Body>
+            </Card>
         <br />
         </div>
 
         <div className="col d-flex justify-content-center">
-        <div className="col-6 col-sm-4">
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>Selim</Card.Header>
-            <Card.Body>
-                <Card.Text>
-                <img src="./images/me.jpg" className="img-thumbnail"></img>
-                <Card.Footer>Documentation Officer</Card.Footer>
-                </Card.Text>
-            </Card.Body>
-        </Card>
+            <div className="col-6 col-sm-4">
+                <Card border="dark" style={{ width: '18rem' }}>
+                    <Card.Header>Selim EL Sayed Aly</Card.Header>
+                        <Card.Body>
+                        <Card.Text>
+                            <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
+                            <Card.Footer>Documentation Officer</Card.Footer>
+                        </Card.Text>
+                        </Card.Body>
+                </Card>
         <br />
         </div>
 
         <div className="col-6 col-sm-4">
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>Dhruv</Card.Header>
-            <Card.Body>
+            <Card border="dark" style={{ width: '18rem' }}>
+                <Card.Header>Dhruv Ghosh</Card.Header>
+                <Card.Body>
                 <Card.Text>
-                <img src="./images/dhruv.jpg" className="img-thumbnail"></img>
-                <Card.Footer>Communication Officer</Card.Footer>
+                    <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
+                    <Card.Footer>Communication Officer</Card.Footer>
                 </Card.Text>
-          </Card.Body>
-        </Card>
+                </Card.Body>
+                </Card>
         <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-        </div>
-        </div>
-        </div>
+
         <NavBarBot />
-        </div>
-    
-
-
-
-            
-
-        
-        
-        
+        </div> 
     )
 
 }

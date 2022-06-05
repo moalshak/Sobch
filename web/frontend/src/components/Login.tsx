@@ -9,6 +9,11 @@ import NavBar, {NavBarBot} from "../components/NavBar";
 import {Alert, AlertProps, Variant} from './CustomAlert';
 import {setLoggedIn, isLoggedIn} from '../lib/acc';
 import {useNavigate} from 'react-router-dom';
+import { FaFingerprint } from "react-icons/fa";
+
+/**
+ * The login page for the frontend
+ */
 
 function Login() {
 
@@ -58,7 +63,9 @@ function Login() {
                return;
            }
 
-           // message show the message from the server
+           /**
+            * message shown in server
+            */
            if (data.message) {
             setAlertProps({ 
                 heading: 'Success',
@@ -67,7 +74,9 @@ function Login() {
              });
             }
 
-        // set local storage 
+        /**
+         * set the access token in the local storage
+         */
         const accessToken = res.data.accessToken;
         localStorage.setItem('accessToken', accessToken);
         setLoggedIn(true);
@@ -131,11 +140,11 @@ function Login() {
                 <></>
                 :
                 setPass ?
-                <Container className='mt-3'>
+                <Container className='required'>
                 <Form onSubmit={sendReset}>
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
-                        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e)=> {logEmail(e.target.value)}}/>
+                        <Form.Label >Email address <span style={{color : 'red'}}>*</span></Form.Label>
+                        <Form.Control required type="email" placeholder="Enter email" value={email} onChange={(e)=> {logEmail(e.target.value)}}/>
                         <Form.Text className="text-muted">
                             Email address associated with your account
                         </Form.Text>
@@ -143,23 +152,26 @@ function Login() {
                     <Button variant="primary" type="submit">
                         Send reset email
                     </Button>
+                    <Button className='ms-3' onClick={(_) => setSetPass(false)} >Go Back</Button>
                 </Form>
+                <span style={{color : 'red'}}>*</span> required field
                 </Container>
                 :
                 <Container className='mt-3'>
                 <h1>Login</h1>
                 <Form onSubmit={doLoginRequest}>
                     <Form.Group controlId="formBasicEmail">
-                        <Form.Label>Email address</Form.Label>
+                        <Form.Label>Email address <span style={{color : 'red'}}>*</span></Form.Label>
                         <Form.Control required type="email" placeholder="email@example.com" value={email} onChange={(e) => logEmail(e.target.value.trim()) }/>
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Password</Form.Label>
+                        <Form.Label>Password <span style={{color : 'red'}}>*</span></Form.Label>
                         <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                     </Form.Group>
                     <Button variant="primary" type="submit" className='mt-3'>Login</Button>
-                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?</Button>
+                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?  <FaFingerprint/></Button>
                 </Form>
+                <span style={{color : 'red'}}>*</span> required field
                 </Container>
 
             }

@@ -7,6 +7,11 @@ import {removeUser, getLog} from '../../../lib/config.js';
 const router = express.Router(),
     Log = getLog("logout");
 
+    /** 
+     * @api {get} /auth/logout Logout
+     */
+
+
 router.post('/', async (req, res) => {
     const user = req.user;
 
@@ -17,6 +22,7 @@ router.post('/', async (req, res) => {
         await signOut(auth);
         res.status(200).send("Success");
         Log.info("Logged out", {user : user.uid});
+
     } catch (error) {
         Log.error("Failed to log out", {user : user.uid, error});
         res.status(500).send(error);

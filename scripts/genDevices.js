@@ -1,9 +1,12 @@
 console.log("Generating devices...");
-import { v4 as uuidv4 } from 'uuid';
-import { generate } from 'generate-password';
+import fs from 'fs';
 import {db} from "../lib/firebase.js";
 import {ref, set, get} from "firebase/database";
 import {genRandomTemperature} from '../simulation/main.js';
+import {getLog} from "../lib/config.js";
+
+const Log = getLog("genDevices");
+
 
 /**
  * IDs of the admins
@@ -34,6 +37,16 @@ const ADMINS = [
 
 var ID = 0;
 
+try {
+    const data = fs.readFileSync(`${process.cwd()}/scripts/lastId.id`, 'utf8');
+    ID = parseInt(data);
+} catch (err) {
+    Log.error(err);
+    console.log(err);
+    process.exit(1);
+}
+
+
 /**
  * @returns {string} A unique ID
  */
@@ -58,7 +71,14 @@ function generateID() {
    return result;
 }
 
+/**
+ * Array of possible rooms for devices
+ */
 const ROOMS = ["Living Room", "Bedroom", "Kitchen", "Bathroom", "Office", "Garage"];
+
+/**
+ * Array of possible models for devices
+ */
 const MODELS = ["Sobch DHT-11", "Sobch DHT-22", "Sobch DHT-33", "Sobch DHT-44", "Sobch DHT-55"];
 
 /**
@@ -76,7 +96,7 @@ function generateDevice() {
     device.config.max = genRandomTemperature(25, 30, 2);
     device.config.room = ROOMS[Math.floor(Math.random() * ROOMS.length)];
     device.config.active = true;
-    device.config.wantsToBeNotified = true;
+    device.config.wantsToBeNotified = ADMINS;
     device.owners = ADMINS;
     device.model = MODELS[Math.floor(Math.random() * MODELS.length)];
     device.otp = generateOTP();
@@ -115,5 +135,13 @@ for (var admin of ADMINS) {
     set(ref(db, `users/${admin}`), user);
 }
 
-console.log("Devices generated");
-process.exit(0);
+const idString = (ID++).toString();
+fs.writeFile(`${process.cwd()}/scripts/lastId.id`, idString, err => {
+    if (err) {
+        Log.error(err);
+        process.exit(1);
+    }
+    console.log("Devices generated ended up at :" + idString);
+    process.exit(0);
+});
+

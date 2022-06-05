@@ -33,27 +33,34 @@ function Corparate() {
                 <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Contact us</h6>
                 <span>
                         Contact us by phone or email <br/>
-                    <strong>Phone:</strong> +31 6 12345678<br/>
+                    <strong>Phone:</strong> +33643193801<br/>
                     <strong>Email:</strong> help@sobch.xyz
                 </span>
             </div>
         </div>
         
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>Meet the team</Card.Header>
-            <Card.Body>
-                <Card.Title>Members of SOBCH</Card.Title>
-                <a href="/team" className="card-link">See More</a>
-            </Card.Body>
-        </Card>
-            
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>FAQ</Card.Header>
-            <Card.Body>
-                <Card.Title>Need help?</Card.Title>
-                <a href="/help" className="card-link">See More</a>
-            </Card.Body>
-        </Card>
+        <div className="container">
+            <div className="col-md-6 col-lg-4 mb-4">
+                <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Sobch Team</h6>
+                <span>
+                       Meet the <a href="/team" className="card-link">team!</a>
+                </span>
+            </div>
+        </div>
+
+        <div className="container">
+            <div className="col-md-6 col-lg-4 mb-4">
+                <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Products</h6>
+                <p>
+                       <strong>Sobch DHT-11</strong> <img src="./images/therm1.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-22</strong> <img src="./images/them2.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-33</strong> <img src="./images/therm3.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-44</strong> <img src="./images/therm4.jpg" className="img-thumbnail"></img> <br/>
+                       <strong>Sobch DHT-55</strong> <img src="./images/therm5.jpeg" className="img-thumbnail"></img> <br/>
+                </p>
+            </div>
+        </div>
+
       </body>
       <NavBarBot />
       </div>

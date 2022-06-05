@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {BACKEND_BASE_URL} from '../App';
 import {getAccessToken} from '../lib/acc';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -12,18 +12,28 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import NavBar from "./NavBar";
+import NavBar, {NavBarBot} from "./NavBar";
 import {isLoggedIn, setLoggedIn} from "../lib/acc";
 import Spinner from "react-bootstrap/Spinner";
 import {AiOutlineEdit} from "react-icons/ai";
 import {BiDevices} from "react-icons/bi";
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import {Alert, AlertProps, Variant} from './CustomAlert';
+import {MdOutlineNotificationImportant} from "react-icons/md";
 
 function Stats() {
     
     const [loading, setLoading] = useState(true);
     const [owners, setOwners] = useState([]);
     const [currentTemp, setCurrentTemp] = useState(undefined);
+
+    const [alertProps, setAlertProps] = useState<AlertProps>({
+        heading: '',
+        message: '',
+        variant: Variant.nothing
+    });
+
+    const navigate = useNavigate();
 
 
     /**
@@ -61,11 +71,34 @@ function Stats() {
             });
             setDevice(res.data.device);
             setCurrentTemp(res.data.currentTemp);
-            setOwners(res.data.device.owners);
+            // filter duplicates from owners
+            setOwners(res.data.device.owners.filter((c, index) => {
+                return res.data.device.owners.indexOf(c) === index;
+            }));
             setLoading(false);
-        } catch(error) {
-            alert(error);
-        }
+            setLoggedIn(true);
+        } catch (err : any) {
+            if (err.response.status === 401)
+                {
+                    setAlertProps({
+                        heading: 'You are not logged in!',
+                        message: 'You will be redirected to the login page in a few seconds',
+                        variant: Variant.warning
+                    });
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 2500);
+                    return;
+                }
+                else if (err.response.data.error) {
+                    setAlertProps({
+                        heading: 'Error',
+                        message: err.response.data.message,
+                        variant: Variant.danger
+                    });
+                    return;
+                }
+        }          
     }
 
     async function getCurrentTemp() {
@@ -77,9 +110,28 @@ function Stats() {
                 }
             });
             setCurrentTemp(res.data.device.currentTemp);
-        } catch(error) {
-            alert(error);
-        }
+        } catch (err : any) {
+            if (err.response.status === 401)
+            {
+                setAlertProps({
+                    heading: 'You are not logged in!',
+                    message: 'You will be redirected to the login page in a few seconds',
+                    variant: Variant.warning
+                });
+                setTimeout(() => {
+                    navigate("/login");
+                }, 2500);
+                return;
+            }
+            else if (err.response.data.error) {
+                setAlertProps({
+                    heading: 'Error',
+                    message: err.response.data.message,
+                    variant: Variant.danger
+                });
+                return;
+            }
+        }        
     }
 
 
@@ -121,6 +173,7 @@ function Stats() {
 
 
     useEffect(()=> {
+        setLoggedIn(false);
         getStats();
     }, []);
 
@@ -167,8 +220,8 @@ function Stats() {
                                 </span>
                             </Col>
                             <Col>
-                                <span>
-                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
+                                <span style={{textDecoration: 'underline'}}>
+                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"} <MdOutlineNotificationImportant/>
                                 </span>
                             </Col>
                             <Col>
@@ -191,9 +244,11 @@ function Stats() {
                     <Card.Header>Owners</Card.Header>
                     <ListGroup>
                         {owners.map((owner) => {
-                            return (
-                                    <ListGroup.Item key={owner}>{owner}</ListGroup.Item>
-                            )
+                            if (owner) {
+                                return (
+                                        <ListGroup.Item key={owner}>{owner}</ListGroup.Item>
+                                )
+                            }
                         })}
                     </ListGroup>
                 </Card>
@@ -215,6 +270,7 @@ function Stats() {
     return (
         <div>
             <NavBar/>
+            <Alert {...alertProps}/>
             {loading ? 
             <div className="d-flex justify-content-center">
                 <div  role="status">
@@ -222,6 +278,7 @@ function Stats() {
                 </div>
             </div>
             : <RenderStats/>}
+            <NavBarBot />
         </div>
     );
 }
