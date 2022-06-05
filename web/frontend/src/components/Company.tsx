@@ -38,6 +38,15 @@ function Corparate() {
                 </span>
             </div>
         </div>
+        
+        <div className="container">
+            <div className="col-md-6 col-lg-4 mb-4">
+                <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Sobch Team</h6>
+                <span>
+                       Meet the <a href="/team" className="card-link">team!</a>
+                </span>
+            </div>
+        </div>
 
         <div className="container">
             <div className="col-md-6 col-lg-4 mb-4">
@@ -51,17 +60,7 @@ function Corparate() {
                 </p>
             </div>
         </div>
-        
-        <div className="container">
-            <div className="col-md-6 col-lg-4 mb-4">
-                <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Sobch Team</h6>
-                <span>
-                       Meet the <a href="/team" className="card-link">team!</a>
-                </span>
-            </div>
-        </div>
 
-            
       </body>
       <NavBarBot />
       </div>

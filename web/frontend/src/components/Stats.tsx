@@ -217,8 +217,8 @@ function Stats() {
                                 </span>
                             </Col>
                             <Col>
-                                <span>
-                                    <b>Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"} <MdOutlineNotificationImportant/>
+                                <span style={{textDecoration: 'underline'}}>
+                                    <b><MdOutlineNotificationImportant/> Notify Me:</b> {device.config.wantsToBeNotified ? "Yes" : "No"}
                                 </span>
                             </Col>
                             <Col>
