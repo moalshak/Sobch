@@ -89,7 +89,7 @@ function Register() {
 
             setTimeout(() => {
                 window.location.href = '/login';
-            }, 2300);
+            }, 3000);
 
         } catch(error : any) {
             if (error.response.data.error) {
