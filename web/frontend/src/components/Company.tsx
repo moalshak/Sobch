@@ -39,14 +39,13 @@ function Corparate() {
             </div>
         </div>
         
-        <div className = "container">
-        <Card border="dark" style={{ width: '18rem' }}>
-            <Card.Header>Meet the team</Card.Header>
-            <Card.Body>
-                <Card.Title>Members of SOBCH</Card.Title>
-                <a href="/team" className="card-link">See More</a>
-            </Card.Body>
-        </Card>
+        <div className="container">
+            <div className="col-md-6 col-lg-4 mb-4">
+                <h6 className="mb-3 text-primary"><i className="fas fa-pen-alt text-primary pe-2"></i>Sobch Team</h6>
+                <span>
+                       Meet the <a href="/team" className="card-link">team!</a>
+                </span>
+            </div>
         </div>
 
             

@@ -37,7 +37,8 @@ function NavBar() {
                     <>
                     <Nav.Link href="/my-devices">My Devices <BiDevices/></Nav.Link>
                     <Nav.Link href="/profile">Profile <CgProfile/></Nav.Link>
-                    <Nav.Link href="/logout" onClick={goLogout}>Logout <IoIosLogOut/></Nav.Link></>
+                    <Nav.Link href="/logout" onClick={goLogout}>Logout <IoIosLogOut/></Nav.Link>
+                    <Nav.Link href="/navhelp">Help <IoIosHelpCircleOutline/></Nav.Link></>
                     :
                     <>
                     <Nav.Link href="/register">Register</Nav.Link>
