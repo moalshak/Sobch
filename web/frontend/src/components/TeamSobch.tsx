@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Card from 'react-bootstrap/esm/Card';
+
 import NavBar, {NavBarBot} from "../components/NavBar";
 
 function Team(){
@@ -9,82 +9,75 @@ function Team(){
 
         <div>
             <NavBar />
+            <div className="row">
             <div className="container">
                 <div className="text-center">
-                    <div className="row">
+                    
                         <div className="col-6 col-sm-4">
-                        <Card border="dark" style={{ width: '18rem' }}>
-                            <Card.Header>Mohammad Al Shakoush</Card.Header>
-                                <Card.Body>
-                                <Card.Text>
-                                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
-                                    <Card.Footer>Technical Officer</Card.Footer>
-                                </Card.Text>
-                                </Card.Body>
-                        </Card>
                         
+                            <h6>Mohammad Al Shakoush</h6>
+                               
+                                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
+                        <div className="footer">
+                         Technical Officer   
+                        </div>
+                                
         <br />
         </div>
 
+        <div className="col d-flex justify-content-center">
         <div className="col-6 col-sm-4">
-            <Card border="dark" style={{ width: '18rem' }}>
-                <Card.Header>Fergal McCollam</Card.Header>
-                    <Card.Body>
-                    <Card.Text>
+                <h6> Fergal McCollam </h6>
+                    
                         <img src="./images/profile.jpg" className="img-thumbnail"></img>
-                        <Card.Footer>Project Leader</Card.Footer>
-                    </Card.Text>
-                    </Card.Body>
-            </Card>
+                        <div className="footer">
+                            Project Leader
+                        </div>
+
+                    
         <br />
         </div>
 
         <div className="col-6 col-sm-4">
-            <Card border="dark" style={{ width: '18rem' }}>
-                <Card.Header>Carmen Jica</Card.Header>
-                    <Card.Body>
-                    <Card.Text>
+            <h6 className="text-center">Carmen Jica</h6>
+                   
                         <img src="./images/carmenimg.jpg" className="img-thumbnail"></img>
-                        <Card.Footer>Architecture Officer</Card.Footer>
-                    </Card.Text>
-                    </Card.Body>
-            </Card>
+                        <div className="footer">
+                            Architecture Officer
+                        </div>
+              
         <br />
         </div>
 
         <div className="col d-flex justify-content-center">
             <div className="col-6 col-sm-4">
-                <Card border="dark" style={{ width: '18rem' }}>
-                    <Card.Header>Selim EL Sayed Aly</Card.Header>
-                        <Card.Body>
-                        <Card.Text>
-                            <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
-                            <Card.Footer>Documentation Officer</Card.Footer>
-                        </Card.Text>
-                        </Card.Body>
-                </Card>
+                <h6 className="text-center">Selim EL Sayed Aly</h6>
+                    <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
+                    <div className="footer">
+                            Documentation Officer
+                        </div>
+                        
         <br />
         </div>
 
         <div className="col-6 col-sm-4">
-            <Card border="dark" style={{ width: '18rem' }}>
-                <Card.Header>Dhruv Ghosh</Card.Header>
-                <Card.Body>
-                <Card.Text>
+                <h6>Dhruv Ghosh</h6>
+                
                     <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
-                    <Card.Footer>Communication Officer</Card.Footer>
-                </Card.Text>
-                </Card.Body>
-                </Card>
+                    <div className="footer">
+                           Communication Officer
+                        </div>
+                
         <br />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <NavBarBot />
         </div> 
+        
+        <NavBarBot />
+        </div>
     )
 
 }
