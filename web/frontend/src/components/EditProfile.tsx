@@ -252,7 +252,7 @@ function EditProfile(){
                             An empty field will preserve the current information.
                         </Form.Text>
                     </Form.Group>
-                    <Button variant="primary" onClick={(_) => {
+                    <Button variant="primary" type="submit" onClick={(_) => {
                         handleShowPopUp();
                     }}>
                         Save changes <AiOutlineEdit/>
