@@ -168,15 +168,14 @@ function Login() {
                         <Form.Label>Password <span style={{color : 'red'}}>*</span></Form.Label>
                         <Form.Control required type="password" placeholder="Password" value={password} onChange={(e) => logPassword(e.target.value) }/>
                     </Form.Group>
+                    <span style={{marginLeft: '1em', color : 'red'}}>*</span> required field
+                    <br/>
                     <Button variant="primary" type="submit" className='mt-3'>Login</Button>
-                    <Button className='mt-3 ms-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?  <FaFingerprint/></Button>
+                    <Button className='mt-3 ms-3' href="/register">Register a new account</Button>
+                    <Button className='mt-3' variant="link" onClick={(_) => setSetPass(true)}>Forgot Password?  <FaFingerprint/></Button>
                 </Form>
-                <span style={{color : 'red'}}>*</span> required field
                 </Container>
-
             }
-            <br/>
-            <span>Don't have an account yet ? <a href="/register">Register a new account</a></span>
             <NavBarBot/>
         </div>
     );
