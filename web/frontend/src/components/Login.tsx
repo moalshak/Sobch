@@ -175,6 +175,8 @@ function Login() {
                 </Container>
 
             }
+            <br/>
+            <span>Don't have an account yet ? <a href="/register">Register a new account</a></span>
             <NavBarBot/>
         </div>
     );
