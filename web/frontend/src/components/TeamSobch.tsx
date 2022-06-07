@@ -1,6 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/esm/Card';
 import NavBar, {NavBarBot} from "../components/NavBar";
+import Container from 'react-bootstrap/esm/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 function Team(){
 
@@ -9,25 +12,24 @@ function Team(){
 
         <div>
             <NavBar />
-            <div className="container">
-                <div className="text-center">
-                    <div className="row">
-                        <div className="col-6 col-sm-4">
-                        <Card border="dark" style={{ width: '18rem' }}>
-                            <Card.Header>Mohammad Al Shakoush</Card.Header>
-                                <Card.Body>
-                                <Card.Text>
-                                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
-                                    <Card.Footer>Technical Officer</Card.Footer>
-                                </Card.Text>
-                                </Card.Body>
-                        </Card>
-                        
-        <br />
-        </div>
+            
+            <Container>
 
-        <div className="col-6 col-sm-4">
-            <Card border="dark" style={{ width: '18rem' }}>
+            <Row>
+                <Col>
+            <Card style={{width : '18em'}}>
+            <Card.Header>Mohammad Al Shakoush</Card.Header>
+                <Card.Body>
+                <Card.Text>
+                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
+                    <Card.Footer>Technical Officer</Card.Footer>
+                </Card.Text>
+                </Card.Body>
+            </Card>
+            </Col>
+
+            <Col>
+            <Card style={{width : '18em'}}>
                 <Card.Header>Fergal McCollam</Card.Header>
                     <Card.Body>
                     <Card.Text>
@@ -36,11 +38,10 @@ function Team(){
                     </Card.Text>
                     </Card.Body>
             </Card>
-        <br />
-        </div>
+            </Col>
 
-        <div className="col-6 col-sm-4">
-            <Card border="dark" style={{ width: '18rem' }}>
+            <Col>
+            <Card style={{width : '18em'}}>
                 <Card.Header>Carmen Jica</Card.Header>
                     <Card.Body>
                     <Card.Text>
@@ -49,41 +50,37 @@ function Team(){
                     </Card.Text>
                     </Card.Body>
             </Card>
-        <br />
-        </div>
+            </Col>
+        </Row>
 
-        <div className="col d-flex justify-content-center">
-            <div className="col-6 col-sm-4">
-                <Card border="dark" style={{ width: '18rem' }}>
-                    <Card.Header>Selim EL Sayed Aly</Card.Header>
-                        <Card.Body>
-                        <Card.Text>
-                            <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
-                            <Card.Footer>Documentation Officer</Card.Footer>
-                        </Card.Text>
-                        </Card.Body>
-                </Card>
-        <br />
-        </div>
-
-        <div className="col-6 col-sm-4">
-            <Card border="dark" style={{ width: '18rem' }}>
-                <Card.Header>Dhruv Ghosh</Card.Header>
-                <Card.Body>
-                <Card.Text>
-                    <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
-                    <Card.Footer>Communication Officer</Card.Footer>
-                </Card.Text>
-                </Card.Body>
-                </Card>
-        <br />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <Row>
+        <Col>
+        <Card style={{width : '18em'}}>
+        <Card.Header>Selim EL Sayed Aly</Card.Header>
+            <Card.Body>
+            <Card.Text>
+                <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
+                <Card.Footer>Documentation Officer</Card.Footer>
+            </Card.Text>
+            </Card.Body>
+        </Card>
+        </Col>
+        <Col>
+        <Card style={{width : '18em'}}>
+            <Card.Header>Dhruv Ghosh</Card.Header>
+            <Card.Body>
+            <Card.Text>
+                <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
+                <Card.Footer>Communication Officer</Card.Footer>
+            </Card.Text>
+            </Card.Body>
+        </Card>
+        </Col>
+        </Row>
         <NavBarBot />
+
+        </Container>
+
         </div> 
     )
 
