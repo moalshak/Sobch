@@ -162,8 +162,8 @@ function Alter() {
             });
             if (response.status === 200) {
                 setAlertProps({
-                    heading: 'Device Deleted',
-                    message: 'The device has been deleted!',
+                    heading: 'Device Removed',
+                    message: 'The device has been unlinked!',
                     variant: Variant.success
                 });
                 setTimeout(() => {

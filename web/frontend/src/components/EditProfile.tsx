@@ -218,9 +218,9 @@ function EditProfile(){
             
             
             <h1>Edit Profile</h1><Form>
-                    <Form.Group>
+                    <Form.Group controlId="formBasicEmail">
                         <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="email@exmaple.com" value={profile.profile.credentials.email} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, email: e.target.value.trim()}}})}/>
+                        <Form.Control type="email" placeholder="email@example.com" value={profile.profile.credentials.email} onChange={(e) => setProfile({...profile, profile: {...profile.profile, credentials: {...profile.profile.credentials, email: e.target.value.trim()}}})}/>
                         <Form.Text className="text-muted">
                             An empty field will preserve the current information.
                         </Form.Text>
@@ -252,7 +252,7 @@ function EditProfile(){
                             An empty field will preserve the current information.
                         </Form.Text>
                     </Form.Group>
-                    <Button variant="primary" onClick={(_) => {
+                    <Button variant="primary" type="submit" onClick={(_) => {
                         handleShowPopUp();
                     }}>
                         Save changes <AiOutlineEdit/>
