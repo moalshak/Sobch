@@ -128,7 +128,13 @@ router.post("/", async (req, res) => {
                     }
                 } else {
                     // remove user from wantsToBeNotified
-                    deviceSnapshot.config.wantsToBeNotified.splice(deviceSnapshot.config.wantsToBeNotified.indexOf(user.uid), 1);
+                    if (Array.isArray(deviceSnapshot.config.wantsToBeNotified)) {
+                        if (deviceSnapshot.config.wantsToBeNotified.includes(user.uid)) {
+                            deviceSnapshot.config.wantsToBeNotified.splice(deviceSnapshot.config.wantsToBeNotified.indexOf(user.uid), 1);
+                        }
+                    } else {
+                        deviceSnapshot.config.wantsToBeNotified = [];
+                    }
                 }
             }
             await set(ref(db, `devices/${deviceId}`), deviceSnapshot);
