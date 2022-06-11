@@ -60,5 +60,23 @@ describe('login endpoint', () => {
             done(err);
         })
     });
-}); 
+});
+
+describe('My devices endpoint', () => {
+    it ('user can get his devices', (done) => {
+        axios.get(`http://localhost:${PORT}/api/my-devices`, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            res.data.devices.forEach((device) => {
+                assert(device.owners.includes('VfULdqBkeYXXtjP0xK6lVvYQTIW2'));
+            });
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+})
 
