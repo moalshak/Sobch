@@ -188,6 +188,7 @@ if (process.argv[2] === 'start') {
 export {
     db as db,
     auth as auth,
-    app as app
+    app as app,
+    init as init
 }
 

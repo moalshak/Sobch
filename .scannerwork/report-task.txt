@@ -1,0 +1,6 @@
+projectKey=SOBCH
+serverUrl=http://localhost:9000
+serverVersion=9.5.0.56709
+dashboardUrl=http://localhost:9000/dashboard?id=SOBCH
+ceTaskId=AYFUQ8gyj_QdrIw6qdvJ
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYFUQ8gyj_QdrIw6qdvJ

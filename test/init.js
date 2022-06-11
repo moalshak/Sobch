@@ -1,88 +1,64 @@
 import * as server from '../web/server.js';
 import assert from 'assert';
 import { describe } from 'mocha';
-//import { get as getRequest } from 'request';
-import { ref, get, set } from "@firebase/database";
+import axios from 'axios';
+import {PORT, PASSWORD, ACC_PASSWORD, getLog, getUser} from '../lib/config.js';
 
-describe('No JS errors', () => {
+
+var accessToken;
+
+describe('Server can start', () => {
     it('running init', (done) =>{
+        server.init();
         done();
     });
-})
+});
 
-//// testing the alter/{device-id} endpoints
+describe('login endpoint', () => {
+    it('invalid password responds with status 400', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "mo.alshakoush@gmail.com",
+            password: PASSWORD
+        }).then((res) => {
+            assert.equal(res.status, 400);
+            done();
+        }).catch((err) => {
+            if (err.response.status === 400 && err.response.data.error === true && err.response.data.message === "Invalid Credentials") {
+                done();
+            } else {
+                done(err);
+            }
+        })
+    });
 
-// define some testing variables
-// const device1 = {
-//     "id": "1",
-//     "config" : {
-//         "active": true,
-//         "max": 20,
-//         "min": 15,
-//         "room": "kitchen"
-//     },
-//     "otp": "70"
-// }
+    it('invalid email responds with status 400', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "mo@gmail.com",
+            password: ACC_PASSWORD
+        }).then((res) => {
+            assert.equal(res.status, 400);
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
 
-// const user1 = {
-//     "credentials":{
-//         "email" : "userRegTest@test.com",
-//         "password" : "login123"
-
-//     },
-//     "address" : "The Forum"
-
-// }
-
-// describe('No errors from the alter/{device-id} endpoints', () => {
-//     it('running alter/{device-id} DELETE request', (done) => {
-//     set(ref(server.db, `devices/${device1.id}`),
-//     {
-//         "id": device1.id,
-//         "config": {
-//         "min": device1.config.min,
-//         "max": device1.config.max,
-//         "room": device1.config.room,
-//         "active": device1.config.active
-//         },
-//         "otp": device1.otp
-//     }).then(() => {
-//         get(ref(server.db, `devices/${device1.id}`)).then((deviceSnapshot) => {
-//             if(deviceSnapshot.exists()) {
-//                 //getRequest
-//                 done();
-//             } else {
-//                 console.log("Testing objects have not been created.");
-//             }
-//         });
-//         //done();
-//     }).catch((error) => {
-//         console.log(error);
-//     });
-//         //get(ref(db, `devices/${deviceId}`)).then
-        
-//     })
-// })
-
-// describe('No errors from the auth/register endpoints', () => {
-//     it('running auth/register POST request', (done) => {
-//         set(ref(db, `users/${user.uid}`),
-//         {
-//             "credentials": {
-//                 "email": email,
-//                 "password" : password,
-//             },
-//             "address": address   
-//         }
-//     );
-//     }).then(() => {
-        
-//         });
-//         //done();
-//     }).catch((error) => {
-//         console.log(error);
-//     });
-//         //get(ref(db, `devices/${deviceId}`)).then
-        
-    
+    it('valid credentials responds with status 200', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "mo.alshakoush@gmail.com",
+            password: ACC_PASSWORD
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            accessToken = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+}); 
 

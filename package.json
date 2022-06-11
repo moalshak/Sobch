@@ -10,6 +10,7 @@
   "author": "Mohammad Al Shakoush",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "dot-env": "^0.0.1",
@@ -29,6 +30,7 @@
     "dotenv": "^16.0.0",
     "generate-password": "^1.7.0",
     "nodemon": "^2.0.16",
+    "sonarqube-scanner": "^2.8.1",
     "uuid": "^8.3.2"
   }
 }
