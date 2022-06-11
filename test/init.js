@@ -2,6 +2,8 @@ import * as server from '../web/server.js';
 import assert from 'assert';
 import { describe } from 'mocha';
 import axios from 'axios';
+import { ref, set, get} from "firebase/database";
+import {db} from "../lib/firebase.js";
 import {PORT, PASSWORD, ACC_PASSWORD, getLog, getUser} from '../lib/config.js';
 
 
@@ -70,10 +72,24 @@ describe('My devices endpoint', () => {
             }
         }).then((res) => {
             assert.equal(res.status, 200);
+            /**
+             * make sure that the owners list of every device includes the user id
+             */
             res.data.devices.forEach((device) => {
                 assert(device.owners.includes('VfULdqBkeYXXtjP0xK6lVvYQTIW2'));
             });
-            done();
+
+            /**
+             * assert that the user is also linked to the devices
+             */
+            get(ref(db, `users/VfULdqBkeYXXtjP0xK6lVvYQTIW2`))
+            .then((snapshot) => {
+                var user = snapshot.val();
+                user.owns.forEach((device) => {
+                    assert(res.data.devices.some((dev) => dev.id === device));
+                });
+                done();
+            })
         }).catch((err) => {
             done(err);
         });
