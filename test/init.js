@@ -4,10 +4,13 @@ import { describe } from 'mocha';
 import axios from 'axios';
 import { ref, set, get} from "firebase/database";
 import {db} from "../lib/firebase.js";
-import {PORT, PASSWORD, ACC_PASSWORD, getLog, getUser} from '../lib/config.js';
+import {PORT, PASSWORD, ACC_PASSWORD, TEST_PASSWORD, getLog, getUser} from '../lib/config.js';
+
 
 
 var accessToken;
+var registerAcc;
+
 
 
 describe('Server can start', () => {
@@ -16,6 +19,8 @@ describe('Server can start', () => {
         done();
     });
 });
+
+
 
 describe('login endpoint', () => {
     it('invalid password responds with status 400', (done) => {
@@ -33,6 +38,10 @@ describe('login endpoint', () => {
             }
         })
     });
+
+/**
+ * Test the logout endpoint
+ */
 
     it('invalid email responds with status 400', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
@@ -97,9 +106,7 @@ describe('My devices endpoint', () => {
     });
 })
 
-/**
- * Test the logout endpoint
- */
+
 describe('logout endpoint', () => {
     it('logout endpoint works', (done) => {
         axios.post(`http://localhost:${PORT}/api/logout`, {}, {
@@ -118,16 +125,18 @@ describe('logout endpoint', () => {
 /**
  * Test the register endpoint
  */
-describe('register endpoint', () => {
+ describe('register endpoint', () => {
     it('register endpoint works', (done) => {
         axios.post(`http://localhost:${PORT}/api/register`, {
            credentials:{
                 email: "testendpoint@test.com",
-                password: "testendpoint"
+                password: TEST_PASSWORD
            },
             address: "testendpoint"
         }).then((res) => {
             assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");
+            registerAcc = res.data.accessToken;
             done();
         }
         ).catch((err) => {
@@ -135,6 +144,48 @@ describe('register endpoint', () => {
         });
     });
 });
+
+/**
+ * test delete request in register endpoint
+ */ 
+describe('delete account', () => {
+   
+
+    it('delete account works', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/register`,{}, {
+            headers: {
+                Authorization: `${registerAcc}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+});
+
+/**test for alter endpoint
+describe('alter endpoint', () => {
+    it('alter endpoint works', (done) => {
+        axios.put(`http://localhost:${PORT}/api/alter`, {},{
+            "0" : min,
+            "20" : max,
+            "test" : room,
+            "active" : active,
+
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }
+        ).catch((err) => {
+            done(err);
+        });
+    } );
+}
+);
+**/
+
 
 
 
