@@ -4,13 +4,14 @@ import { describe } from 'mocha';
 import axios from 'axios';
 import { ref, set, get} from "firebase/database";
 import {db} from "../lib/firebase.js";
-import {PORT, PASSWORD, ACC_PASSWORD, TEST_PASSWORD, getLog, getUser} from '../lib/config.js';
+import {PORT, PASSWORD, ACC_PASSWORD, ACC_PASSWORD2, TEST_PASSWORD, getLog, getUser} from '../lib/config.js';
 
 
 
 var accessToken;
 var registerAcc;
-let accessToken2;
+var accessToken2;
+const USERID = 'VfULdqBkeYXXtjP0xK6lVvYQTIW2';
 
 
 
@@ -107,24 +108,6 @@ describe('My devices endpoint', () => {
     });
 })
 
-
-describe('logout endpoint', () => {
-    it('logout endpoint works', (done) => {
-        axios.post(`http://localhost:${PORT}/api/logout`, {}, {
-            headers: {
-                Authorization: `${accessToken}`
-            }
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }).catch((err) => {
-            done(err);
-        });
-    });
-});
-
-    
-
 describe('non-admin login', () => {
     it('setting non-admin accessToken', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
@@ -172,11 +155,26 @@ describe('My profile endpoint', () => {
             set(ref(db, `users/${id}`), null);
             done();
         }).catch((err) => {
+            console
             done(err);
         });
     });
 });
 
+describe('logout endpoint', () => {
+    it('logout endpoint works', (done) => {
+        axios.post(`http://localhost:${PORT}/api/logout`, {}, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+});
 
 /**
  * Test the register endpoint
