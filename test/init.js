@@ -115,10 +115,11 @@ describe('logout endpoint', () => {
     });
 });
 
-//test for register endpoint 
+/**
+ * Test the register endpoint
+ */
 describe('register endpoint', () => {
     it('register endpoint works', (done) => {
-        console.log("here");
         axios.post(`http://localhost:${PORT}/api/register`, {
            credentials:{
                 email: "testendpoint@test.com",
@@ -126,8 +127,6 @@ describe('register endpoint', () => {
            },
             address: "testendpoint"
         }).then((res) => {
-            console.log("hereNow");
-            //assert.equal(res.message, "Success, please make sure to verify your email in order to login")
             assert.equal(res.status, 200);
             done();
         }
