@@ -12,7 +12,21 @@ var accessToken;
 var registerAcc;
 var accessToken2;
 const USERID = 'VfULdqBkeYXXtjP0xK6lVvYQTIW2';
-var deviceID = 40;
+const SELIM_ID = 'cKJS6IQrayM9EUt4Zb7IFgHVjBC3';
+
+const deviceID = 31;
+const otp = "PYFL-TUVB-MGEE-SYIP";
+const device = {
+    "device": {
+      "id": deviceID,
+      "config": {
+        "min": -22,
+        "max": 80,
+        "room": "bedroom",
+        "active": true
+      },
+      "otp": otp
+    }};
 
 
 
@@ -95,10 +109,35 @@ describe('non-admin login', () => {
 });
 
 describe('My devices endpoint', () => {
+    
+    it ('User can link Device' , (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+            "device": {
+                "id": "31",
+                "config": {
+                    "min": -22,
+                    "max": 80,
+                    "room": "bedroom",
+                    "active": true
+                },
+                "otp": "PYFL-TUVB-MGEE-SYIP"
+            },
+        }, {headers: {
+            Authorization: `${accessToken2}`
+        }
+    }).then((res) => {
+        assert.equal(res.status, 200);
+        assert.equal(res.data.error, false);
+        assert.equal(res.data.message, "device added");
+        done();
+    }).catch((err) => {
+        done(err);
+    });
+    
     it ('user can get his devices', (done) => {
         axios.get(`http://localhost:${PORT}/api/my-devices`, {
             headers: {
-                Authorization: `${accessToken}`
+                Authorization: `${accessToken2}`
             }
         }).then((res) => {
             assert.equal(res.status, 200);
@@ -106,13 +145,13 @@ describe('My devices endpoint', () => {
              * make sure that the owners list of every device includes the user id
              */
             res.data.devices.forEach((device) => {
-                assert(device.owners.includes('VfULdqBkeYXXtjP0xK6lVvYQTIW2'));
+                assert(device.owners.includes(`${SELIM_ID}`));
             });
 
             /**
              * assert that the user is also linked to the devices
              */
-            get(ref(db, `users/VfULdqBkeYXXtjP0xK6lVvYQTIW2`))
+            get(ref(db, `users/${SELIM_ID}`))
             .then((snapshot) => {
                 let user = snapshot.val();
                 user.owns.forEach((device) => {
@@ -123,6 +162,9 @@ describe('My devices endpoint', () => {
         }).catch((err) => {
             done(err);
         });
+    });
+        
+
     });
 });
 
@@ -136,11 +178,12 @@ describe('Edit a device endpoint', () => {
                     max:40,
                     room: "nowhere man",
                     active: true
-                }
+                },
+                otp: otp
             }
         }, {
             headers: {
-                Authorization: `${accessToken}`
+                Authorization: `${accessToken2}`
             }
         }).then((res) => {
             assert.equal(res.status, 200);
@@ -165,7 +208,7 @@ describe('Edit a device endpoint', () => {
             }
         }, {
             headers: {
-                Authorization: `${accessToken}`
+                Authorization: `${accessToken2}`
             }
         }).then((res) => {
             assert.equal(res.status, 401);
@@ -183,13 +226,13 @@ describe('Delete a device endpoint', () => {
     it ('user can delete a device that they own', (done) => {
         axios.delete(`http://localhost:${PORT}/api/alter/${deviceID}`, {
             headers: {
-                Authorization: `${accessToken}`
+                Authorization: `${accessToken2}`
             }
         }).then((res) => {
             assert.equal(res.status, 200);
             assert.equal(res.data.message, "Success device deleted");
 
-            get(ref(db, `users/${USERID}`)).then((snapshot) => {
+            get(ref(db, `users/${SELIM_ID}`)).then((snapshot) => {
                 let user = snapshot.val();
                 user.owns.forEach((device) => {
                     assert(device !== deviceID);
@@ -198,7 +241,7 @@ describe('Delete a device endpoint', () => {
             get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
                 let device = snapshot.val();
                 device.owners.forEach((user) => {
-                    assert(user !== USERID);
+                    assert(user !== SELIM_ID);
                 })
             })
             done();
@@ -207,52 +250,21 @@ describe('Delete a device endpoint', () => {
         });
     });
 
-    it ('user cannot delete a device that they do not own', (done) => {
-        axios.delete(`http://localhost:${PORT}/api/alter/0`, {
-            headers: {
-                Authorization: `${accessToken}`
-            }
-        }).then((res) => {
-            assert.equal(res.status, 401);
-            assert.equal(res.data.error, true);
-            assert.equal(res.data.message, "Unauthorized");
-            done();
-        }).catch((err) => {
-            done(err);
-        });
-    });
-};
-
-    it ('User can link Device' , (done) => {
-        axios.post(`http://localhost:${PORT}/api/my-devices`, {
-                "device": {
-                  "id": "31",
-                  "config": {
-                    "min": -22,
-                    "max": 80,
-                    "room": "bedroom",
-                    "active": true
-                  },
-                  "otp": "PYFL-TUVB-MGEE-SYIP"
-                },
-        }, {headers: {
-            Authorization: `${accessToken2}`
-        }
-    }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.error, false);
-            assert.equal(res.data.message, "device added");
-            done();
-        }).catch((err) => {
-            done(err);
-        });
-        
-        
-
-    });
-})
-
-
+    // it ('user cannot delete a device that they do not own', (done) => {
+    //     axios.delete(`http://localhost:${PORT}/api/alter/0`, {
+    //         headers: {
+    //             Authorization: `${accessToken}`
+    //         }
+    //     }).then((res) => {
+    //         assert.equal(res.status, 401);
+    //         assert.equal(res.data.error, true);
+    //         assert.equal(res.data.message, "Unauthorized");
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     });
+    // });
+});
 
 describe('My profile endpoint', () => {
     it ('Non-Admin cannot get user profile information, response = 401', (done) => {
@@ -306,6 +318,39 @@ describe('logout endpoint', () => {
 });
 
 /**
+ * test delete request in register endpoint
+ */ 
+describe('delete account', () => {
+    it('valid credentials responds with status 200', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "testendpoint@test.com",
+            password: TEST_PASSWORD
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            registerAcc = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+    
+    it('delete account works', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/register`, {
+            headers: {
+                Authorization: `${registerAcc}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+});
+
+/**
  * Test the register endpoint
  */
  describe('register endpoint', () => {
@@ -328,25 +373,6 @@ describe('logout endpoint', () => {
     });
 });
 
-/**
- * test delete request in register endpoint
- */ 
-describe('delete account', () => {
-   
-
-    it('delete account works', (done) => {
-        axios.delete(`http://localhost:${PORT}/api/register`,{}, {
-            headers: {
-                Authorization: `${registerAcc}`
-            }
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }).catch((err) => {
-            done(err);
-        });
-    });
-});
 
 /**test for alter endpoint
 describe('alter endpoint', () => {
@@ -389,7 +415,6 @@ describe('Edit-Profile endpoint', () => {
             // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
-            console.log(err);
             done(err);
         })
     });
@@ -411,7 +436,6 @@ describe('Edit-Profile endpoint', () => {
             // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
-            console.log(err);
             done(err);
         })
     });
@@ -433,7 +457,6 @@ describe('Edit-Profile endpoint', () => {
             // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
-            console.log(err);
             done(err);
         })
     });
