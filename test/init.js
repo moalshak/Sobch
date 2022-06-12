@@ -120,41 +120,9 @@ describe('logout endpoint', () => {
             done(err);
         });
     });
+});
 
-    it ('user cannot get his profile information, without the correct accesstoken', (done) => {
-        axios.get(`http://localhost:${PORT}/api/profile`, {
-            headers: {
-                Authorization: `xxx`
-            }
-        }).then((res) => {
-            // console.log(res.data);
-            assert.equal(res.status, 401);
-            done();
-        }).catch((err) => {
-            if (err.response.status == 401){
-                assert.equal(err.response.data.error, "You are not authorized to make this request");
-                done();
-            }
-            else {
-                done(err);
-            }
-            // console.log(err.response.data);       
-        });
-    });
-
-    it ('Admin can get user profile information', (done) => {
-        axios.get(`http://localhost:${PORT}/api/profile/${USERID}`, {
-            headers: {
-                Authorization: `${accessToken}`
-            }
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }).catch((err) => {
-            done(err);
-        });
-    });
-})
+    
 
 describe('non-admin login', () => {
     it('setting non-admin accessToken', (done) => {
