@@ -97,7 +97,9 @@ describe('My devices endpoint', () => {
     });
 })
 
-
+/**
+ * Test the logout endpoint
+ */
 describe('logout endpoint', () => {
     it('logout endpoint works', (done) => {
         axios.post(`http://localhost:${PORT}/api/logout`, {}, {
@@ -108,6 +110,28 @@ describe('logout endpoint', () => {
            assert.equal(res.status, 200);
             done();
         }).catch((err) => {
+            done(err);
+        });
+    });
+});
+
+//test for register endpoint 
+describe('register endpoint', () => {
+    it('register endpoint works', (done) => {
+        console.log("here");
+        axios.post(`http://localhost:${PORT}/api/register`, {
+           credentials:{
+                email: "testendpoint@test.com",
+                password: "testendpoint"
+           },
+            address: "testendpoint"
+        }).then((res) => {
+            console.log("hereNow");
+            //assert.equal(res.message, "Success, please make sure to verify your email in order to login")
+            assert.equal(res.status, 200);
+            done();
+        }
+        ).catch((err) => {
             done(err);
         });
     });
