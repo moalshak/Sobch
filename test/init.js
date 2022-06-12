@@ -77,6 +77,23 @@ describe('login endpoint', () => {
     });
 });
 
+describe('non-admin login', () => {
+    it('setting non-admin accessToken', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "s.el.sayed.aly@student.rug.nl",
+            password: ACC_PASSWORD2
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+});
+
 describe('My devices endpoint', () => {
     it ('user can get his devices', (done) => {
         axios.get(`http://localhost:${PORT}/api/my-devices`, {
@@ -206,22 +223,36 @@ describe('Delete a device endpoint', () => {
     });
 };
 
-describe('non-admin login', () => {
-    it('setting non-admin accessToken', (done) => {
-        axios.post(`http://localhost:${PORT}/api/login`, {
-            email: "s.el.sayed.aly@student.rug.nl",
-            password: ACC_PASSWORD2
-        }).then((res) => {
+    it ('User can link Device' , (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+                "device": {
+                  "id": "31",
+                  "config": {
+                    "min": -22,
+                    "max": 80,
+                    "room": "bedroom",
+                    "active": true
+                  },
+                  "otp": "PYFL-TUVB-MGEE-SYIP"
+                },
+        }, {headers: {
+            Authorization: `${accessToken2}`
+        }
+    }).then((res) => {
             assert.equal(res.status, 200);
             assert.equal(res.data.error, false);
-            assert.equal(res.data.message, "Logged in!");
-            accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            assert.equal(res.data.message, "device added");
             done();
         }).catch((err) => {
             done(err);
-        })
+        });
+        
+        
+
     });
-});
+})
+
+
 
 describe('My profile endpoint', () => {
     it ('Non-Admin cannot get user profile information, response = 401', (done) => {
@@ -340,5 +371,94 @@ describe('alter endpoint', () => {
 
 
 
+describe('Edit-Profile endpoint', () => {
+    it('User can edit his/her address', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : ""
+            },
+            address : 'home'
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            // assert.equal(res.data.error, false);
+            // assert.equal(res.data.message, "Logged in!");
+            done();
+        }).catch((err) => {
+            console.log(err);
+            done(err);
+        })
+    });
+
+    it('User can edit his/her password', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : "selim123"
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            // assert.equal(res.data.error, false);
+            // assert.equal(res.data.message, "Logged in!");
+            done();
+        }).catch((err) => {
+            console.log(err);
+            done(err);
+        })
+    });
+
+    it('User can edit his/her information blank and unchanged', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : ""
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            // assert.equal(res.data.error, false);
+            // assert.equal(res.data.message, "Logged in!");
+            done();
+        }).catch((err) => {
+            console.log(err);
+            done(err);
+        })
+    });
+
+    // it('User cannot edit his/her information if not logged in', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "",
+    //             password : ""
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `random`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         // assert.equal(res.data.error, false);
+    //         // assert.equal(res.data.message, "Logged in!");
+    //         done();
+    //     }).catch((err) => {
+    //         console.log(err);
+    //         done(err);
+    //     })
+    // });
+});
 
 
