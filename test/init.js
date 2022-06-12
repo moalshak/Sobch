@@ -333,7 +333,6 @@ describe('My profile endpoint', () => {
             assert.equal(res.status, 401);
             done();
         }).catch((err) => {
-            // console.log(err);
             assert.equal(err.response.status, 401);
             assert.equal(err.response.data.error, "Unauthorized access");
             done();
@@ -347,7 +346,6 @@ describe('My profile endpoint', () => {
                 Authorization: `${accessToken}`
             }
         }).then((res) => {
-            // console.log(res.data);
             assert.equal(res.status, 200);
             assert.equal(res.data.profile, null);
             set(ref(db, `users/${id}`), null);
@@ -356,6 +354,26 @@ describe('My profile endpoint', () => {
             console
             done(err);
         });
+    });
+
+    it('User cannot get his/her information if not logged in', (done) => {
+        axios.get(`http://localhost:${PORT}/api/profile/`, {
+            headers: {
+                Authorization: `random`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status == 401){
+                assert.equal(err.response.data.error, "You are not authorized to make this request");
+                done();
+            }
+            else {
+                done(err);
+            }
+        })
     });
 });
 
@@ -468,8 +486,6 @@ describe('Edit-Profile endpoint', () => {
         }
         ).then((res) => {
             assert.equal(res.status, 200);
-            // assert.equal(res.data.error, false);
-            // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
             done(err);
@@ -489,13 +505,68 @@ describe('Edit-Profile endpoint', () => {
         }
         ).then((res) => {
             assert.equal(res.status, 200);
-            // assert.equal(res.data.error, false);
-            // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
             done(err);
         })
     });
+
+    // it('User can edit his/her password, back to normal', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "",
+    //             password : "selim123"
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     })
+    // });
+
+    // it('User can edit his/her email', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "pain@gmail.com",
+    //             password : ""
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     })
+    // });
+
+    // it('User can edit his/her email, continuation..', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "s.el.sayed.aly@student.rug.nl",
+    //             password : ""
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     })
+    // });
 
     it('User can edit his/her information blank and unchanged', (done) => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
@@ -510,35 +581,36 @@ describe('Edit-Profile endpoint', () => {
         }
         ).then((res) => {
             assert.equal(res.status, 200);
-            // assert.equal(res.data.error, false);
-            // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
             done(err);
         })
     });
 
-    // it('User cannot edit his/her information if not logged in', (done) => {
-    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
-    //         credentials : {
-    //             email : "",
-    //             password : ""
-    //         },
-    //         address : ''
-    //     }, {headers: {
-    //             Authorization: `random`
-    //         }
-    //     }
-    //     ).then((res) => {
-    //         assert.equal(res.status, 200);
-    //         // assert.equal(res.data.error, false);
-    //         // assert.equal(res.data.message, "Logged in!");
-    //         done();
-    //     }).catch((err) => {
-    //         console.log(err);
-    //         done(err);
-    //     })
-    // });
+    it('User cannot edit his/her information if not logged in', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : ""
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `random`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status == 401){
+                assert.equal(err.response.data.error, "You are not authorized to make this request");
+                done();
+            }
+            else {
+                done(err);
+            }
+        })
+    });
 });
 
 

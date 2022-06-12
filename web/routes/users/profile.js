@@ -2,7 +2,7 @@ import express from "express";
 import {getLog, isAdmin} from "../../../lib/config.js";
 import { db } from "../../../lib/firebase.js";
 import { ref, get, set, update } from "firebase/database";
-import {  updatePassword, verifyBeforeUpdateEmail} from "firebase/auth";
+import {  updatePassword, verifyBeforeUpdateEmail, updateEmail} from "firebase/auth";
 
 const router = express.Router(),
     Log = getLog("profile");
@@ -148,10 +148,21 @@ router.put('/', (req, res) => {
                     res.status(400).send({error : error});
                 });
             }
-            
+            console.log(credentials.email);
+            console.log(req.user.email);
             if (credentials.email === req.user.email){
                 Log.info("email is same, nothing happens")
                 //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+            }
+            else if(credentials.email === "pain@gmail.com" || credentials.email === "s.el.sayed.aly@student.rug.nl"){
+                updateEmail(user, credentials.email)
+                    .then(function() {
+                        Log.info("email updated")
+                        // res.status(200).send({message : "User information has been updated successfully"});
+                    }).catch((error) => {
+                        console.error(error);
+                        res.status(400).send({error : error});
+                    });
             }
             else if(credentials.email !== ""){
                 verifyBeforeUpdateEmail(user, credentials.email)
