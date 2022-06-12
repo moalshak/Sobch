@@ -12,6 +12,7 @@ var accessToken;
 var registerAcc;
 var accessToken2;
 const USERID = 'VfULdqBkeYXXtjP0xK6lVvYQTIW2';
+var deviceID = 40;
 
 
 
@@ -106,7 +107,104 @@ describe('My devices endpoint', () => {
             done(err);
         });
     });
-})
+});
+
+describe('Edit a device endpoint', () => {
+    it ('user can alter his chosen device', (done) => {
+        axios.put(`http://localhost:${PORT}/api/my-devices`, {
+            device: {
+                id: deviceID,
+                config: {
+                    min: 0,
+                    max:40,
+                    room: "nowhere man",
+                    active: true
+                }
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+
+            get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
+                let device = snapshot.val();
+                assert.equal(device.config.min, 0);
+                assert.equal(device.config.max, 40);
+                assert.equal(device.config.room, "nowhere man");
+                assert.equal(device.config.active, true);
+                done();
+            });
+        }).catch((err) => {
+            done(err);
+        });
+    });
+
+    it ('user cannot alter a device that they do not own', (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+            device: {
+                id : 0
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            assert.equal(res.data.error, true);
+            assert.equal(res.data.message, "Unauthorized");
+            //res.status(401).send({error: true, message : "Unauthorized"});
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+});
+
+describe('Delete a device endpoint', () => {
+    it ('user can delete a device that they own', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/alter/${deviceID}`, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Success device deleted");
+
+            get(ref(db, `users/${USERID}`)).then((snapshot) => {
+                let user = snapshot.val();
+                user.owns.forEach((device) => {
+                    assert(device !== deviceID);
+                });
+            });
+            get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
+                let device = snapshot.val();
+                device.owners.forEach((user) => {
+                    assert(user !== USERID);
+                })
+            })
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+
+    it ('user cannot delete a device that they do not own', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/alter/0`, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            assert.equal(res.data.error, true);
+            assert.equal(res.data.message, "Unauthorized");
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+};
 
 describe('non-admin login', () => {
     it('setting non-admin accessToken', (done) => {
