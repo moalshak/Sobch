@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     email = credentials.email.trim(),
     password = credentials.password;
 
-    var code,message;
+    let code,message;
 
     /**
      * post request passes email and password to auth if 
@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
 
     } catch(error) {
          const errorCode = error.code;
-         var message;
+         let message;
 
         if(errorCode == "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
             code = 400;
@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
  * @api {post} /auth/forgotPassword Forgot Password
  */
 router.put('/', (req, res) => {
-    var email = '';
+    let email = '';
 
     try {
         email = req.body.email.trim();

@@ -153,7 +153,7 @@ function EditProfile(){
         }
     }
 
-    var getProfile = async () => {
+    let getProfile = async () => {
         try {
             setLoading(true);
             const response = await axios.get(`${BACKEND_BASE_URL}/profile/`, {

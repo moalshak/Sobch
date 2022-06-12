@@ -12,7 +12,7 @@ export function getAccessToken () {
 
 export async function goLogout(e : any) {
     e.preventDefault();
-    var data : any = {};
+    let data : any = {};
     
     try {
         const res = await axios.post(`${BACKEND_BASE_URL}/logout`, {

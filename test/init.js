@@ -10,6 +10,7 @@ import {PORT, PASSWORD, ACC_PASSWORD, TEST_PASSWORD, getLog, getUser} from '../l
 
 var accessToken;
 var registerAcc;
+let accessToken2;
 
 
 
@@ -94,7 +95,7 @@ describe('My devices endpoint', () => {
              */
             get(ref(db, `users/VfULdqBkeYXXtjP0xK6lVvYQTIW2`))
             .then((snapshot) => {
-                var user = snapshot.val();
+                let user = snapshot.val();
                 user.owns.forEach((device) => {
                     assert(res.data.devices.some((dev) => dev.id === device));
                 });
@@ -159,7 +160,7 @@ describe('My profile endpoint', () => {
     });
 
     it ('Admin cannot get user profile information if non-existent profile = null', (done) => {
-        var id = '1111';
+        let id = '1111';
         axios.get(`http://localhost:${PORT}/api/profile/${id}`, {
             headers: {
                 Authorization: `${accessToken}`

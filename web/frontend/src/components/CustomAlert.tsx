@@ -19,7 +19,7 @@ interface Props {
 }
 
 function CustomAlert(props: Props) {
-    var {variant, message, heading} = props;
+    let {variant, message, heading} = props;
     if (variant === Variant.nothing) {
         return (
             <div></div>

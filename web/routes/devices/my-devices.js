@@ -20,7 +20,7 @@ function unauthorized(res, req) {
 
 
 router.delete("/", async (req, res) => {
-    var user, deviceId;
+    let user, deviceId;
 
     try {
         user = req.user;
@@ -30,7 +30,7 @@ router.delete("/", async (req, res) => {
         return;
     }
 
-    var message, code;
+    let message, code;
 
     try {
         // check if device is owned by user
@@ -40,7 +40,7 @@ router.delete("/", async (req, res) => {
             return;
         }
 
-        var owners = device.owners || [];
+        let owners = device.owners || [];
 
         if (!isAdmin(user.uid)) {
             if (owners.indexOf(user.uid) === -1) {
@@ -52,7 +52,7 @@ router.delete("/", async (req, res) => {
         // get the user
         const userData = await get(ref(db, `users/${user.uid}`));
 
-        var owns = userData.owns || [];
+        let owns = userData.owns || [];
 
         if (!isAdmin(user.uid)) {
             if (owns.indexOf(deviceId) === -1) {
@@ -87,7 +87,7 @@ router.delete("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    var device, otp, user;
+    let device, otp, user;
     try {
         device = req.body.device;
         otp = device.otp;
@@ -101,7 +101,7 @@ router.post("/", async (req, res) => {
     const deviceId = device.id.toString().trim();
     const snapshot = await get(ref(db, `devices/${deviceId}`));
     if (snapshot.exists()) {
-        var deviceSnapshot = snapshot.val();
+        let deviceSnapshot = snapshot.val();
         // otp matches -> add device
         if (otp === deviceSnapshot.otp) {
             Log.info("OTP MATCHES!")
@@ -110,7 +110,7 @@ router.post("/", async (req, res) => {
                 deviceSnapshot.owners = [];
             }
             // device already owned
-            var deviceLiked = deviceSnapshot.owners.includes(user.uid);
+            let deviceLiked = deviceSnapshot.owners.includes(user.uid);
             if (!deviceLiked) {
                 deviceSnapshot.owners.push(user.uid);
             }
@@ -138,7 +138,7 @@ router.post("/", async (req, res) => {
                 }
             }
             await set(ref(db, `devices/${deviceId}`), deviceSnapshot);
-            var userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();
+            let userSnapshot = (await get(ref(db, `users/${user.uid}`))).val();
             if (!userSnapshot) {
                 await set(ref(db, `users/${user.uid}`), {
                     credentials : {
@@ -151,7 +151,7 @@ router.post("/", async (req, res) => {
             if (userSnapshot.owns === undefined || !Array.isArray(userSnapshot.owns)) {
                 userSnapshot.owns = [];
             }
-            var userLinked = userSnapshot.owns.includes(deviceId);
+            let userLinked = userSnapshot.owns.includes(deviceId);
             if (!userLinked) {
                 userSnapshot.owns.push(deviceId);
             }
@@ -177,7 +177,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    var user;
+    let user;
     try{ 
     user = req.user;
     } catch(error) {
@@ -188,14 +188,14 @@ router.get('/', async (req, res) => {
 
     try {
         // using this 'user' variable for now.
-        var snapshot = await get(ref(db, `users/${user.uid}`))
+        let snapshot = await get(ref(db, `users/${user.uid}`))
     
         if (snapshot.exists() && snapshot.val().owns !== undefined  && snapshot.val().owns.length > 0)
         {
-            var devicesIds = snapshot.val().owns;
-            var devices = [];
-            for (var deviceId of devicesIds) {
-                var dev = (await get(ref(db, `devices/${deviceId}`))).val();
+            let devicesIds = snapshot.val().owns;
+            let devices = [];
+            for (let deviceId of devicesIds) {
+                let dev = (await get(ref(db, `devices/${deviceId}`))).val();
                 devices.push (
                     {
                         id : deviceId,
@@ -205,11 +205,11 @@ router.get('/', async (req, res) => {
             }
 
             // get all devices
-            var devicesSnap = await get(ref(db, `devices`));
+            let devicesSnap = await get(ref(db, `devices`));
             if (devicesSnap.exists()) {
-                var devicesSnapshot = devicesSnap.val();
-                for (var i in devicesSnapshot) {
-                    var dev = devicesSnapshot[i];
+                let devicesSnapshot = devicesSnap.val();
+                for (let i in devicesSnapshot) {
+                    let dev = devicesSnapshot[i];
                     if (isAdmin(user.uid) || dev.owners.includes(user.uid)) {
                         if (!devicesIds.includes(dev.id)) {
                             devices.push (

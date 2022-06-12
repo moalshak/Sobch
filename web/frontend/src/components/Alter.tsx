@@ -124,14 +124,14 @@ function Alter() {
     }
 
 
-    var getDevice = async () => {
+    let getDevice = async () => {
         try {
             const response = await axios.get(`${BACKEND_BASE_URL}/stats/${deviceId}`, {
                 headers: {
                     Authorization: `${getAccessToken()}`
                 }
             });
-            var device = response.data.device;
+            let device = response.data.device;
             if (device) {
                 setDevice(device);
                 setLoading(false);
@@ -153,7 +153,7 @@ function Alter() {
         }
     }
 
-    var deleteDevice = async () => {
+    let deleteDevice = async () => {
         try {
             const response = await axios.delete(`${BACKEND_BASE_URL}/alter/${deviceId}`, {
                 headers: {

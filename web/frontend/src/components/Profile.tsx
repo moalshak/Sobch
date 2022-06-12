@@ -51,7 +51,7 @@ function Profile() {
 
     async function goDelete(e : any) {
         e.preventDefault();
-        var data : any = {};
+        let data : any = {};
         
         try {
             setLoading(true);
@@ -102,7 +102,7 @@ function Profile() {
     async function getProfile() {
         try{
             setLoading(true);
-            var url = `${BACKEND_BASE_URL}/profile/`;
+            let url = `${BACKEND_BASE_URL}/profile/`;
             if (id) {
                 url += id;
             }
