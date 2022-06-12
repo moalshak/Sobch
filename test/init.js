@@ -220,7 +220,64 @@ describe('Edit a device endpoint', () => {
             done(err);
         });
     });
-});
+
+
+    it ('Wrong otp/id Add Device' , (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+                "device": {
+                  "id": "aaaaa",
+                  "config": {
+                    "min": -22,
+                    "max": 80,
+                    "room": "bedroom",
+                    "active": true
+                  },
+                  "otp": "aaaa"
+                },
+        }, {headers: {
+            Authorization: `${accessToken2}`
+        }
+    }).then((res) => {
+            done();
+        }).catch((err) => {
+            if (err.response.status === 403 && err.response.data.error === true && err.response.data.message === "Invalid match (device id / otp)") {
+                done();
+            } else {
+                done(err);
+            }
+            // assert.equal(err.status, 403);
+            // assert.equal(err.data.error, false);
+            // assert.equal(err.data.message, "Invalid match (device id / otp)");
+            // done();
+        });
+        
+        
+
+    });
+
+    it ('Empty Request Add device' , (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {}, {headers: {
+            Authorization: `${accessToken2}`
+        }
+    }).then((res) => {
+            done();
+        }).catch((err) => {
+            if (err.response.status === 400 ||  err.response.data.error === "Bad request" || err.response.data.message === "FAILED" || err.response.data.message === "Bad request" ) {
+                done();
+            } else {
+                done(err);
+            }
+            // assert.equal(err.status, 400);
+            // assert.equal(err.data.error, true);
+            // assert.equal(err.data.message, "Bad request");
+            // done();
+        });
+        
+        
+
+    });
+
+})
 
 describe('Delete a device endpoint', () => {
     it ('user can delete a device that they own', (done) => {
