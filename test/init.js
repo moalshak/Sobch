@@ -12,6 +12,7 @@ var accessToken2;
 
 const USERID = `VfULdqBkeYXXtjP0xK6lVvYQTIW2`;
 
+
 describe('Server can start', () => {
     it('running init', (done) =>{
         server.init();
@@ -199,4 +200,30 @@ describe('My profile endpoint', () => {
             done(err);
         });
     });
-})
+});
+
+
+/**
+ * Test the register endpoint
+ */
+describe('register endpoint', () => {
+    it('register endpoint works', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+           credentials:{
+                email: "testendpoint@test.com",
+                password: "testendpoint"
+           },
+            address: "testendpoint"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }
+        ).catch((err) => {
+            done(err);
+        });
+    });
+});
+
+
+
+
