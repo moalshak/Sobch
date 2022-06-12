@@ -9,6 +9,7 @@ import {PORT, PASSWORD, ACC_PASSWORD, getLog, getUser} from '../lib/config.js';
 
 var accessToken;
 
+
 describe('Server can start', () => {
     it('running init', (done) =>{
         server.init();
@@ -95,4 +96,23 @@ describe('My devices endpoint', () => {
         });
     });
 })
+
+
+describe('logout endpoint', () => {
+    it('logout endpoint works', (done) => {
+        axios.post(`http://localhost:${PORT}/api/logout`, {}, {
+            headers: {
+                Authorization: `${accessToken}`    
+            }
+        }).then((res) => {
+           assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+});
+
+
+
 
