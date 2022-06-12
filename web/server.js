@@ -88,7 +88,7 @@ const middleWare = async (req, res, next) => {
                 if (decodedToken.exp - decodedToken.auth_time <= 60) {
                     await admin_auth.revokeRefreshTokens(uid);
                 }
-                var user = getUser(uid);
+                let user = getUser(uid);
                 if (!user.stsTokenManager) {
                     user.stsTokenManager = {};
                 }
@@ -121,7 +121,7 @@ const middleWare = async (req, res, next) => {
  */
 function initRoutes(app) {
     app.use(middleWare);
-    for (var route in routes) {
+    for (let route in routes) {
         app.use(route, routes[route].router);
     }
 }
@@ -165,11 +165,14 @@ function init() {
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-    app.use(cors())
+    app.use(cors( {
+        origin : ['sobch.xyz', 'https://sobch.xyz'],
+        }
+    ))
 
     initRoutes(app);
     
-    var router = express.Router();
+    let router = express.Router();
     app.use(subdomain('api', router));
 
     app.listen(PORT, () => {

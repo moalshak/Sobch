@@ -75,7 +75,7 @@ function MyDevices() {
                     Authorization: `${accessToken}`
                 }
             });
-            var ids = response.data.devices || [];
+            let ids = response.data.devices || [];
 
             if (ids.length === 0) {
                 setAlertProps({
@@ -135,7 +135,7 @@ function MyDevices() {
 
     function ModelImg(model){
         model = model.model; // JS being JS
-        var link;
+        let link;
         if(model === "Sobch DHT-11"){
             link = "./images/therm1.jpg";
         }

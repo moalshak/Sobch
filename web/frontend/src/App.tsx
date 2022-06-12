@@ -14,7 +14,7 @@ import Help from './components/Help';
 import Corparate from './components/Company';
 import NavHelp from './components/NavHelp';
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://www.sobch.xyz/api" || "http://172.104.242.242:8000";
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://www.sobch.xyz/api";
 
 function App() {
   

@@ -70,7 +70,7 @@ router.get('/', async (req, res) => {
     const userid = req.user.uid;
     const meta = req.user.metadata;
 
-    var snapshot = await get(ref(db, `users/${userid}`));
+    let snapshot = await get(ref(db, `users/${userid}`));
     
     try {
         if (!snapshot.exists()) {

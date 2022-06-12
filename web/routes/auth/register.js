@@ -15,14 +15,14 @@ const router = express.Router(),
 
 router.delete('/', async (req, res) => {
     const user = req.user;
-    var message, code;
+    let message, code;
     
     try{
         deleteUser(user);
         code = 200;
         message = "Success"  
 
-        set(ref(db, `users/${user.uid}`), null),
+        set(ref(db, `users/${user.uid}`), null);
         res.status(200).send({error : false, message : `Account Nuked`});
         Log.info(`Success - Account deleted`);
 
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
         password = credentials.password,
         address = req.body.address;
 
-    var code, message;
+    let code, message;
     
     try {
         const userCredential =  await createUserWithEmailAndPassword(auth, email, password);
@@ -75,7 +75,7 @@ router.post('/', async (req, res) => {
 
     } catch(error) {
         const errorCode = error.code;
-        var message;
+        let message;
 
         if(errorCode == "auth/email-already-in-use"){
             code = 200;

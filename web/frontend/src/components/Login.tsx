@@ -40,7 +40,7 @@ function Login() {
     */
    async function doLoginRequest(e: any) {
        e.preventDefault();
-       var data : any = {};
+       let data : any = {};
 
        try{
            const res = await axios.post(`${BACKEND_BASE_URL}/login`, {
@@ -48,7 +48,7 @@ function Login() {
                password : password.trim()
            });
            data = res.data;
-           var error = data.error, message;
+           let error = data.error, message;
 
            if(error) {
                if(data.message){

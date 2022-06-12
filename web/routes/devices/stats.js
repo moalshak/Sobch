@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 
   
   try{
-    var snapshot = await get(ref(db, `devices/${dataId}`));
+    let snapshot = await get(ref(db, `devices/${dataId}`));
     
     if (!snapshot.exists()) {
           res.status(401).send({error : "Unauthorized", accessToken: req.user.stsTokenManager.accessToken});
@@ -46,12 +46,12 @@ router.get('/:id', async (req, res) => {
       }
       // The Device of associated ID exists.
       else if ((snapshot.exists() && snapshot.val().owners.includes(user.uid)) || isAdmin(user.uid)) {
-        var device = snapshot.val();
-        var ownersEmails = [];
+        let device = snapshot.val();
+        let ownersEmails = [];
         if (isAdmin(user.uid)) {
           ownersEmails.push(await get(ref(db, `users/${user.uid}/credentials/email`)));
         }
-        for (var owner in device.owners) {
+        for (let owner in device.owners) {
           if (isAdmin(device.owners[owner])) {
             if (isAdmin(user.uid)) {
               if (!ownersEmails.includes(device.owners[owner])) {

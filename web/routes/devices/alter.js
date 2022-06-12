@@ -7,7 +7,7 @@ const router = express.Router(),
     Log = getLog("alter");
 
 router.put('/:deviceId', async (req, res) => {
-    var device, deviceId, user, config;
+    let device, deviceId, user, config;
     try {
         device = req.body;
         config = device.config;
@@ -24,9 +24,9 @@ router.put('/:deviceId', async (req, res) => {
         const deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
         
         if(deviceSnapshot.exists()) {
-            var requester = await get(ref(db, `users/${user.uid}`));
+            let requester = await get(ref(db, `users/${user.uid}`));
             if (requester.exists()) {
-                var owns = requester.val().owns;
+                let owns = requester.val().owns;
                 if (owns.includes(deviceId)) {
                     const deviceVal = deviceSnapshot.val();
 
@@ -65,7 +65,7 @@ router.put('/:deviceId', async (req, res) => {
 })
 
 router.delete('/:deviceId', async (req, res) => {
-    var deviceId, user;
+    let deviceId, user;
     try {
         deviceId = req.params.deviceId.trim();
         user = req.user;
@@ -76,14 +76,14 @@ router.delete('/:deviceId', async (req, res) => {
     }
 
     try {
-        var deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
+        let deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
 
         if(deviceSnapshot.exists()) {
-            var requester = await get(ref(db, `users/${user.uid}`));
+            let requester = await get(ref(db, `users/${user.uid}`));
 
             if(requester.exists()) {
-                var owns = requester.val().owns || [];
-                var owners = deviceSnapshot.val().owners || [];
+                let owns = requester.val().owns || [];
+                let owners = deviceSnapshot.val().owners || [];
                 
                 if (!isAdmin(user.uid)) {
                     if (!owners.includes(user.uid)) {

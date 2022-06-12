@@ -113,7 +113,7 @@ function AddDevice() {
     }
 
 
-    var authenticate = async () => {
+    let authenticate = async () => {
         try {
             await axios.get(`${BACKEND_BASE_URL}/my-devices`, {
                 headers: {

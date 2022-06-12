@@ -7,6 +7,7 @@ scanner(
         options: {
             "sonar.projectName" : "SOBCH",
             "sonar.sources": "./",
+            "sonar.exclusions" : ["genDevices.js", "main.js"]
         }
     },
     () => process.exit()
