@@ -74,7 +74,6 @@ router.delete('/:deviceId', async (req, res) => {
         Log.error(error);
         return;
     }
-
     try {
         var deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
 
@@ -115,9 +114,12 @@ router.delete('/:deviceId', async (req, res) => {
                 Log.info("Unauthorized user does not own this device", {user : user.uid});
                 return;
             }
+        }else{
+            res.status(401).send({error: "Unauthorized"});
+            Log.info("Unauthorized user does not own this device", {user : user.uid});
+            return;
         }
     } catch(error) {
-        console.log(error);
         res.status(500).send({message: "Internal server error", error: error});
         Log.info("Internal server error", {user: user.uid});
         return;

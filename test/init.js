@@ -250,20 +250,22 @@ describe('Delete a device endpoint', () => {
         });
     });
 
-    // it ('user cannot delete a device that they do not own', (done) => {
-    //     axios.delete(`http://localhost:${PORT}/api/alter/0`, {
-    //         headers: {
-    //             Authorization: `${accessToken}`
-    //         }
-    //     }).then((res) => {
-    //         assert.equal(res.status, 401);
-    //         assert.equal(res.data.error, true);
-    //         assert.equal(res.data.message, "Unauthorized");
-    //         done();
-    //     }).catch((err) => {
-    //         done(err);
-    //     });
-    // });
+    it ('user cannot delete a device that they do not own', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/alter/0`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status === 401 && err.response.data.error === "Unauthorized") {
+                done();
+            } else {
+                done(err);
+            }
+        });
+    });
 });
 
 describe('My profile endpoint', () => {
