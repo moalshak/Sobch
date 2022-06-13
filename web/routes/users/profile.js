@@ -126,76 +126,145 @@ router.get('/', async (req, res) => {
 })
 
 
-router.put('/', (req, res) => {
+router.put('/', async (req, res) => {
     //to do : testinggggg
+    let credentials, address, user, userid, newPassword;
     
-    const reqToken = req.user.stsTokenManager.accessToken;
-    const userid = req.user.uid;
-    const reqid = req.params.id;
-    const credentials = req.body.credentials;
-    const address = req.body.address;
-    const user = req.user;
-    const newPassword = credentials.password.trim();
-    
-    get(ref(db, `users/${userid}`)).then((snapshot) => {
-        if (snapshot.exists()){
-            if (newPassword !== ""){                   
-                updatePassword(user, newPassword).then(() => {
-                    Log.info("User's password has been succesfully updated")
-                    //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                }).catch((error) => {
-                    console.error(error);
-                    res.status(400).send({error : error});
-                });
-            }
-            console.log(credentials.email);
-            console.log(req.user.email);
-            if (credentials.email === req.user.email){
-                Log.info("email is same, nothing happens")
-                //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-            }
-            else if(credentials.email === "pain@gmail.com" || credentials.email === "s.el.sayed.aly@student.rug.nl"){
-                updateEmail(user, credentials.email)
-                    .then(function() {
-                        Log.info("email updated")
-                        // res.status(200).send({message : "User information has been updated successfully"});
-                    }).catch((error) => {
-                        console.error(error);
-                        res.status(400).send({error : error});
-                    });
-            }
-            else if(credentials.email !== ""){
-                verifyBeforeUpdateEmail(user, credentials.email)
-                    .then(function() {
-                        Log.info("Verification email has been set, awaiting verification")
-                        //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                    }).catch((error) => {
-                        console.error(error);
-                        res.status(400).send({error : error});
-                    });
-            }
-            
-            if(address !== ""){
-                update(ref(db, `users/${userid}`),
-                {
-                    "address": address
+    try {
+        credentials = req.body.credentials;
+        address = req.body.address;
+        user = req.user;
+        userid = user.uid;
+        newPassword = credentials.password.trim();
+    } catch (error) {
+        Log.info("Body is not valid")
+        console.error(error);
+        res.status(400).send({error : true, message: "Bad request"});
+        return;
+    }
 
-                }).then(() => {
-                    res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                    Log.info("User information updated")
-                }).catch((error) => {
-                    console.error(error);
-                    res.status(400).send({error : error});
-                });
+    let message, code;
+
+    try {
+        const profile = await get(ref(db, `users/${userid}`));
+        
+        if (!profile) {
+            Log.info("Profile does not exist")
+            res.status(400).send({error : true, message: "Bad Request"});
+            return;
+        }
+
+        if (newPassword !== ""){                   
+            try {
+                await updatePassword(user, newPassword);
+                Log.info("User's password has been succesfully updated")
+            } catch(error) {
+                console.error(error);
+                res.status(400).send({error : error});
+            };
+        }
+        if (credentials.email === req.user.email){
+            Log.info("email is same, nothing happens")
+        }
+        else if(credentials.email === "pain@gmail.com" || credentials.email === "s.el.sayed.aly@student.rug.nl"){
+            try {
+                await updateEmail(user, credentials.email)
+                Log.info("email updated")
+            } catch(error) {
+                console.error(error);
+                res.status(400).send({error : error});
+            };
+        }
+        else if(credentials.email !== ""){
+            try {
+                await verifyBeforeUpdateEmail(user, credentials.email)
+                Log.info("Verification email has been set, awaiting verification")
+            } catch(error) {
+                console.error(error);
+                res.status(400).send({error : error});
+            };
+        }
+        if(address !== ""){
+            try{
+                await update(ref(db, `users/${userid}`),{"address": address});
+                Log.info("User information updated")
+            } catch (error){
+                console.error(error);
+                res.status(400).send({error : error});
             }
-            else{
-                res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-            } 
         }
-        else {
-            res.status(400).send({error : "Bad Request"});
-        }
-    })
+        code = 200;
+        message = "Success - Information updated";
+        res.status(code).send({error : false, message});
+        Log.info("Success - Information updated");
+    } catch (error) {
+        code = 400;
+        message = "FAILED";
+        console.error(error);
+        res.status(code).send({error : true, message});
+        Log.error(error);
+    }
+    
+    // get(ref(db, `users/${userid}`)).then((snapshot) => {
+    //     if (snapshot.exists()){
+    //         if (newPassword !== ""){                   
+    //             await updatePassword(user, newPassword).then(() => {
+    //                 Log.info("User's password has been succesfully updated")
+    //                 //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+    //             }).catch((error) => {
+    //                 console.error(error);
+    //                 res.status(400).send({error : error});
+    //             });
+    //         }
+    //         console.log(newPassword);
+    //         console.log(credentials.email);
+    //         console.log(req.user.email);
+    //         if (credentials.email === req.user.email){
+    //             Log.info("email is same, nothing happens")
+    //             //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+    //         }
+    //         else if(credentials.email === "pain@gmail.com" || credentials.email === "s.el.sayed.aly@student.rug.nl"){
+    //             updateEmail(user, credentials.email)
+    //                 .then(function() {
+    //                     Log.info("email updated")
+    //                     // res.status(200).send({message : "User information has been updated successfully"});
+    //                 }).catch((error) => {
+    //                     console.error(error);
+    //                     res.status(400).send({error : error});
+    //                 });
+    //         }
+    //         else if(credentials.email !== ""){
+    //             verifyBeforeUpdateEmail(user, credentials.email)
+    //                 .then(function() {
+    //                     Log.info("Verification email has been set, awaiting verification")
+    //                     //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+    //                 }).catch((error) => {
+    //                     console.error(error);
+    //                     res.status(400).send({error : error});
+    //                 });
+    //         }
+            
+    //         if(address !== ""){
+    //             update(ref(db, `users/${userid}`),
+    //             {
+    //                 "address": address
+
+    //             }).then(() => {
+    //                 res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+    //                 Log.info("User information updated")
+    //             }).catch((error) => {
+    //                 console.error(error);
+    //                 res.status(400).send({error : error});
+    //             });
+    //         }
+    //         else{
+    //             res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+    //         } 
+    //     }
+    //     else {
+    //         res.status(400).send({error : "Bad Request"});
+    //     }
+    // })
 })
 // to do : take care pf errors and check for verification and use maybe verifybeforeupdate 
 export default {

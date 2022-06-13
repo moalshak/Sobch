@@ -99,7 +99,6 @@ describe('non-admin login', () => {
             assert.equal(res.data.error, false);
             assert.equal(res.data.message, "Logged in!");
             accessToken2 = res.data.accessToken; // set the accesstoken for later use
-            console.log(accessToken2);
             done();
         }).catch((err) => {
             done(err);
@@ -350,7 +349,6 @@ describe('My profile endpoint', () => {
             set(ref(db, `users/${id}`), null);
             done();
         }).catch((err) => {
-            console
             done(err);
         });
     });
@@ -496,82 +494,6 @@ describe('Edit-Profile endpoint', () => {
         })
     });
 
-    it('User can edit his/her password', (done) => {
-        axios.put(`http://localhost:${PORT}/api/profile/`, {
-            credentials : {
-                email : "",
-                password : "selim123"
-            },
-            address : ''
-        }, {headers: {
-                Authorization: `${accessToken2}`
-            }
-        }
-        ).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }).catch((err) => {
-            done(err);
-        })
-    });
-
-    // it('User can edit his/her password, back to normal', (done) => {
-    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
-    //         credentials : {
-    //             email : "",
-    //             password : "selim123"
-    //         },
-    //         address : ''
-    //     }, {headers: {
-    //             Authorization: `${accessToken2}`
-    //         }
-    //     }
-    //     ).then((res) => {
-    //         assert.equal(res.status, 200);
-    //         done();
-    //     }).catch((err) => {
-    //         done(err);
-    //     })
-    // });
-
-    // it('User can edit his/her email', (done) => {
-    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
-    //         credentials : {
-    //             email : "pain@gmail.com",
-    //             password : ""
-    //         },
-    //         address : ''
-    //     }, {headers: {
-    //             Authorization: `${accessToken2}`
-    //         }
-    //     }
-    //     ).then((res) => {
-    //         assert.equal(res.status, 200);
-    //         done();
-    //     }).catch((err) => {
-    //         done(err);
-    //     })
-    // });
-
-    // it('User can edit his/her email, continuation..', (done) => {
-    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
-    //         credentials : {
-    //             email : "s.el.sayed.aly@student.rug.nl",
-    //             password : ""
-    //         },
-    //         address : ''
-    //     }, {headers: {
-    //             Authorization: `${accessToken2}`
-    //         }
-    //     }
-    //     ).then((res) => {
-    //         assert.equal(res.status, 200);
-    //         done();
-    //     }).catch((err) => {
-    //         done(err);
-    //     })
-    // });
-
     it('User can edit his/her information blank and unchanged', (done) => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
             credentials : {
@@ -615,6 +537,127 @@ describe('Edit-Profile endpoint', () => {
             }
         })
     });
+
+    it('User can edit his/her email', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "pain@gmail.com",
+                password : ""
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('try and login with new email', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "pain@gmail.com",
+            password: "selim123"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('User can edit his/her email, continuation..', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "s.el.sayed.aly@student.rug.nl",
+                password : ""
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('try and login with old email again', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "s.el.sayed.aly@student.rug.nl",
+            password: "selim123"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('User can edit his/her password', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : "idkrandom"
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+    
+    it('try and login with new password', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "s.el.sayed.aly@student.rug.nl",
+            password: "idkrandom"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('User can edit his/her password, back to normal', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : "selim123"
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });        
+    });   
 });
 
 
