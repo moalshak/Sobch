@@ -174,18 +174,23 @@ router.put('/', (req, res) => {
                         res.status(400).send({error : error});
                     });
             }
-            update(ref(db, `users/${userid}`),
-            {
-                "address": address
+            
+            if(address !== ""){
+                update(ref(db, `users/${userid}`),
+                {
+                    "address": address
 
-            }).then(() => {
+                }).then(() => {
+                    res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
+                    Log.info("User information updated")
+                }).catch((error) => {
+                    console.error(error);
+                    res.status(400).send({error : error});
+                });
+            }
+            else{
                 res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-                Log.info("User information updated")
-            }).catch((error) => {
-                console.error(error);
-                res.status(400).send({error : error});
-            });
-
+            } 
         }
         else {
             res.status(400).send({error : "Bad Request"});

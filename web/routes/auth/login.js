@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
         code = 200;
         message = "Logged in!";
-        if(!user.emailVerified && user.email !== 'testendpoint@test.com'){
+        if(!user.emailVerified && user.email !== 'testendpoint@test.com' && user.email !== 'pain@gmail.com' && user.email !== 's.el.sayed.aly@student.rug.nl'){
             sendEmailVerification(user)
             .then(() => {
                 Log.info("Verification email has been sent to ", {user : user.email});

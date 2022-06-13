@@ -99,6 +99,7 @@ describe('non-admin login', () => {
             assert.equal(res.data.error, false);
             assert.equal(res.data.message, "Logged in!");
             accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            console.log(accessToken2);
             done();
         }).catch((err) => {
             done(err);
