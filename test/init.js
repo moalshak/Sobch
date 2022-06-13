@@ -168,7 +168,7 @@ describe('My devices endpoint', () => {
 });
 
 describe('Edit a device endpoint', () => {
-    it ('user can alter his chosen device', (done) => {
+    /*it ('user can alter his chosen device', (done) => {
         axios.put(`http://localhost:${PORT}/api/my-devices`, {
             device: {
                 id: deviceID,
@@ -186,6 +186,7 @@ describe('Edit a device endpoint', () => {
             }
         }).then((res) => {
             assert.equal(res.status, 200);
+            console.log("HERERERERRE");
 
             get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
                 let device = snapshot.val();
@@ -196,14 +197,39 @@ describe('Edit a device endpoint', () => {
                 done();
             });
         }).catch((err) => {
+            //console.log(err);
             done(err);
         });
-    });
+    });*/
 
-    it ('user cannot alter a device that they do not own', (done) => {
+    /*it ('user cannot alter a device that they do not own', (done) => {
         axios.post(`http://localhost:${PORT}/api/my-devices`, {
             device: {
-                id : 0
+                id : 32,
+                otp: "PYFL-TUVB-MGEE-SYIP"
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            console.log(err);
+            if (err.response.status === 401 && err.response.data.error === true && err.response.data.message === "Unauthorised") {
+                done();
+            } else {
+                done(err);
+            }
+        });
+    });*/
+
+    it ('user cannot alter a device that they do not own', (done) => {
+        axios.put(`http://localhost:${PORT}/api/alter/0`, {
+            device: {
+                id : 0,
+                otp : 3
             }
         }, {
             headers: {
@@ -211,15 +237,39 @@ describe('Edit a device endpoint', () => {
             }
         }).then((res) => {
             assert.equal(res.status, 401);
-            assert.equal(res.data.error, true);
-            assert.equal(res.data.message, "Unauthorized");
-            //res.status(401).send({error: true, message : "Unauthorized"});
             done();
         }).catch((err) => {
-            done(err);
+            //console.log(err);
+            if (err.response.status === 401 && err.response.data.message === "Unauthorized") {
+                done();
+            } else {
+                done(err);
+            }
         });
     });
 
+    it ('user cannot alter a device with incorrect / unmatching credentials', (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+            device: {
+                id : 0,
+                otp : 3
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 403);
+            done();
+        }).catch((err) => {
+            //console.log(err);
+            if (err.response.status === 403 && err.response.data.error === true && err.response.data.message === "Invalid match (device id / otp)") {
+                done();
+            } else {
+                done(err);
+            }
+        });
+    });
 
     it ('Wrong otp/id Add Device' , (done) => {
         axios.post(`http://localhost:${PORT}/api/my-devices`, {
@@ -244,10 +294,6 @@ describe('Edit a device endpoint', () => {
             } else {
                 done(err);
             }
-            // assert.equal(err.status, 403);
-            // assert.equal(err.data.error, false);
-            // assert.equal(err.data.message, "Invalid match (device id / otp)");
-            // done();
         });
         
         
@@ -266,10 +312,6 @@ describe('Edit a device endpoint', () => {
             } else {
                 done(err);
             }
-            // assert.equal(err.status, 400);
-            // assert.equal(err.data.error, true);
-            // assert.equal(err.data.message, "Bad request");
-            // done();
         });
         
         

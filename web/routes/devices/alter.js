@@ -56,6 +56,10 @@ router.put('/:deviceId', async (req, res) => {
                 Log.info("Unauthorized user does not exist", {user : user.uid});
                 return;
             }
+        } else {
+            res.status(401).send({error: true, message : "Unauthorized"});
+            Log.info("Unauthorized user does not exist", {user : user.uid});
+            return;
         }
     } catch(error) {
         res.status(500).send({message: "Internal server error", error: true});
