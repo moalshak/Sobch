@@ -452,6 +452,7 @@ describe('logout endpoint', () => {
             done(err);
         });
     });
+
     it('email already in use', (done) => {
         axios.post(`http://localhost:${PORT}/api/register`, {
             credentials:{
@@ -538,6 +539,7 @@ describe('logout endpoint', () => {
             done(err);
         });
     });
+    
 });
 
 describe('Edit-Profile endpoint', () => {
