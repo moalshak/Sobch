@@ -8,25 +8,11 @@ import {PORT, PASSWORD, ACC_PASSWORD, ACC_PASSWORD2, TEST_PASSWORD, getLog, getU
 
 
 
-var accessToken;
-var registerAcc;
-var accessToken2;
-const USERID = 'VfULdqBkeYXXtjP0xK6lVvYQTIW2';
-const SELIM_ID = 'cKJS6IQrayM9EUt4Zb7IFgHVjBC3';
-
-const deviceID = 31;
-const otp = "PYFL-TUVB-MGEE-SYIP";
-const device = {
-    "device": {
-      "id": deviceID,
-      "config": {
-        "min": -22,
-        "max": 80,
-        "room": "bedroom",
-        "active": true
-      },
-      "otp": otp
-    }};
+let accessToken, registerAcc, accessToken2;
+const USERID = 'VfULdqBkeYXXtjP0xK6lVvYQTIW2', 
+    SELIM_ID = 'cKJS6IQrayM9EUt4Zb7IFgHVjBC3',
+    deviceID = 31,
+    otp = "PYFL-TUVB-MGEE-SYIP";
 
 
 
@@ -189,15 +175,10 @@ describe('Edit a device endpoint', () => {
             get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
                 console.log("1");
                 let device = snapshot.val();
-                console.log("2");
                 assert.equal(device.config.min, 15);
-                console.log("3");
                 assert.equal(device.config.max, 25);
-                console.log("4");
                 assert.equal(device.config.room, "somewhere man");
-                console.log("5");
                 assert.equal(device.config.active, false);
-                console.log("6");
                 done();
             });
         }).catch((err) => {
