@@ -285,7 +285,7 @@ describe('Edit a device endpoint', () => {
             Authorization: `${accessToken2}`
         }
     }).then((res) => {
-            done();
+            assert.equal(res.status, 400);
         }).catch((err) => {
             if (err.response.status === 400 ||  err.response.data.error === "Bad request" || err.response.data.message === "FAILED" || err.response.data.message === "Bad request" ) {
                 done();
@@ -293,12 +293,44 @@ describe('Edit a device endpoint', () => {
                 done(err);
             }
         });
-        
-        
+    });
+})
 
+describe('get device stats endpoint', () => {
+    it ('user can get device stats', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/${deviceID}`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            console.log(res.data.device.id, deviceID)
+            done();
+        }).catch((err) => {
+            done(err);
+        });
     });
 
-})
+    it ('user unauthorized to get device stats', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/${deviceID}`, {
+            headers: {
+                Authorization: "112321123"
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+        }).catch((err) => {
+            if (err.response.status === 401 || err.response.data.error === "Unauthorized") {
+            done();
+            }else{
+                done(err);
+            }
+        });
+    });
+
+});
+
+
+
 
 describe('Delete a device endpoint', () => {
     it ('user can delete a device that they own', (done) => {
