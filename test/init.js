@@ -394,10 +394,34 @@ describe('logout endpoint', () => {
     });
 });
 
+
+
+/**
+ * Test the register endpoint
+ */
+ describe('register endpoint', () => {
+    it('register endpoint works', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+           credentials:{
+                email: "testendpoint@test.com",
+                password: TEST_PASSWORD
+           },
+            address: "testendpoint"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");            registerAcc = res.data.accessToken;
+            done();
+        }
+        ).catch((err) => {
+            done(err);
+        });
+    });
+});
+
 /**
  * test delete request in register endpoint
  */ 
-describe('delete account', () => {
+ describe('delete account', () => {
     it('valid credentials responds with status 200', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "testendpoint@test.com",
@@ -422,29 +446,6 @@ describe('delete account', () => {
             assert.equal(res.status, 200);
             done();
         }).catch((err) => {
-            done(err);
-        });
-    });
-});
-
-/**
- * Test the register endpoint
- */
- describe('register endpoint', () => {
-    it('register endpoint works', (done) => {
-        axios.post(`http://localhost:${PORT}/api/register`, {
-           credentials:{
-                email: "testendpoint@test.com",
-                password: TEST_PASSWORD
-           },
-            address: "testendpoint"
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");
-            registerAcc = res.data.accessToken;
-            done();
-        }
-        ).catch((err) => {
             done(err);
         });
     });
