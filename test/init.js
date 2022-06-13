@@ -421,7 +421,7 @@ describe('logout endpoint', () => {
 /**
  * test delete request in register endpoint
  */ 
- describe('delete account', () => {
+ describe('login endpoint for account delete', () => {
     it('valid credentials responds with status 200', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "testendpoint@test.com",
