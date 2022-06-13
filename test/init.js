@@ -4,7 +4,7 @@ import { describe } from 'mocha';
 import axios from 'axios';
 import { ref, set, get} from "firebase/database";
 import {db} from "../lib/firebase.js";
-import {PORT, PASSWORD, ACC_PASSWORD, ACC_PASSWORD2, TEST_PASSWORD, getLog, getUser} from '../lib/config.js';
+import {PORT, PASSWORD, ACC_PASSWORD, ACC_PASSWORD2, WEAK_PASSWORD, TEST_PASSWORD, getLog, getUser} from '../lib/config.js';
 
 
 
@@ -452,6 +452,60 @@ describe('logout endpoint', () => {
             done(err);
         });
     });
+
+    it('email already in use', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "f.j.mccollam@student.rug.nl",
+                 password: TEST_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Email already in use");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
+
+    it('weak password', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "f.j.mccollam@student.rug.nl",
+                 password: WEAK_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Weak password: Should be at least 6 characters long");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
+
+    it('invalid email', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "notemail",
+                 password: WEAK_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Invalid email");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
 });
 
 /**
@@ -485,6 +539,7 @@ describe('logout endpoint', () => {
             done(err);
         });
     });
+    
 });
 
 describe('Edit-Profile endpoint', () => {
