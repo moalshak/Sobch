@@ -452,6 +452,23 @@ describe('logout endpoint', () => {
             done(err);
         });
     });
+    it('email already in use', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "f.j.mccollam@student.rug.nl",
+                 password: TEST_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Email already in use");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
 });
 
 /**
