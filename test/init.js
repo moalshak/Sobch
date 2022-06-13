@@ -56,9 +56,7 @@ describe('login endpoint', () => {
         })
     });
 
-/**
- * Test the logout endpoint
- */
+
 
     it('invalid email responds with status 400', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
@@ -220,7 +218,64 @@ describe('Edit a device endpoint', () => {
             done(err);
         });
     });
-});
+
+
+    it ('Wrong otp/id Add Device' , (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+                "device": {
+                  "id": "aaaaa",
+                  "config": {
+                    "min": -22,
+                    "max": 80,
+                    "room": "bedroom",
+                    "active": true
+                  },
+                  "otp": "aaaa"
+                },
+        }, {headers: {
+            Authorization: `${accessToken2}`
+        }
+    }).then((res) => {
+            done();
+        }).catch((err) => {
+            if (err.response.status === 403 && err.response.data.error === true && err.response.data.message === "Invalid match (device id / otp)") {
+                done();
+            } else {
+                done(err);
+            }
+            // assert.equal(err.status, 403);
+            // assert.equal(err.data.error, false);
+            // assert.equal(err.data.message, "Invalid match (device id / otp)");
+            // done();
+        });
+        
+        
+
+    });
+
+    it ('Empty Request Add device' , (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {}, {headers: {
+            Authorization: `${accessToken2}`
+        }
+    }).then((res) => {
+            done();
+        }).catch((err) => {
+            if (err.response.status === 400 ||  err.response.data.error === "Bad request" || err.response.data.message === "FAILED" || err.response.data.message === "Bad request" ) {
+                done();
+            } else {
+                done(err);
+            }
+            // assert.equal(err.status, 400);
+            // assert.equal(err.data.error, true);
+            // assert.equal(err.data.message, "Bad request");
+            // done();
+        });
+        
+        
+
+    });
+
+})
 
 describe('Delete a device endpoint', () => {
     it ('user can delete a device that they own', (done) => {
@@ -278,7 +333,6 @@ describe('My profile endpoint', () => {
             assert.equal(res.status, 401);
             done();
         }).catch((err) => {
-            // console.log(err);
             assert.equal(err.response.status, 401);
             assert.equal(err.response.data.error, "Unauthorized access");
             done();
@@ -292,7 +346,6 @@ describe('My profile endpoint', () => {
                 Authorization: `${accessToken}`
             }
         }).then((res) => {
-            // console.log(res.data);
             assert.equal(res.status, 200);
             assert.equal(res.data.profile, null);
             set(ref(db, `users/${id}`), null);
@@ -302,7 +355,31 @@ describe('My profile endpoint', () => {
             done(err);
         });
     });
+
+    it('User cannot get his/her information if not logged in', (done) => {
+        axios.get(`http://localhost:${PORT}/api/profile/`, {
+            headers: {
+                Authorization: `random`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status == 401){
+                assert.equal(err.response.data.error, "You are not authorized to make this request");
+                done();
+            }
+            else {
+                done(err);
+            }
+        })
+    });
 });
+
+/**
+ * Test the logout endpoint
+ */
 
 describe('logout endpoint', () => {
     it('logout endpoint works', (done) => {
@@ -319,10 +396,34 @@ describe('logout endpoint', () => {
     });
 });
 
+
+
+/**
+ * Test the register endpoint
+ */
+ describe('register endpoint', () => {
+    it('register endpoint works', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+           credentials:{
+                email: "testendpoint@test.com",
+                password: TEST_PASSWORD
+           },
+            address: "testendpoint"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");            registerAcc = res.data.accessToken;
+            done();
+        }
+        ).catch((err) => {
+            done(err);
+        });
+    });
+});
+
 /**
  * test delete request in register endpoint
  */ 
-describe('delete account', () => {
+ describe('delete account', () => {
     it('valid credentials responds with status 200', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "testendpoint@test.com",
@@ -347,29 +448,6 @@ describe('delete account', () => {
             assert.equal(res.status, 200);
             done();
         }).catch((err) => {
-            done(err);
-        });
-    });
-});
-
-/**
- * Test the register endpoint
- */
- describe('register endpoint', () => {
-    it('register endpoint works', (done) => {
-        axios.post(`http://localhost:${PORT}/api/register`, {
-           credentials:{
-                email: "testendpoint@test.com",
-                password: TEST_PASSWORD
-           },
-            address: "testendpoint"
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");
-            registerAcc = res.data.accessToken;
-            done();
-        }
-        ).catch((err) => {
             done(err);
         });
     });
@@ -413,8 +491,6 @@ describe('Edit-Profile endpoint', () => {
         }
         ).then((res) => {
             assert.equal(res.status, 200);
-            // assert.equal(res.data.error, false);
-            // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
             done(err);
@@ -434,13 +510,68 @@ describe('Edit-Profile endpoint', () => {
         }
         ).then((res) => {
             assert.equal(res.status, 200);
-            // assert.equal(res.data.error, false);
-            // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
             done(err);
         })
     });
+
+    // it('User can edit his/her password, back to normal', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "",
+    //             password : "selim123"
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     })
+    // });
+
+    // it('User can edit his/her email', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "pain@gmail.com",
+    //             password : ""
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     })
+    // });
+
+    // it('User can edit his/her email, continuation..', (done) => {
+    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
+    //         credentials : {
+    //             email : "s.el.sayed.aly@student.rug.nl",
+    //             password : ""
+    //         },
+    //         address : ''
+    //     }, {headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }
+    //     ).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     })
+    // });
 
     it('User can edit his/her information blank and unchanged', (done) => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
@@ -455,35 +586,36 @@ describe('Edit-Profile endpoint', () => {
         }
         ).then((res) => {
             assert.equal(res.status, 200);
-            // assert.equal(res.data.error, false);
-            // assert.equal(res.data.message, "Logged in!");
             done();
         }).catch((err) => {
             done(err);
         })
     });
 
-    // it('User cannot edit his/her information if not logged in', (done) => {
-    //     axios.put(`http://localhost:${PORT}/api/profile/`, {
-    //         credentials : {
-    //             email : "",
-    //             password : ""
-    //         },
-    //         address : ''
-    //     }, {headers: {
-    //             Authorization: `random`
-    //         }
-    //     }
-    //     ).then((res) => {
-    //         assert.equal(res.status, 200);
-    //         // assert.equal(res.data.error, false);
-    //         // assert.equal(res.data.message, "Logged in!");
-    //         done();
-    //     }).catch((err) => {
-    //         console.log(err);
-    //         done(err);
-    //     })
-    // });
+    it('User cannot edit his/her information if not logged in', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "",
+                password : ""
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `random`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status == 401){
+                assert.equal(err.response.data.error, "You are not authorized to make this request");
+                done();
+            }
+            else {
+                done(err);
+            }
+        })
+    });
 });
 
 
