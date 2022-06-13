@@ -9,7 +9,7 @@ const router = express.Router(),
 router.put('/:deviceId', async (req, res) => {
     var device, deviceId, user, config;
     try {
-        device = req.body;
+        device = req.body.device;
         config = device.config;
         deviceId = req.params.deviceId.trim();
         user = req.user;
@@ -33,7 +33,14 @@ router.put('/:deviceId', async (req, res) => {
                     const min = config.min || deviceVal.config.min || 0;
                     const max = config.max || deviceVal.config.max || 30;
                     const room = config.room || deviceVal.config.room || "";
-                    const active =  config.active || deviceVal.config.active || false;
+                    var active;
+                    if (config.active !== undefined) {
+                        active = config.active;
+                    } else if (deviceVal.config.active !== undefined) {
+                        active =  deviceVal.config.active;
+                    } else {
+                        active =  false;
+                    }
                     
                     deviceVal.config = {
                         "min": min,
@@ -56,6 +63,10 @@ router.put('/:deviceId', async (req, res) => {
                 Log.info("Unauthorized user does not exist", {user : user.uid});
                 return;
             }
+        } else {
+            res.status(401).send({error: true, message : "Unauthorized"});
+            Log.info("Unauthorized user does not exist", {user : user.uid});
+            return;
         }
     } catch(error) {
         res.status(500).send({message: "Internal server error", error: true});
@@ -74,7 +85,6 @@ router.delete('/:deviceId', async (req, res) => {
         Log.error(error);
         return;
     }
-
     try {
         var deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
 
@@ -115,9 +125,12 @@ router.delete('/:deviceId', async (req, res) => {
                 Log.info("Unauthorized user does not own this device", {user : user.uid});
                 return;
             }
+        }else{
+            res.status(401).send({error: "Unauthorized"});
+            Log.info("Unauthorized user does not own this device", {user : user.uid});
+            return;
         }
     } catch(error) {
-        console.log(error);
         res.status(500).send({message: "Internal server error", error: error});
         Log.info("Internal server error", {user: user.uid});
         return;

@@ -168,14 +168,14 @@ describe('My devices endpoint', () => {
 
 describe('Edit a device endpoint', () => {
     it ('user can alter his chosen device', (done) => {
-        axios.put(`http://localhost:${PORT}/api/my-devices`, {
+        axios.put(`http://localhost:${PORT}/api/alter/${deviceID}`, {
             device: {
                 id: deviceID,
                 config: {
-                    min: 0,
-                    max:40,
-                    room: "nowhere man",
-                    active: true
+                    "min": 15,
+                    "max":25,
+                    "room": "somewhere man",
+                    "active": false
                 },
                 otp: otp
             }
@@ -187,22 +187,30 @@ describe('Edit a device endpoint', () => {
             assert.equal(res.status, 200);
 
             get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
+                console.log("1");
                 let device = snapshot.val();
-                assert.equal(device.config.min, 0);
-                assert.equal(device.config.max, 40);
-                assert.equal(device.config.room, "nowhere man");
-                assert.equal(device.config.active, true);
+                console.log("2");
+                assert.equal(device.config.min, 15);
+                console.log("3");
+                assert.equal(device.config.max, 25);
+                console.log("4");
+                assert.equal(device.config.room, "somewhere man");
+                console.log("5");
+                assert.equal(device.config.active, false);
+                console.log("6");
                 done();
             });
         }).catch((err) => {
+            console.log(err);
             done(err);
         });
     });
 
     it ('user cannot alter a device that they do not own', (done) => {
-        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+        axios.put(`http://localhost:${PORT}/api/alter/0`, {
             device: {
-                id : 0
+                id : 0,
+                otp : 3
             }
         }, {
             headers: {
@@ -210,15 +218,37 @@ describe('Edit a device endpoint', () => {
             }
         }).then((res) => {
             assert.equal(res.status, 401);
-            assert.equal(res.data.error, true);
-            assert.equal(res.data.message, "Unauthorized");
-            //res.status(401).send({error: true, message : "Unauthorized"});
             done();
         }).catch((err) => {
-            done(err);
+            if (err.response.status === 401 && err.response.data.message === "Unauthorized") {
+                done();
+            } else {
+                done(err);
+            }
         });
     });
 
+    it ('user cannot alter a device with incorrect / unmatching credentials', (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+            device: {
+                id : 0,
+                otp : 3
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 403);
+            done();
+        }).catch((err) => {
+            if (err.response.status === 403 && err.response.data.error === true && err.response.data.message === "Invalid match (device id / otp)") {
+                done();
+            } else {
+                done(err);
+            }
+        });
+    });
 
     it ('Wrong otp/id Add Device' , (done) => {
         axios.post(`http://localhost:${PORT}/api/my-devices`, {
@@ -243,10 +273,6 @@ describe('Edit a device endpoint', () => {
             } else {
                 done(err);
             }
-            // assert.equal(err.status, 403);
-            // assert.equal(err.data.error, false);
-            // assert.equal(err.data.message, "Invalid match (device id / otp)");
-            // done();
         });
         
         
@@ -258,24 +284,52 @@ describe('Edit a device endpoint', () => {
             Authorization: `${accessToken2}`
         }
     }).then((res) => {
-            done();
+            assert.equal(res.status, 400);
         }).catch((err) => {
             if (err.response.status === 400 ||  err.response.data.error === "Bad request" || err.response.data.message === "FAILED" || err.response.data.message === "Bad request" ) {
                 done();
             } else {
                 done(err);
             }
-            // assert.equal(err.status, 400);
-            // assert.equal(err.data.error, true);
-            // assert.equal(err.data.message, "Bad request");
-            // done();
         });
-        
-        
+    });
+})
 
+describe('get device stats endpoint', () => {
+    it ('user can get device stats', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/${deviceID}`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            console.log(res.data.device.id, deviceID)
+            done();
+        }).catch((err) => {
+            done(err);
+        });
     });
 
-})
+    it ('user unauthorized to get device stats', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/${deviceID}`, {
+            headers: {
+                Authorization: "112321123"
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+        }).catch((err) => {
+            if (err.response.status === 401 || err.response.data.error === "Unauthorized") {
+            done();
+            }else{
+                done(err);
+            }
+        });
+    });
+
+});
+
+
+
 
 describe('Delete a device endpoint', () => {
     it ('user can delete a device that they own', (done) => {
@@ -305,20 +359,22 @@ describe('Delete a device endpoint', () => {
         });
     });
 
-    // it ('user cannot delete a device that they do not own', (done) => {
-    //     axios.delete(`http://localhost:${PORT}/api/alter/0`, {
-    //         headers: {
-    //             Authorization: `${accessToken}`
-    //         }
-    //     }).then((res) => {
-    //         assert.equal(res.status, 401);
-    //         assert.equal(res.data.error, true);
-    //         assert.equal(res.data.message, "Unauthorized");
-    //         done();
-    //     }).catch((err) => {
-    //         done(err);
-    //     });
-    // });
+    it ('user cannot delete a device that they do not own', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/alter/0`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status === 401 && err.response.data.error === "Unauthorized") {
+                done();
+            } else {
+                done(err);
+            }
+        });
+    });
 });
 
 describe('My profile endpoint', () => {
@@ -449,30 +505,6 @@ describe('logout endpoint', () => {
         });
     });
 });
-
-
-/**test for alter endpoint
-describe('alter endpoint', () => {
-    it('alter endpoint works', (done) => {
-        axios.put(`http://localhost:${PORT}/api/alter`, {},{
-            "0" : min,
-            "20" : max,
-            "test" : room,
-            "active" : active,
-
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }
-        ).catch((err) => {
-            done(err);
-        });
-    } );
-}
-);
-**/
-
-
 
 describe('Edit-Profile endpoint', () => {
     it('User can edit his/her address', (done) => {
