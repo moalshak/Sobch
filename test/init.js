@@ -41,9 +41,7 @@ describe('login endpoint', () => {
         })
     });
 
-/**
- * Test the logout endpoint
- */
+
 
     it('invalid email responds with status 400', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
@@ -160,6 +158,10 @@ describe('My profile endpoint', () => {
         });
     });
 });
+
+/**
+ * Test the logout endpoint
+ */
 
 describe('logout endpoint', () => {
     it('logout endpoint works', (done) => {
