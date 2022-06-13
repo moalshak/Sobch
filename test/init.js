@@ -99,6 +99,7 @@ describe('non-admin login', () => {
             assert.equal(res.data.error, false);
             assert.equal(res.data.message, "Logged in!");
             accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            console.log(accessToken2);
             done();
         }).catch((err) => {
             done(err);
@@ -423,7 +424,7 @@ describe('logout endpoint', () => {
 /**
  * test delete request in register endpoint
  */ 
- describe('delete account', () => {
+ describe('login endpoint for account delete', () => {
     it('valid credentials responds with status 200', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "testendpoint@test.com",
