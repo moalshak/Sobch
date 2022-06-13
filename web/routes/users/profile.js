@@ -127,7 +127,6 @@ router.get('/', async (req, res) => {
 
 
 router.put('/', async (req, res) => {
-    //to do : testinggggg
     let credentials, address, user, userid, newPassword;
     
     try {
@@ -204,69 +203,8 @@ router.put('/', async (req, res) => {
         res.status(code).send({error : true, message});
         Log.error(error);
     }
-    
-    // get(ref(db, `users/${userid}`)).then((snapshot) => {
-    //     if (snapshot.exists()){
-    //         if (newPassword !== ""){                   
-    //             await updatePassword(user, newPassword).then(() => {
-    //                 Log.info("User's password has been succesfully updated")
-    //                 //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-    //             }).catch((error) => {
-    //                 console.error(error);
-    //                 res.status(400).send({error : error});
-    //             });
-    //         }
-    //         console.log(newPassword);
-    //         console.log(credentials.email);
-    //         console.log(req.user.email);
-    //         if (credentials.email === req.user.email){
-    //             Log.info("email is same, nothing happens")
-    //             //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-    //         }
-    //         else if(credentials.email === "pain@gmail.com" || credentials.email === "s.el.sayed.aly@student.rug.nl"){
-    //             updateEmail(user, credentials.email)
-    //                 .then(function() {
-    //                     Log.info("email updated")
-    //                     // res.status(200).send({message : "User information has been updated successfully"});
-    //                 }).catch((error) => {
-    //                     console.error(error);
-    //                     res.status(400).send({error : error});
-    //                 });
-    //         }
-    //         else if(credentials.email !== ""){
-    //             verifyBeforeUpdateEmail(user, credentials.email)
-    //                 .then(function() {
-    //                     Log.info("Verification email has been set, awaiting verification")
-    //                     //res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-    //                 }).catch((error) => {
-    //                     console.error(error);
-    //                     res.status(400).send({error : error});
-    //                 });
-    //         }
-            
-    //         if(address !== ""){
-    //             update(ref(db, `users/${userid}`),
-    //             {
-    //                 "address": address
-
-    //             }).then(() => {
-    //                 res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-    //                 Log.info("User information updated")
-    //             }).catch((error) => {
-    //                 console.error(error);
-    //                 res.status(400).send({error : error});
-    //             });
-    //         }
-    //         else{
-    //             res.status(200).send({message : "User information has been updated successfully",accessToken: req.user.stsTokenManager.accessToken});
-    //         } 
-    //     }
-    //     else {
-    //         res.status(400).send({error : "Bad Request"});
-    //     }
-    // })
 })
-// to do : take care pf errors and check for verification and use maybe verifybeforeupdate 
+
 export default {
     router: router
 }
