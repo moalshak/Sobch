@@ -221,7 +221,6 @@ describe('Edit a device endpoint', () => {
             assert.equal(res.status, 401);
             done();
         }).catch((err) => {
-            //console.log(err);
             if (err.response.status === 401 && err.response.data.message === "Unauthorized") {
                 done();
             } else {
@@ -244,7 +243,6 @@ describe('Edit a device endpoint', () => {
             assert.equal(res.status, 403);
             done();
         }).catch((err) => {
-            //console.log(err);
             if (err.response.status === 403 && err.response.data.error === true && err.response.data.message === "Invalid match (device id / otp)") {
                 done();
             } else {
@@ -477,30 +475,6 @@ describe('logout endpoint', () => {
         });
     });
 });
-
-
-/**test for alter endpoint
-describe('alter endpoint', () => {
-    it('alter endpoint works', (done) => {
-        axios.put(`http://localhost:${PORT}/api/alter`, {},{
-            "0" : min,
-            "20" : max,
-            "test" : room,
-            "active" : active,
-
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }
-        ).catch((err) => {
-            done(err);
-        });
-    } );
-}
-);
-**/
-
-
 
 describe('Edit-Profile endpoint', () => {
     it('User can edit his/her address', (done) => {
