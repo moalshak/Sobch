@@ -9,7 +9,7 @@ const router = express.Router(),
 router.put('/:deviceId', async (req, res) => {
     var device, deviceId, user, config;
     try {
-        device = req.body;
+        device = req.body.device;
         config = device.config;
         deviceId = req.params.deviceId.trim();
         user = req.user;
@@ -33,7 +33,14 @@ router.put('/:deviceId', async (req, res) => {
                     const min = config.min || deviceVal.config.min || 0;
                     const max = config.max || deviceVal.config.max || 30;
                     const room = config.room || deviceVal.config.room || "";
-                    const active =  config.active || deviceVal.config.active || false;
+                    var active;
+                    if (config.active !== undefined) {
+                        active = config.active;
+                    } else if (deviceVal.config.active !== undefined) {
+                        active =  deviceVal.config.active;
+                    } else {
+                        active =  false;
+                    }
                     
                     deviceVal.config = {
                         "min": min,

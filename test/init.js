@@ -168,15 +168,15 @@ describe('My devices endpoint', () => {
 });
 
 describe('Edit a device endpoint', () => {
-    /*it ('user can alter his chosen device', (done) => {
-        axios.put(`http://localhost:${PORT}/api/my-devices`, {
+    it ('user can alter his chosen device', (done) => {
+        axios.put(`http://localhost:${PORT}/api/alter/${deviceID}`, {
             device: {
                 id: deviceID,
                 config: {
-                    min: 0,
-                    max:40,
-                    room: "nowhere man",
-                    active: true
+                    "min": 15,
+                    "max":25,
+                    "room": "somewhere man",
+                    "active": false
                 },
                 otp: otp
             }
@@ -186,44 +186,26 @@ describe('Edit a device endpoint', () => {
             }
         }).then((res) => {
             assert.equal(res.status, 200);
-            console.log("HERERERERRE");
 
             get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
+                console.log("1");
                 let device = snapshot.val();
-                assert.equal(device.config.min, 0);
-                assert.equal(device.config.max, 40);
-                assert.equal(device.config.room, "nowhere man");
-                assert.equal(device.config.active, true);
+                console.log("2");
+                assert.equal(device.config.min, 15);
+                console.log("3");
+                assert.equal(device.config.max, 25);
+                console.log("4");
+                assert.equal(device.config.room, "somewhere man");
+                console.log("5");
+                assert.equal(device.config.active, false);
+                console.log("6");
                 done();
             });
         }).catch((err) => {
-            //console.log(err);
+            console.log(err);
             done(err);
         });
-    });*/
-
-    /*it ('user cannot alter a device that they do not own', (done) => {
-        axios.post(`http://localhost:${PORT}/api/my-devices`, {
-            device: {
-                id : 32,
-                otp: "PYFL-TUVB-MGEE-SYIP"
-            }
-        }, {
-            headers: {
-                Authorization: `${accessToken2}`
-            }
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }).catch((err) => {
-            console.log(err);
-            if (err.response.status === 401 && err.response.data.error === true && err.response.data.message === "Unauthorised") {
-                done();
-            } else {
-                done(err);
-            }
-        });
-    });*/
+    });
 
     it ('user cannot alter a device that they do not own', (done) => {
         axios.put(`http://localhost:${PORT}/api/alter/0`, {
