@@ -1,11 +1,10 @@
 import * as server from '../web/server.js';
 import assert from 'assert';
-import { describe } from 'mocha';
+import {describe} from 'mocha';
 import axios from 'axios';
-import { ref, set, get} from "firebase/database";
+import {get, ref, set} from "firebase/database";
 import {db} from "../lib/firebase.js";
-import {PORT, PASSWORD, ACC_PASSWORD, ACC_PASSWORD2, WEAK_PASSWORD, TEST_PASSWORD, getLog, getUser} from '../lib/config.js';
-
+import {ACC_PASSWORD, ACC_PASSWORD2, PASSWORD, PORT, TEST_PASSWORD, WEAK_PASSWORD} from '../lib/config.js';
 
 
 let accessToken, registerAcc, accessToken2;

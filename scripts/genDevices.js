@@ -1,7 +1,7 @@
 console.log("Generating devices...");
 import fs from 'fs';
 import {db} from "../lib/firebase.js";
-import {ref, set, get} from "firebase/database";
+import {get, ref, set} from "firebase/database";
 import {genRandomTemperature} from '../simulation/main.js';
 import {getLog} from "../lib/config.js";
 
@@ -35,8 +35,14 @@ const ADMINS = [
     }, // fergal
 }
 
+/**
+ * ID for the device
+ * */
 let ID = 0;
 
+/**
+ * retrieve the last made id from disk to ensure uniqueness
+ * */
 try {
     const data = fs.readFileSync(`${process.cwd()}/scripts/lastId.id`, 'utf8');
     ID = parseInt(data);
@@ -48,6 +54,7 @@ try {
 
 
 /**
+ * Generates an id
  * @returns {string} A unique ID
  */
 function generateID() {
@@ -64,11 +71,9 @@ function generateID() {
     let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     let charactersLength = characters.length;
     for ( let i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
    }
-   result = result.match(/.{1,4}/g).join("-");
-   return result;
+   return result.match(/.{1,4}/g).join("-");
 }
 
 /**
@@ -105,6 +110,9 @@ function generateDevice() {
 
 let devices = [];
 
+/**
+ * generate x devices and add them to the database
+ * */
 for (let i = 0; i < 10; i++) {
     let device = generateDevice();
     devices.push(device.id);
@@ -112,10 +120,12 @@ for (let i = 0; i < 10; i++) {
     for (let key in device) {
         devToAdd[key] = device[key];
     }
-    set(ref(db, `devices/${device.id}`), devToAdd);
+    await set(ref(db, `devices/${device.id}`), devToAdd);
 }
 
-
+/**
+ * link every device to every admin
+ * */
 for (let admin of ADMINS) {
     let snapshot = await get(ref(db, `users/${admin}`))
     if (!snapshot.exists()) {
@@ -132,9 +142,12 @@ for (let admin of ADMINS) {
     }
     user.owns = owns;
     // user.owns = []; // uncomment this to remove all devices from the admins
-    set(ref(db, `users/${admin}`), user);
+    await set(ref(db, `users/${admin}`), user);
 }
 
+/**
+ * save the last made id to disk
+ * */
 const idString = (ID++).toString();
 fs.writeFile(`${process.cwd()}/scripts/lastId.id`, idString, err => {
     if (err) {

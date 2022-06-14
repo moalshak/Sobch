@@ -1,10 +1,14 @@
 import {db} from '../lib/firebase.js';
-import {ref, set, get} from 'firebase/database';
+import {get, ref, set} from 'firebase/database';
 import {getLog} from '../lib/config.js';
-import { notifyUserViaEmail } from '../lib/notifyUser.js';
+import {notifyUserViaEmail} from '../lib/notifyUser.js';
 
 const Log = getLog("simulation");
 
+/**
+ * defaultAggressiveness has attributes needed for the simulation
+ * these are the attributes that get used when not specified by the user
+ * */
 let defaultAggressiveness =  {
     min : -0.2,
     max : 0.2,
@@ -17,8 +21,8 @@ let defaultAggressiveness =  {
  * Generates a random temperature between a min and max temp
  * with the given precision
  * 
- * @param {Float} min 
- * @param {Float} max 
+ * @param {number} min
+ * @param {number} max
  * @param {Number} decimals 
  * @returns 
  */
@@ -89,10 +93,7 @@ let simulateEnvironment = async (devices) => {
                         Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
                     }
                 }
-            } 
-            // else if (!beyondLimit && !device.config.wantsToBeNotified) {
-            //     device.config.wantsToBeNotified = true;
-            // }
+            }
             // update the database
             await set(ref(db, `devices/${id}`), device);
         }
@@ -101,7 +102,7 @@ let simulateEnvironment = async (devices) => {
 
 /**
  * 
- * @param {*} ms 
+ * @param ms time to wait in ms
  * @returns 
  */
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -122,7 +123,7 @@ let startSimulation = async (agg) => {
         for (let dev in devices) {
             devices[dev].id = dev;
         }
-        simulateEnvironment(devices);
+        await simulateEnvironment(devices);
         await delay(aggressiveness.delay);
     }
 }
