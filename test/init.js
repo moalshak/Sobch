@@ -14,7 +14,9 @@ const USERID = 'VfULdqBkeYXXtjP0xK6lVvYQTIW2',
     deviceID = 31,
     otp = "PYFL-TUVB-MGEE-SYIP";
 
-
+/**
+ * server test
+ */
 
 describe('Server can start', () => {
     it('running init', (done) =>{
@@ -23,7 +25,9 @@ describe('Server can start', () => {
     });
 });
 
-
+/**
+ * login test for each response
+ */
 
 describe('login endpoint', () => {
     it('invalid password responds with status 400', (done) => {
@@ -92,6 +96,10 @@ describe('non-admin login', () => {
     });
 });
 
+/**
+ * devices test for linking accessing devices
+ */
+
 describe('My devices endpoint', () => {
     
     it ('User can link Device' , (done) => {
@@ -152,6 +160,9 @@ describe('My devices endpoint', () => {
     });
 });
 
+/**
+ * test for editing device and their responses
+ */
 describe('Edit a device endpoint', () => {
     it ('user can alter his chosen device', (done) => {
         axios.put(`http://localhost:${PORT}/api/alter/${deviceID}`, {
@@ -276,6 +287,9 @@ describe('Edit a device endpoint', () => {
     });
 })
 
+/**
+ * test for retrieving device stats and their responses
+ */
 describe('get device stats endpoint', () => {
     it ('user can get device stats', (done) => {
         axios.get(`http://localhost:${PORT}/api/stats/${deviceID}`, {
@@ -310,7 +324,9 @@ describe('get device stats endpoint', () => {
 });
 
 
-
+/**
+ * test for deleting device and their responses
+ */
 
 describe('Delete a device endpoint', () => {
     it ('user can delete a device that they own', (done) => {
@@ -358,6 +374,9 @@ describe('Delete a device endpoint', () => {
     });
 });
 
+/**
+ * test for getting profile info and their responses
+ */
 describe('My profile endpoint', () => {
     it ('Non-Admin cannot get user profile information, response = 401', (done) => {
         axios.get(`http://localhost:${PORT}/api/profile/${USERID}`, {
@@ -541,7 +560,9 @@ describe('logout endpoint', () => {
     });
     
 });
-
+/**
+ * test for edit profile endpoint
+ */
 describe('Edit-Profile endpoint', () => {
     it('User can edit his/her address', (done) => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
