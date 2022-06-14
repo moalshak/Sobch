@@ -17,73 +17,6 @@ function unauthorized(res, req) {
 }
 
 
-router.delete("/", async (req, res) => {
-    let user, deviceId;
-
-    try {
-        user = req.user;
-        deviceId = req.body.deviceId;
-    } catch (error) {
-        res.status(400).send({error : true, message: "Bad request"});
-        return;
-    }
-
-    let message, code;
-
-    try {
-        // check if device is owned by user
-        const device = await get(ref(db, `devices/${deviceId}`));
-        if (!device) {
-            unauthorized(res, req);
-            return;
-        }
-
-        let owners = device.owners || [];
-
-        if (!isAdmin(user.uid)) {
-            if (owners.indexOf(user.uid) === -1) {
-                unauthorized(res, req);
-                return;
-            }
-        }
-
-        // get the user
-        const userData = await get(ref(db, `users/${user.uid}`));
-
-        let owns = userData.owns || [];
-
-        if (!isAdmin(user.uid)) {
-            if (owns.indexOf(deviceId) === -1) {
-                unauthorized(res, req);
-                return;
-            }
-        }
-
-        // remove device from user and user from device
-        device.owners.filter((owner) => {
-            return owner !== user.uid;
-        });
-
-        // remove device from user
-        userData.owns.filter((deviceId) => {
-            return deviceId !== deviceId;
-        });
-
-        await set(ref(db, `devices/${deviceId}`), device);
-        await set(ref(db, `users/${user.uid}`), userData);
-
-        code = 200;
-        message = "Success, device unlinked!";
-        res.status(code).send({error : false, message});
-        Log.info("Success - Device unlinked", {deviceId, user: user.uid});
-    } catch (error) {
-        code = 400;
-        message = "FAILED";
-        res.status(code).send({error : true, message});
-        Log.error(error);
-    }
-});
-
 router.post("/", async (req, res) => {
     let device, otp, user;
     try {
@@ -173,17 +106,9 @@ router.post("/", async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    let user;
-    try{ 
-    user = req.user;
-    } catch(error) {
-        res.status(400).send({error: "Bad Request", accessToken: req.user.stsTokenManager.accessToken});
-        Log.error(error);
-    return;
-    }
+    let user = req.user;
 
     try {
-        // using this 'user' variable for now.
         let snapshot = await get(ref(db, `users/${user.uid}`))
     
         if (snapshot.exists() && snapshot.val().owns !== undefined  && snapshot.val().owns.length > 0)
@@ -191,41 +116,20 @@ router.get('/', async (req, res) => {
             let devicesIds = snapshot.val().owns;
             let devices = [];
             for (let deviceId of devicesIds) {
-                let dev = (await get(ref(db, `devices/${deviceId}`))).val();
-                devices.push (
-                    {
-                        id : deviceId,
-                        ...dev
-                    }
-                );
-            }
-
-            // get all devices
-            let devicesSnap = await get(ref(db, `devices`));
-            if (devicesSnap.exists()) {
-                let devicesSnapshot = devicesSnap.val();
-                for (let i in devicesSnapshot) {
-                    let dev = devicesSnapshot[i];
-                    if (isAdmin(user.uid) || dev.owners.includes(user.uid)) {
-                        if (!devicesIds.includes(dev.id)) {
-                            devices.push (
-                                {
-                                    id : dev.id,
-                                    ...devicesSnapshot[dev.id]
-                                }
-                            );
+                let dev = (await get(ref(db, `devices/${deviceId}`)));
+                if (dev.exists()) {
+                    dev = dev.val()
+                    devices.push (
+                        {
+                            id : deviceId,
+                            ...dev
                         }
-                    }
+                    );
                 }
             }
-
             res.status(200).send({message: "Owned Device List.", devices, accessToken: req.user.stsTokenManager.accessToken})
-        }
-        else if (user.owns === undefined || snapshot.val().owns.length === 0)  {
+        } else if (user.owns === undefined || snapshot.val().owns.length === 0)  {
             res.status(200).send({message: "No devices to show.", accessToken: req.user.stsTokenManager.accessToken})
-        }
-        else  {
-            res.status(401).send({message: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken})
         }
     } catch(error) {
         console.error(error);

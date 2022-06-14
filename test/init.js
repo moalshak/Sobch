@@ -113,16 +113,19 @@ describe('My devices endpoint', () => {
                 },
                 "otp": "PYFL-TUVB-MGEE-SYIP"
             },
-        }, {headers: {
+        },
+        {
+        headers: {
             Authorization: `${accessToken2}`
         }
-    }).then((res) => {
-        assert.equal(res.status, 200);
-        assert.equal(res.data.error, false);
-        assert.equal(res.data.message, "device added");
-        done();
-    }).catch((err) => {
-        done(err);
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "device added");
+            done();
+        }).catch((err) => {
+            done(err);
+        });
     });
     
     it ('user can get his devices', (done) => {
@@ -153,9 +156,6 @@ describe('My devices endpoint', () => {
         }).catch((err) => {
             done(err);
         });
-    });
-        
-
     });
 });
 
