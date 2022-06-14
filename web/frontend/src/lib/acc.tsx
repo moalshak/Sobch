@@ -40,13 +40,13 @@ export async function goLogout(e : any) {
  * @returns {boolean} true if the user is logged in
  */
 export function isLoggedIn() {
-    return localStorage.getItem('loggedIn') === 'true' ? true : false;
+    return localStorage.getItem('loggedIn') === 'true';
 }
 
 /**
  * Sets the logged in status
- * 
- * @param {boolean} loggedIn the value to set it to
+ *
+ * @param value loggedIn the value to set it to
  */
 export function setLoggedIn(value: boolean) {
     localStorage.setItem('loggedIn', value ? 'true' : 'false');

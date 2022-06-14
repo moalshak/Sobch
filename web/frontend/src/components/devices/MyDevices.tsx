@@ -1,16 +1,15 @@
 import axios from 'axios';
-import {useState, useEffect} from 'react';
-import {BACKEND_BASE_URL} from '../App';
-import {getAccessToken} from '../lib/acc';
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from 'react';
+import {BACKEND_BASE_URL} from '../../App';
+import {getAccessToken, isLoggedIn, setLoggedIn} from '../../lib/acc';
+import {useNavigate} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar, {NavBarBot} from "../components/NavBar";
-import {Alert, Variant} from './CustomAlert';
-import {isLoggedIn, setLoggedIn} from "../lib/acc";
+import NavBar, {NavBarBot} from "../utils/NavBar";
+import {Alert, Variant} from '../utils/CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
 import {AiOutlineEdit} from "react-icons/ai";
 import {ImStatsBars} from 'react-icons/im';
@@ -152,7 +151,7 @@ function MyDevices() {
             link = "./images/therm5.jpeg";
         }
         return (
-            <Card.Img  src={link}></Card.Img>
+            <Card.Img  src={link}/>
         );
         
     }

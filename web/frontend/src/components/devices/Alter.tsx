@@ -1,26 +1,27 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import {BACKEND_BASE_URL} from "../App";
-import {getAccessToken, isLoggedIn} from "../lib/acc";
-import { Link, useNavigate } from "react-router-dom";
-import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {BACKEND_BASE_URL} from "../../App";
+import {getAccessToken, isLoggedIn, setLoggedIn} from "../../lib/acc";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar, {NavBarBot} from "../components/NavBar";
+import NavBar, {NavBarBot} from "../utils/NavBar";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import Modal from "react-bootstrap/Modal";
-import {setLoggedIn} from "../lib/acc";
-import {Alert, AlertProps, Variant} from './CustomAlert';
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
-import { AiOutlineEdit } from "react-icons/ai";
+import {AiOutlineEdit} from "react-icons/ai";
 import {ImStatsBars} from "react-icons/im";
 import {BiDevices, BiUnlink} from "react-icons/bi";
 
+/**
+ * device interface. This is basically a struct for the Device
+ * */
 interface Device {
     id: string,
     config: {
@@ -35,6 +36,9 @@ interface Device {
 
 function Alter() {
 
+    /**
+     * device state
+     * */
     const [device, setDevice] = useState<Device>({
         id: "",
         config: {
@@ -47,29 +51,46 @@ function Alter() {
         otp: ""
     });
 
-
-
     /**
      * The navigate of react
      */
     const navigate = useNavigate();
 
+    /**
+     * The loading state, indicator if the data has been fetched from the backend or not
+     * */
     const [loading, setLoading] = useState(true);
 
+    /**
+     * device id state, which is from the path params
+     * */
     const {deviceId} = useParams();
 
-
+    /**
+     * state to either show the form of not
+     * */
     const [showForm, setShowForm] = useState(true);
 
-
+    /**
+     * state for the show  dialog, which is the confirmation box
+     * */
     const [showDialog, setShowDialog] = useState(false);
 
+    /**
+     *
+     * */
     const [isEdit, setIsEdit] = useState(false);
 
+    /**
+     * handles the closing of the dialog
+     * */
     function handleClose() {
         setShowDialog(false);
     }
 
+    /**
+     * handles the show of the dialog
+     * */
     function handleShowDialog() {
         setShowDialog(true);
     }
