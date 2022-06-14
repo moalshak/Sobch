@@ -1,7 +1,7 @@
 import express from 'express';
-import { auth } from '../../../lib/firebase.js';
-import { signOut } from 'firebase/auth';
-import {removeUser, getLog} from '../../../lib/config.js';
+import {auth} from '../../../lib/firebase.js';
+import {signOut} from 'firebase/auth';
+import {getLog, removeUser} from '../../../lib/config.js';
 
 
 const router = express.Router(),

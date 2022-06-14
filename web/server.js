@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import {PORT, getLog, getUser} from '../lib/config.js';
-import {db, auth, admin_auth, app} from '../lib/firebase.js';
+import {getLog, getUser, PORT} from '../lib/config.js';
+import {admin_auth, app, auth, db} from '../lib/firebase.js';
 import subdomain from 'express-subdomain';
 
 /**

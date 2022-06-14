@@ -1,7 +1,7 @@
 import {db} from "../../../lib/firebase.js";
 import {getLog, isAdmin} from "../../../lib/config.js";
 import express from "express";
-import { ref, set, get} from "firebase/database";
+import {get, ref, set} from "firebase/database";
 
 const router = express.Router(),
     Log = getLog("my-devices");

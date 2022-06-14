@@ -1,7 +1,7 @@
 import express from "express";
 import {getLog, isAdmin} from "../../../lib/config.js";
-import { db, auth } from "../../../lib/firebase.js";
-import { ref, get } from "firebase/database";
+import {auth, db} from "../../../lib/firebase.js";
+import {get, ref} from "firebase/database";
 
 
 const router = express.Router(),

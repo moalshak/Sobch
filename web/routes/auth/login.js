@@ -1,7 +1,7 @@
 import express from "express";
 import {auth, sendPasswordResetEmail} from "../../../lib/firebase.js";
-import {signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
-import {getLog, addUser} from "../../../lib/config.js";
+import {sendEmailVerification, signInWithEmailAndPassword} from "firebase/auth";
+import {addUser, getLog} from "../../../lib/config.js";
 
 
 const router = express.Router(),

@@ -1,8 +1,8 @@
 import express from "express";
-import {getLog, addUser} from "../../../lib/config.js";
-import { db,auth } from "../../server.js";
-import {createUserWithEmailAndPassword, deleteUser, getAuth, sendEmailVerification } from "firebase/auth";
-import { ref, set } from "firebase/database";
+import {addUser, getLog} from "../../../lib/config.js";
+import {auth, db} from "../../server.js";
+import {createUserWithEmailAndPassword, deleteUser, sendEmailVerification} from "firebase/auth";
+import {ref, set} from "firebase/database";
 
 const router = express.Router(),
     Log = getLog("register");
