@@ -11,10 +11,10 @@ const router = express.Router(),
 
 //Bad Request
 router.get('/', (req, res) => {
-  const datainf = req;
+  const deviceInfo = req;
   const user = auth.user;
   //using this 'user' variable for now.
-  get(ref(db, `devices/${datainf.id}`)).then((snapshot) => {
+  get(ref(db, `devices/${deviceInfo.id}`)).then((snapshot) => {
           res.status(400).send({device : req.body, accessToken: req.user.stsTokenManager.accessToken},"Bad Request");
           console.log("Bad Request")
     }).catch((error) => {
@@ -24,14 +24,12 @@ router.get('/', (req, res) => {
 })
  
 router.get('/:id', async (req, res) => {
-  const datainf = req.params;
+  const devInf = req.params;
   //using this 'user' variable for now.
   const user = req.user;
 
-  const dataId = datainf.id.trim();
+  const dataId = devInf.id.trim();
 
-
-  
   try{
     let snapshot = await get(ref(db, `devices/${dataId}`));
     
@@ -70,19 +68,17 @@ router.get('/:id', async (req, res) => {
         if (device.config.wantsToBeNotified !== undefined) {
           device.config.wantsToBeNotified = device.config.wantsToBeNotified.includes(user.uid);
         }
-
         res.status(200).send({device, accessToken: req.user.stsTokenManager.accessToken});  
         Log.info(snapshot.val());
       }
       //Internal Server error
-      else 
-      {
-          res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
+      else  {
+          res.status(500).send({accessToken: req.user.stsTokenManager.accessToken, message: "Internal server error"});
           Log.info("Internal server error")
       }
     } catch(error){
       Log.error(error);
-      res.status(500).send({accessToken: req.user.stsTokenManager.accessToken},"Internal server error");
+      res.status(500).send({accessToken: req.user.stsTokenManager.accessToken, message: "Internal server error"});
     }    
 });
 

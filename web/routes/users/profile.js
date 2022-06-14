@@ -31,38 +31,23 @@ router.get('/:id', (req, res) => {
                 if (requester && requested) {
                     res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully ", {requester, requested});
-                    return;
                 } else if (!snapshot.exists()){
                     res.status(401).send({error : "Unauthorized access"});
-                    return;
                 } else {
                     res.status(400).send({error : "Bad Request"});
-                    return;
                 }
             });
         } else {
-            if (requester && requested) {
-                res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
-                Log.info("Profile details returned successfully ", {requester, requested});
-                return;
-            } else if (!snapshot.exists()){
-                res.status(401).send({error : "Unauthorized access"});
-                return;
-            } else {
-                res.status(400).send({error : "Bad Request"});
-                return;
-            }
-        };
+            res.status(401).send({error : "Unauthorized access"});
+        }
     }).catch((error) => {
         console.error(error);
         res.status(401).send({error : true, message : "Unauthorized access"});
-        return;
     });        
 })
 
 
 router.get('/', async (req, res) => {
-    //to do : testinggggg
     if (!req.user) {
         return res.status(401).send({error : "Unauthorized access"});
     }

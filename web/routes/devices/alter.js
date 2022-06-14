@@ -1,4 +1,4 @@
-import { set, ref, get, update } from "firebase/database";
+import { set, ref, get } from "firebase/database";
 import express from "express";
 import {getLog, isAdmin} from "../../../lib/config.js";
 import { db } from "../../server.js";
@@ -7,7 +7,7 @@ const router = express.Router(),
     Log = getLog("alter");
 
 router.put('/:deviceId', async (req, res) => {
-    var device, deviceId, user, config;
+    let device, deviceId, user, config;
     try {
         device = req.body.device;
         config = device.config;
@@ -20,13 +20,12 @@ router.put('/:deviceId', async (req, res) => {
     }
 
     try {
-        // const deviceSnapshot = await get(ref(db, `users/${user.uid}/owns/${deviceId}`));
         const deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
         
         if(deviceSnapshot.exists()) {
-            var requester = await get(ref(db, `users/${user.uid}`));
+            const requester = await get(ref(db, `users/${user.uid}`));
             if (requester.exists()) {
-                var owns = requester.val().owns;
+                const owns = requester.val().owns;
                 if (owns.includes(deviceId)) {
                     const deviceVal = deviceSnapshot.val();
 
@@ -52,31 +51,26 @@ router.put('/:deviceId', async (req, res) => {
                     await set(ref(db, `devices/${deviceId}`), deviceVal);
                     res.status(200).send({message: "Success device updated", device : deviceVal,accessToken: req.user.stsTokenManager.accessToken});
                     Log.info("Success device updated", {device : deviceVal, user : user.uid});
-                    return;
                 } else {
                     res.status(401).send({error: true, message : "Unauthorized"});
                     Log.info("Unauthorized user does not own this device", {user : user.uid});
-                    return;
                 }
             } else {
                 res.status(401).send({error: true, message : "Unauthorized"});
                 Log.info("Unauthorized user does not exist", {user : user.uid});
-                return;
             }
         } else {
             res.status(401).send({error: true, message : "Unauthorized"});
             Log.info("Unauthorized user does not exist", {user : user.uid});
-            return;
         }
     } catch(error) {
         res.status(500).send({message: "Internal server error", error: true});
         Log.info("Internal server error", {user: user.uid});
-        return;
     }
 })
 
 router.delete('/:deviceId', async (req, res) => {
-    var deviceId, user;
+    let deviceId, user;
     try {
         deviceId = req.params.deviceId.trim();
         user = req.user;
@@ -86,15 +80,15 @@ router.delete('/:deviceId', async (req, res) => {
         return;
     }
     try {
-        var deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
+        const deviceSnapshot = await get(ref(db, `devices/${deviceId}`));
 
         if(deviceSnapshot.exists()) {
-            var requester = await get(ref(db, `users/${user.uid}`));
+            const requester = await get(ref(db, `users/${user.uid}`));
 
             if(requester.exists()) {
-                var owns = requester.val().owns || [];
-                var owners = deviceSnapshot.val().owners || [];
-                
+                let owns = requester.val().owns || [];
+                let owners = deviceSnapshot.val().owners || [];
+
                 if (!isAdmin(user.uid)) {
                     if (!owners.includes(user.uid)) {
                         res.status(401).send({error: true, message : "Unauthorized"});
@@ -118,22 +112,17 @@ router.delete('/:deviceId', async (req, res) => {
 
                 res.status(200).send({message: "Success device deleted",accessToken: req.user.stsTokenManager.accessToken});
                 Log.info("Success device deleted", {deviceId: deviceId, user : user.uid});
-                return;
-                
             } else {
                 res.status(401).send({error: "Unauthorized"});
                 Log.info("Unauthorized user does not own this device", {user : user.uid});
-                return;
             }
         }else{
             res.status(401).send({error: "Unauthorized"});
             Log.info("Unauthorized user does not own this device", {user : user.uid});
-            return;
         }
     } catch(error) {
         res.status(500).send({message: "Internal server error", error: error});
         Log.info("Internal server error", {user: user.uid});
-        return;
     }
 })
 

@@ -54,7 +54,7 @@ router.post('/', async (req, res) => {
          const errorCode = error.code;
          let message;
 
-        if(errorCode == "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
+        if(errorCode === "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
             code = 400;
             message = "Invalid Credentials";
 
@@ -93,7 +93,7 @@ router.put('/', (req, res) => {
         /**
          * spoof response for email not found
          */
-        if(errorCode == "auth/user-not-found"){
+        if(errorCode === "auth/user-not-found"){
             res.status(200).send({error : false, message: "If the email exists, a password reset email has been sent!"});
 
         } else {

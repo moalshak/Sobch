@@ -1,5 +1,5 @@
 import express from "express";
-import {getLog, addUser, getUser} from "../../../lib/config.js";
+import {getLog, addUser} from "../../../lib/config.js";
 import { db,auth } from "../../server.js";
 import {createUserWithEmailAndPassword, deleteUser, getAuth, sendEmailVerification } from "firebase/auth";
 import { ref, set } from "firebase/database";
@@ -12,13 +12,12 @@ const router = express.Router(),
  * @api {delete} /auth/register Register
  * request to delete account
  */
-
 router.delete('/', async (req, res) => {
     const user = req.user;
     let message, code;
     
     try{
-        deleteUser(user);
+        await deleteUser(user);
         code = 200;
         message = "Success"  
 
@@ -33,11 +32,11 @@ router.delete('/', async (req, res) => {
     }
 });
 
+
 /**
  * @api {post} /auth/register Register
  * request to register account
  */
-
 router.post('/', async (req, res) => {
     const credentials = req.body.credentials,
         email = credentials.email.trim(),
@@ -52,12 +51,12 @@ router.post('/', async (req, res) => {
         
         addUser(user);
 
-        set(ref(db, `users/${user.uid}`),
+        await set(ref(db, `users/${user.uid}`),
             {
                 "credentials": {
                     "email": email,
                 },
-                "address": address   
+                "address": address
             }
         );
 
@@ -77,13 +76,13 @@ router.post('/', async (req, res) => {
         const errorCode = error.code;
         let message;
 
-        if(errorCode == "auth/email-already-in-use"){
+        if(errorCode === "auth/email-already-in-use"){
             code = 200;
             message = "Email already in use";
-        } else if (errorCode == "auth/weak-password"){
+        } else if (errorCode === "auth/weak-password"){
             code = 200;
             message = "Weak password: Should be at least 6 characters long";
-        } else if(errorCode == "auth/invalid-email"){
+        } else if(errorCode === "auth/invalid-email"){
             code = 200;
             message = "Invalid email";
         } else {

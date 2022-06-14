@@ -10,12 +10,10 @@ const router = express.Router(),
 function alreadyOwned(res) {
     res.status(200).send({error : false, message: "Already Owned"});
     Log.info("Already Owned device request");
-    return;
 }
 
 function unauthorized(res, req) {
     res.status(403).send({error : true, message: "Invalid match (device id / otp)", accessToken: req.user.stsTokenManager.accessToken});
-    return;
 }
 
 
@@ -166,13 +164,11 @@ router.post("/", async (req, res) => {
         // otp does not match -> unauthorized
         else {
             unauthorized(res, req);
-            Log.info("Device otp does not match");    
-            return;
+            Log.info("Device otp does not match");
         }
     } else {
         unauthorized(res, req);
         Log.info("Unauthorized request to add device");
-        return;
     }
 });
 
@@ -225,15 +221,12 @@ router.get('/', async (req, res) => {
 
             res.status(200).send({message: "Owned Device List.", devices, accessToken: req.user.stsTokenManager.accessToken})
         }
-        else if (user.owns === undefined || snapshot.val().owns.length === 0)
-        {
+        else if (user.owns === undefined || snapshot.val().owns.length === 0)  {
             res.status(200).send({message: "No devices to show.", accessToken: req.user.stsTokenManager.accessToken})
         }
-        else 
-        {
+        else  {
             res.status(401).send({message: "Unauthorized", accessToken: req.user.stsTokenManager.accessToken})
         }
-
     } catch(error) {
         console.error(error);
         res.status(500).send({message : "Internal Server Error"})

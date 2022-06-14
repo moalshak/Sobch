@@ -7,11 +7,10 @@ import {removeUser, getLog} from '../../../lib/config.js';
 const router = express.Router(),
     Log = getLog("logout");
 
-    /** 
-     * @api {get} /auth/logout Logout
-     */
 
-
+/**
+ * @api {get} /auth/logout Logout
+ */
 router.post('/', async (req, res) => {
     const user = req.user;
 

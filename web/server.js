@@ -127,32 +127,6 @@ function initRoutes(app) {
 }
 
 /**
- * initialize the database and connect to it
- * 
- * @returns {firebase.database.Database} Database 
- */
-// function initDB() {
-
-//     const serviceAccount = SERVICE_ACCOUNT;
-//     const firebaseConfig = FIRE_BASE_CONFIG;
-//     // Initialize Firebase
-//     app = initializeApp({
-//         firebaseConfig,
-//         credential: cert(serviceAccount),
-//         databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
-//     });
-
-//     admin_auth = getAuth(app);
-
-//     const c_app = c_initializeApp(firebaseConfig);
-
-//     auth = c_getAuth(c_app);
-
-//     // Get a reference to the database service
-//     return c_getDatabase(c_app);
-// }
-
-/**
  * initialize the server and start it
  * 
  * - first call express.js to create the server
