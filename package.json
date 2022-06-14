@@ -5,7 +5,8 @@
   "description": "Remote thermometer",
   "scripts": {
     "devStart": "nodemon web/server.js start",
-    "test": "mocha -C test -t 30000 --exit"
+    "test": "c8 --config .c8rc mocha -C test -t 30000 --exit",
+    "reportMocha": "mocha --reporter mocha-sonarqube-reporter --config -C test -t 30000  --reporter-options output=coverage/xunit.xml --exit"
   },
   "author": "Mohammad Al Shakoush",
   "license": "ISC",
@@ -27,8 +28,10 @@
     "winston": "^3.7.2"
   },
   "devDependencies": {
+    "c8": "^7.11.3",
     "dotenv": "^16.0.0",
     "generate-password": "^1.7.0",
+    "mocha-sonarqube-reporter": "^1.0.2",
     "nodemon": "^2.0.16",
     "sonarqube-scanner": "^2.8.1",
     "uuid": "^8.3.2"
