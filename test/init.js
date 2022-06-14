@@ -376,9 +376,25 @@ describe('Delete a device endpoint', () => {
 /**
  * test for getting profile info and their responses
  */
+
 describe('My profile endpoint', () => {
+    it ('User can get their profile', (done) => {
+        axios.get(`http://localhost:${PORT}/api/profile/`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert(res.data.meta.createdAt);
+            assert(res.data.meta.lastLoginAt);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+
     it ('Non-Admin cannot get user profile information, response = 401', (done) => {
-        axios.get(`http://localhost:${PORT}/api/profile/${USERID}`, {
+        axios.get(`http://localhost:${PORT}/api/profile/${SELIM_ID}`, {
             headers: {
                 Authorization: `${accessToken2}`
             }
