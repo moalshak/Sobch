@@ -393,8 +393,51 @@ describe('My profile endpoint', () => {
         });
     });
 
-    it ('Non-Admin cannot get user profile information, response = 401', (done) => {
+    // it ('User cannot get their profile', (done) => {
+    //     axios.get(`http://localhost:${PORT}/api/profile/`, {
+    //         headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }).then((res) => {
+    //         assert.equal(res.status, 200);
+    //         assert(res.data.meta.createdAt);
+    //         assert(res.data.meta.lastLoginAt);
+    //         done();
+    //     }).catch((err) => {
+    //         done(err);
+    //     });
+    // });
+
+    it ('Admin can get the profile information of another user', (done) => {
         axios.get(`http://localhost:${PORT}/api/profile/${SELIM_ID}`, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+
+    // it ('Non-Admin cannot get their user profile information, response = 401', (done) => {
+    //     axios.get(`http://localhost:${PORT}/api/profile/${SELIM_ID}`, {
+    //         headers: {
+    //             Authorization: `${accessToken2}`
+    //         }
+    //     }).then((res) => {
+    //         assert.equal(res.status, 401);
+    //         done();
+    //     }).catch((err) => {
+    //         assert.equal(err.response.status, 401);
+    //         assert.equal(err.response.data.error, "Unauthorized access");
+    //         done();
+    //     });
+    // });
+
+    it ('Non-Admin cannot get the profile information of another user, response = 401', (done) => {
+        axios.get(`http://localhost:${PORT}/api/profile/${USERID}`, {
             headers: {
                 Authorization: `${accessToken2}`
             }
@@ -598,6 +641,46 @@ describe('Edit-Profile endpoint', () => {
         })
     });
 
+    it('User cannot edit his/her informatin with an invalid body', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 400);
+            done();
+        }).catch((err) => {
+            if (err.response.status == 400){
+                assert.equal(err.response.data.error, true);
+                done();
+            }
+            else {
+                done(err);
+            }
+        })
+    });
+
+    it('User can edit his/her information reentering their data and so it being unchanged', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "s.el.sayed.aly@student.rug.nl",
+                password : ACC_PASSWORD2
+            },
+            address : 'home'
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
     it('User can edit his/her information blank and unchanged', (done) => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
             credentials : {
@@ -642,7 +725,41 @@ describe('Edit-Profile endpoint', () => {
         })
     });
 
-    it('User can edit his/her email', (done) => {
+    it('resetting non-admin accessToken', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "s.el.sayed.aly@student.rug.nl",
+            password: ACC_PASSWORD2
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            accessToken2 = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('User can edit his/her email, v1', (done) => {
+        axios.put(`http://localhost:${PORT}/api/profile/`, {
+            credentials : {
+                email : "useless@gmail.com",
+                password : ""
+            },
+            address : ''
+        }, {headers: {
+                Authorization: `${accessToken2}`
+            }
+        }
+        ).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('User can edit his/her email, v2', (done) => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
             credentials : {
                 email : "pain@gmail.com",

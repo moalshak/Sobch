@@ -9,10 +9,7 @@ const router = express.Router(),
 
 router.get('/:id', (req, res) => {
     
-    if (!req.user) {
-        Log.error("No user");
-        return res.status(401).send({error : "Unauthorized access not logged in"});
-    } else if (!isAdmin(req.user.uid) && req.user.uid !== req.params.id) {
+    if (!isAdmin(req.user.uid) && req.user.uid !== req.params.id) {
         Log.error("Unauthorized user", {isAdmin : isAdmin(req.user.uid), sameUser : req.user.uid === req.params.id});
         return res.status(401).send({error : "Unauthorized access"});
     }
@@ -31,14 +28,11 @@ router.get('/:id', (req, res) => {
                 if (requester && requested) {
                     res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                     Log.info("Profile details returned successfully ", {requester, requested});
-                } else if (!snapshot.exists()){
-                    res.status(401).send({error : "Unauthorized access"});
-                } else {
-                    res.status(400).send({error : "Bad Request"});
                 }
             });
         } else {
-            res.status(401).send({error : "Unauthorized access"});
+            res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
+            Log.info("Profile details returned successfully ", {requester, requested});
         }
     }).catch((error) => {
         console.error(error);
@@ -48,9 +42,6 @@ router.get('/:id', (req, res) => {
 
 
 router.get('/', async (req, res) => {
-    if (!req.user) {
-        return res.status(401).send({error : "Unauthorized access"});
-    }
 
     const userid = req.user.uid;
     const meta = req.user.metadata;
@@ -59,52 +50,14 @@ router.get('/', async (req, res) => {
     
     try {
         if (!snapshot.exists()) {
-            try {
-                await set(ref(db, `users/${userid}`), {
-                    credentials : {
-                        email : req.user.email
-                    }
-                });
-                snapshot = await get(ref(db, `users/${userid}`));
-
-                while (!snapshot.exists()) {
-                    snapshot = await get(ref(db, `users/${userid}`));
-                }
-
-                while (!snapshot.exists()) {
-                    snapshot = await get(ref(db, `users/${userid}`));
-                }
-
-                if (req.user.uid) {
-                    res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
-                    Log.info("Profile details returned successfully");
-                    return;
-                } else if (!snapshot.exists()){
-                    res.status(401).send({error : "Unauthorized access"});
-                    return;
-                } else {
-                    res.status(400).send({error : "Bad Request"});
-                    return;
-                }
-            } catch (error) {
-                console.error(error);
-                res.status(400).send({error : error});
-            }
-
+            res.status(400).send({error : "Bad Request"});
         } else if (snapshot.exists()) {
             if (req.user.uid) {
                 res.status(200).send({profile: snapshot.val(), accessToken: req.user.stsTokenManager.accessToken, meta});
                 Log.info("Profile details returned successfully");
-            } else if (!snapshot.exists()){
-                res.status(401).send({error : "Unauthorized access"});
-            } else {
-                res.status(400).send({error : "Bad Request"});
-            }
+            } 
         }
     } catch(error){
-        console.error(error);
-        Log.error(error);
-
         Log.error(error);
         res.status(400).send({error : error});
     }      
@@ -122,7 +75,6 @@ router.put('/', async (req, res) => {
         newPassword = credentials.password.trim();
     } catch (error) {
         Log.info("Body is not valid")
-        console.error(error);
         res.status(400).send({error : true, message: "Bad request"});
         return;
     }
@@ -131,12 +83,6 @@ router.put('/', async (req, res) => {
 
     try {
         const profile = await get(ref(db, `users/${userid}`));
-        
-        if (!profile) {
-            Log.info("Profile does not exist")
-            res.status(400).send({error : true, message: "Bad Request"});
-            return;
-        }
 
         if (newPassword !== ""){                   
             try {
