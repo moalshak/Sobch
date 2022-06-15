@@ -62,6 +62,17 @@ describe('login endpoint', () => {
         })
     });
 
+    it('test request', (done) => {
+        axios.get(`http://localhost:${PORT}/api/login`, {
+        
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done();
+        })
+    });
+
     it('valid credentials responds with status 200', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "mo.alshakoush@gmail.com",
@@ -76,6 +87,20 @@ describe('login endpoint', () => {
             done(err);
         })
     });
+
+    it('user forgot password 200', (done) => {
+        axios.put(`http://localhost:${PORT}/api/login`, {
+            email: "testendpoint@gmail.com"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "If the email exists, a password reset email has been sent!");
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
 });
 
 describe('non-admin login', () => {
