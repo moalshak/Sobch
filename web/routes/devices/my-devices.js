@@ -1,5 +1,5 @@
 import {db} from "../../../lib/firebase.js";
-import {getLog, isAdmin} from "../../../lib/config.js";
+import {getLog} from "../../../lib/config.js";
 import express from "express";
 import {get, ref, set} from "firebase/database";
 

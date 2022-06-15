@@ -82,8 +82,6 @@ router.put('/', async (req, res) => {
     let message, code;
 
     try {
-        const profile = await get(ref(db, `users/${userid}`));
-
         if (newPassword !== ""){                   
             try {
                 await updatePassword(user, newPassword);
