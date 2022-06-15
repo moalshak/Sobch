@@ -1,0 +1,206 @@
+
+> sobch@1.0.0 test
+> c8 --config .c8rc mocha -C test -t 30000 --exit
+
+{"level":"info","message":"Using FIRE_BASE_CONFIG from environment variable","module":"config"}
+{"level":"info","message":"Using SERVICE_ACCOUNT from environment variable","module":"config"}
+{"level":"info","message":"Using EMAIL from environment variable","module":"config"}
+{"level":"info","message":"Using PASSWORD from environment variable","module":"config"}
+{"level":"info","message":"Using ACC_PASSWORD from environment variable","module":"config"}
+{"level":"info","message":"Using TEST_PASSWORD from environment variable","module":"config"}
+{"level":"info","message":"Using ACC_PASSWORD2 from environment variable","module":"config"}
+{"level":"info","message":"Using WEAK_PASSWORD from environment variable","module":"config"}
+
+
+  Server can start
+    ✔ running init
+{"level":"info","message":"Server is running on port 8000","module":"main","url":"http://0.0.0.0:8000/"}
+
+  login endpoint
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"error":{"code":"auth/wrong-password","customData":{},"name":"FirebaseError"},"level":"error","message":"Failed to login Invalid Credentials","module":"login"}
+    ✔ invalid password responds with status 400 (252ms)
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"error":{"code":"auth/user-not-found","customData":{},"name":"FirebaseError"},"level":"error","message":"Failed to login Invalid Credentials","module":"login"}
+    ✔ invalid email responds with status 400 (173ms)
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Logged in","module":"login","user":"VfULdqBkeYXXtjP0xK6lVvYQTIW2"}
+    ✔ valid credentials responds with status 200 (569ms)
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Logged in","module":"login","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ non-admins can also login (400ms)
+
+  My devices endpoint
+{"endPoint":"/my-devices","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/my-devices","method":"POST","module":"main","time":"2022-06-15T11:44:19.047Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"OTP MATCHES!","module":"my-devices"}
+    ✔ User can link Device (234ms)
+{"endPoint":"/my-devices","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/my-devices","method":"GET","module":"main","time":"2022-06-15T11:44:19.242Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+    ✔ user can get his devices (54ms)
+
+  Edit a device endpoint
+{"endPoint":"/alter","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/alter/31","method":"PUT","module":"main","time":"2022-06-15T11:44:19.298Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"error","message":{},"module":"alter"}
+    ✔ Invalid body request responds with 400
+{"endPoint":"/alter","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/alter/31","method":"PUT","module":"main","time":"2022-06-15T11:44:19.305Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"device":{"config":{"active":false,"max":25,"min":15,"room":"somewhere man"},"currentTemp":28.15,"id":"31","model":"Sobch DHT-33","otp":"PYFL-TUVB-MGEE-SYIP","owners":["1CUMvWFlucbIddCwslwEsY5qlQb2","yDU8z6Mizch1g4PMQHvWseYD8yF3","a2szgwUYHnUMInbc6cdiwXHeUN73","9GJaxXLYP5SaQDurokIpX2Yu79v1","C2y79Se9cXbPgJ6vQBQRMyEN53o2","r1bucucbP2SJ8TfwlPAlVsSwBQ33","sdWA2bBTtRZXTbZm8Tm7O6OeKba2","DadagQ51hSMNOhS6LcQepQyM4Mo1","MZiSYfePi2bDT6yakY7p8yqAmtr1","1dvAx78n6oUad6rn7390iA7YztS2","URLXxE2SaMPe6c33UCsYwyg6rOz2","UF3lohcWBGXhrMDjEVlUl1xqtmW2","MP43Ieh6ySUJ0jD7TkSPCoZAbd72","nkVpuhFrj1aPaNPJWSqFxxsEULj1","cKJS6IQrayM9EUt4Zb7IFgHVjBC3"]},"level":"info","message":"Success device updated","module":"alter","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+1
+    ✔ user can alter his chosen device (59ms)
+{"endPoint":"/alter","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/alter/31","method":"PUT","module":"main","time":"2022-06-15T11:44:19.365Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"device":{"config":{"active":false,"max":25,"min":15,"room":"somewhere man"},"currentTemp":28.15,"id":"31","model":"Sobch DHT-33","otp":"PYFL-TUVB-MGEE-SYIP","owners":["1CUMvWFlucbIddCwslwEsY5qlQb2","yDU8z6Mizch1g4PMQHvWseYD8yF3","a2szgwUYHnUMInbc6cdiwXHeUN73","9GJaxXLYP5SaQDurokIpX2Yu79v1","C2y79Se9cXbPgJ6vQBQRMyEN53o2","r1bucucbP2SJ8TfwlPAlVsSwBQ33","sdWA2bBTtRZXTbZm8Tm7O6OeKba2","DadagQ51hSMNOhS6LcQepQyM4Mo1","MZiSYfePi2bDT6yakY7p8yqAmtr1","1dvAx78n6oUad6rn7390iA7YztS2","URLXxE2SaMPe6c33UCsYwyg6rOz2","UF3lohcWBGXhrMDjEVlUl1xqtmW2","MP43Ieh6ySUJ0jD7TkSPCoZAbd72","nkVpuhFrj1aPaNPJWSqFxxsEULj1","cKJS6IQrayM9EUt4Zb7IFgHVjBC3"]},"level":"info","message":"Success device updated","module":"alter","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+1
+    ✔ device.config.active is undefined should work (56ms)
+{"endPoint":"/alter","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/alter/0","method":"PUT","module":"main","time":"2022-06-15T11:44:19.422Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"Unauthorized user does not exist","module":"alter","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ user cannot alter a device that they do not own
+{"endPoint":"/my-devices","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/my-devices","method":"POST","module":"main","time":"2022-06-15T11:44:19.440Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"Unauthorized request to add device","module":"my-devices"}
+    ✔ user cannot alter a device with incorrect / unmatching credentials
+{"endPoint":"/my-devices","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/my-devices","method":"POST","module":"main","time":"2022-06-15T11:44:19.458Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"Unauthorized request to add device","module":"my-devices"}
+    ✔ Wrong otp/id Add Device
+{"endPoint":"/my-devices","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/my-devices","method":"POST","module":"main","time":"2022-06-15T11:44:19.476Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"error","message":{},"module":"my-devices"}
+    ✔ Empty Request Add device
+
+  get device stats endpoint
+{"endPoint":"/stats","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/stats/31","method":"GET","module":"main","time":"2022-06-15T11:44:19.483Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":{"config":{"active":false,"max":25,"min":15,"room":"somewhere man"},"currentTemp":28.15,"id":"31","model":"Sobch DHT-33","otp":"PYFL-TUVB-MGEE-SYIP","owners":["1CUMvWFlucbIddCwslwEsY5qlQb2","yDU8z6Mizch1g4PMQHvWseYD8yF3","a2szgwUYHnUMInbc6cdiwXHeUN73","9GJaxXLYP5SaQDurokIpX2Yu79v1","C2y79Se9cXbPgJ6vQBQRMyEN53o2","r1bucucbP2SJ8TfwlPAlVsSwBQ33","sdWA2bBTtRZXTbZm8Tm7O6OeKba2","DadagQ51hSMNOhS6LcQepQyM4Mo1","MZiSYfePi2bDT6yakY7p8yqAmtr1","1dvAx78n6oUad6rn7390iA7YztS2","URLXxE2SaMPe6c33UCsYwyg6rOz2","UF3lohcWBGXhrMDjEVlUl1xqtmW2","MP43Ieh6ySUJ0jD7TkSPCoZAbd72","nkVpuhFrj1aPaNPJWSqFxxsEULj1","cKJS6IQrayM9EUt4Zb7IFgHVjBC3"]},"module":"stats"}
+31 31
+    ✔ user can get device stats (151ms)
+{"endPoint":"/stats","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"unauthorized request received on /api/stats/31","method":"GET","module":"main","time":"2022-06-15T11:44:19.635Z"}
+    ✔ user unauthorized to get device stats
+
+  Delete a device endpoint
+{"endPoint":"/alter","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/alter/31","method":"DELETE","module":"main","time":"2022-06-15T11:44:19.641Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"deviceId":"31","level":"info","message":"Success device deleted","module":"alter","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ user can delete a device that they own (55ms)
+{"endPoint":"/alter","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/alter/0","method":"DELETE","module":"main","time":"2022-06-15T11:44:19.698Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"Unauthorized user does not own this device","module":"alter","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ user cannot delete a device that they do not own
+
+  My profile endpoint
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"GET","module":"main","time":"2022-06-15T11:44:19.715Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"Profile details returned successfully","module":"profile"}
+    ✔ User can get their profile
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/cKJS6IQrayM9EUt4Zb7IFgHVjBC3","method":"GET","module":"main","time":"2022-06-15T11:44:19.734Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+    ✔ Non-Admin cannot get user profile information, response = 401
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/1111","method":"GET","module":"main","time":"2022-06-15T11:44:19.752Z","user":{"email":"mo.alshakoush@gmail.com","uid":"VfULdqBkeYXXtjP0xK6lVvYQTIW2"}}
+{"level":"info","message":"Profile details returned successfully ","module":"profile","requested":"1111","requester":"VfULdqBkeYXXtjP0xK6lVvYQTIW2"}
+    ✔ Admin cannot get user profile information if non-existent profile = null
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"unauthorized request received on /api/profile/","method":"GET","module":"main","time":"2022-06-15T11:44:19.782Z"}
+    ✔ User cannot get his/her information if not logged in
+
+  logout endpoint
+{"endPoint":"/logout","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/logout","method":"POST","module":"main","time":"2022-06-15T11:44:19.788Z","user":{"email":"mo.alshakoush@gmail.com","uid":"VfULdqBkeYXXtjP0xK6lVvYQTIW2"}}
+{"level":"info","message":"Logged out","module":"logout","user":"VfULdqBkeYXXtjP0xK6lVvYQTIW2"}
+    ✔ logout endpoint works
+
+  register endpoint
+{"endPoint":"/register","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+    ✔ register endpoint works (771ms)
+{"endPoint":"/register","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"error","message":{"code":"auth/email-already-in-use","customData":{"_tokenResponse":{"error":{"code":400,"errors":[{"domain":"global","message":"EMAIL_EXISTS","reason":"invalid"}],"message":"EMAIL_EXISTS"}},"appName":"[DEFAULT]"},"name":"FirebaseError"},"module":"register"}
+    ✔ email already in use (393ms)
+{"endPoint":"/register","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Success - Verification email sent","module":"register","user":"Rjvm2kzb17RxHErsw7TG55E0r213"}
+{"level":"error","message":{"code":"auth/weak-password","customData":{"appName":"[DEFAULT]"},"name":"FirebaseError"},"module":"register"}
+    ✔ weak password (210ms)
+{"endPoint":"/register","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"error","message":{"code":"auth/invalid-email","customData":{},"name":"FirebaseError"},"module":"register"}
+    ✔ invalid email (156ms)
+
+  login endpoint for account delete
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Logged in","module":"login","user":"Rjvm2kzb17RxHErsw7TG55E0r213"}
+    ✔ valid credentials responds with status 200 (455ms)
+{"endPoint":"/register","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/register","method":"DELETE","module":"main","time":"2022-06-15T11:44:21.785Z","user":{"email":"testendpoint@test.com","uid":"Rjvm2kzb17RxHErsw7TG55E0r213"}}
+{"level":"info","message":"Success - Account deleted","module":"register"}
+    ✔ delete account works (405ms)
+
+  Edit-Profile endpoint
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:22.193Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"User information updated","module":"profile"}
+{"level":"info","message":"Success - Information updated","module":"profile"}
+    ✔ User can edit his/her address
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:22.227Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"Success - Information updated","module":"profile"}
+    ✔ User can edit his/her information blank and unchanged
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"unauthorized request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:22.247Z"}
+    ✔ User cannot edit his/her information if not logged in
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:22.254Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"email updated","module":"profile"}
+{"level":"info","message":"Success - Information updated","module":"profile"}
+    ✔ User can edit his/her email (749ms)
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Logged in","module":"login","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ try and login with new email (418ms)
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:23.423Z","user":{"email":"pain@gmail.com","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"email updated","module":"profile"}
+{"level":"info","message":"Success - Information updated","module":"profile"}
+    ✔ User can edit his/her email, continuation.. (561ms)
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Logged in","module":"login","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ try and login with old email again (461ms)
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:24.446Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"User's password has been succesfully updated","module":"profile"}
+{"level":"info","message":"Success - Information updated","module":"profile"}
+    ✔ User can edit his/her password (611ms)
+{"endPoint":"/login","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"level":"info","message":"Logged in","module":"login","user":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}
+    ✔ try and login with new password (419ms)
+{"endPoint":"/profile","ip":"::ffff:127.0.0.1","level":"info","message":"Request received","module":"main"}
+{"ip":"::ffff:127.0.0.1","level":"info","message":"request received on /api/profile/","method":"PUT","module":"main","time":"2022-06-15T11:44:25.483Z","user":{"email":"s.el.sayed.aly@student.rug.nl","uid":"cKJS6IQrayM9EUt4Zb7IFgHVjBC3"}}
+{"level":"info","message":"User's password has been succesfully updated","module":"profile"}
+{"level":"info","message":"Success - Information updated","module":"profile"}
+    ✔ User can edit his/her password, back to normal (601ms)
+
+
+  39 passing (8s)
+
+--------------------|---------|----------|---------|---------|--------------------------------------
+File                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                    
+--------------------|---------|----------|---------|---------|--------------------------------------
+All files           |   76.86 |    57.05 |   72.22 |   76.86 |                                      
+ lib                |   85.71 |    68.96 |   66.66 |   85.71 |                                      
+  config.js         |   82.84 |       75 |   63.63 |   82.84 | ...1,133-134,145-173,192-198,203-205 
+  firebase.js       |     100 |       40 |     100 |     100 | 44                                   
+ web                |   90.58 |    73.68 |     100 |   90.58 |                                      
+  server.js         |   90.58 |    73.68 |     100 |   90.58 | 59,89-90,93-94,105-113,159-160       
+ web/routes         |   88.88 |      100 |     100 |   88.88 |                                      
+  index.js          |   88.88 |      100 |     100 |   88.88 | 11-12                                
+ web/routes/auth    |   76.85 |    76.92 |     100 |   76.85 |                                      
+  login.js          |   59.25 |       75 |     100 |   59.25 | 11,38-47,62-64,74-103                
+  logout.js         |   91.17 |    66.66 |     100 |   91.17 | 26-28                                
+  register.js       |      91 |    81.81 |     100 |      91 | 29-32,67-68,89-91                    
+ web/routes/devices |   73.05 |    41.66 |      50 |   73.05 |                                      
+  alter.js          |   77.86 |    39.28 |     100 |   77.86 | ...-81,94-97,100-103,116-118,124-126 
+  my-devices.js     |   73.94 |    47.36 |      50 |   73.94 | ...3-84,92-93,97-101,132-133,135-137 
+  stats.js          |   64.36 |    38.46 |     100 |   64.36 | ...-44,50-51,55-58,69-70,74-78,80-81 
+ web/routes/users   |   55.89 |    46.42 |     100 |   55.89 |                                      
+  profile.js        |   55.89 |    46.42 |     100 |   55.89 | ...2,158-159,163-170,176-178,185-190 
+--------------------|---------|----------|---------|---------|--------------------------------------

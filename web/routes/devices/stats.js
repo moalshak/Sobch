@@ -1,6 +1,6 @@
 import express from "express";
 import {getLog, isAdmin} from "../../../lib/config.js";
-import {auth, db} from "../../../lib/firebase.js";
+import {db} from "../../../lib/firebase.js";
 import {get, ref} from "firebase/database";
 
 
@@ -8,21 +8,6 @@ const router = express.Router(),
     Log = getLog("stats");
 
 
-
-//Bad Request
-router.get('/', (req, res) => {
-  const deviceInfo = req;
-  const user = auth.user;
-  //using this 'user' variable for now.
-  get(ref(db, `devices/${deviceInfo.id}`)).then((snapshot) => {
-          res.status(400).send({device : req.body, accessToken: req.user.stsTokenManager.accessToken},"Bad Request");
-          console.log("Bad Request")
-    }).catch((error) => {
-      console.error(error);
-    });
-      
-})
- 
 router.get('/:id', async (req, res) => {
   const devInf = req.params;
   //using this 'user' variable for now.
@@ -85,6 +70,3 @@ router.get('/:id', async (req, res) => {
 export default {
   router: router
 }    
-
-
-
