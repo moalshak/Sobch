@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from 'axios';
-import {BACKEND_BASE_URL} from '../App';
+import {BACKEND_BASE_URL} from '../../App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
-import NavBar from "./NavBar";
-import {Alert, AlertProps, Variant} from './CustomAlert';
-import {isLoggedIn, setLoggedIn} from '../lib/acc';
-import { useNavigate } from "react-router-dom";
+import NavBar from "../utils/NavBar";
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
+import {isLoggedIn} from '../../lib/acc';
+import {useNavigate} from "react-router-dom";
+
 /***
  * Register component
  * 

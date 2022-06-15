@@ -1,18 +1,15 @@
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import { isLoggedIn } from '../lib/acc';
+import {goLogout, isLoggedIn} from '../../lib/acc';
 import Nav from 'react-bootstrap/Nav';
-import {goLogout} from '../lib/acc';
-import {IoIosLogOut} from 'react-icons/io';
+import {IoIosHelpCircleOutline, IoIosLogOut} from 'react-icons/io';
 import {HiOutlineLogin} from 'react-icons/hi';
 import {BiDevices} from 'react-icons/bi';
 import {CgProfile} from 'react-icons/cg';
 import {AiFillHome} from 'react-icons/ai';
-import {IoInformationCircleOutline, IoHelpCircleOutline} from 'react-icons/io5';
-import { IoIosHelpCircleOutline } from "react-icons/io";
-import { FaDoorOpen } from "react-icons/fa";
+import {IoHelpCircleOutline, IoInformationCircleOutline} from 'react-icons/io5';
+import {FaDoorOpen} from "react-icons/fa";
 
 function NavBar() {
     return(
@@ -63,7 +60,7 @@ export function NavBarBot() {
     return (
         <div className="bottom">
             <div className="navbar-collapse collapse">
-      <ul className="nav navbar-nav pull-right mainNav"></ul>
+      <ul className="nav navbar-nav pull-right mainNav"/>
         <Navbar bg="light" expand="lg">
         <Container>
 

@@ -1,8 +1,8 @@
-import {Alert, AlertProps, Variant} from './CustomAlert';
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
 import {useEffect, useState} from 'react';
-import { isLoggedIn } from '../lib/acc';
+import {isLoggedIn} from '../../lib/acc';
 import {useNavigate} from 'react-router-dom';
-import NavBar, {NavBarBot} from "../components/NavBar";
+import NavBar, {NavBarBot} from "../utils/NavBar";
 
 
 /**
@@ -22,7 +22,7 @@ function Logout () {
     });
     
      useEffect(()=> {
-        if (isLoggedIn() == false) {
+        if (!isLoggedIn()) {
              setAlertProps({ 
                  heading: 'Logged out!',
                  message: "Success, you have logged out",

@@ -1,21 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import {BACKEND_BASE_URL} from "../App";
-import {getAccessToken} from "../lib/acc";
-import { useNavigate } from "react-router-dom";
-import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {BACKEND_BASE_URL} from "../../App";
+import {getAccessToken, setLoggedIn} from "../../lib/acc";
+import {useNavigate, useParams} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar, {NavBarBot} from "../components/NavBar";
-import {setLoggedIn} from "../lib/acc";
-import {Alert, AlertProps, Variant} from './CustomAlert';
+import NavBar, {NavBarBot} from "../utils/NavBar";
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
 import Modal from "react-bootstrap/Modal";
-import { AiOutlineEdit } from "react-icons/ai";
+import {AiOutlineEdit} from "react-icons/ai";
 
 
 interface Profile {
@@ -153,7 +151,7 @@ function EditProfile(){
         }
     }
 
-    var getProfile = async () => {
+    let getProfile = async () => {
         try {
             setLoading(true);
             const response = await axios.get(`${BACKEND_BASE_URL}/profile/`, {

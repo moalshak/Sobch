@@ -1,11 +1,15 @@
 import {db} from '../lib/firebase.js';
-import {ref, set, get} from 'firebase/database';
+import {get, ref, set} from 'firebase/database';
 import {getLog} from '../lib/config.js';
-import { notifyUserViaEmail } from '../lib/notifyUser.js';
+import {notifyUserViaEmail} from '../lib/notifyUser.js';
 
 const Log = getLog("simulation");
 
-var defaultAggressiveness =  {
+/**
+ * defaultAggressiveness has attributes needed for the simulation
+ * these are the attributes that get used when not specified by the user
+ * */
+let defaultAggressiveness =  {
     min : -0.2,
     max : 0.2,
     decimals : 2,
@@ -17,8 +21,8 @@ var defaultAggressiveness =  {
  * Generates a random temperature between a min and max temp
  * with the given precision
  * 
- * @param {Float} min 
- * @param {Float} max 
+ * @param {number} min
+ * @param {number} max
  * @param {Number} decimals 
  * @returns 
  */
@@ -42,11 +46,12 @@ function generateChange(currentTemp) {
 /**
  * ensure that the database is connected
  */
-var ensureDBconnection = () => {
+let ensureDBconnection = () => {
     if (!db) {
         // throw error saying that the database is not connected
         throw new Error("Database is not connected");
     }
+    return true;
 }
 
 
@@ -56,11 +61,11 @@ var ensureDBconnection = () => {
  *  - if device is not active do not change current temp
  * @param {Array} devices the devices to simulate
  */
-var simulateEnvironment = async (devices) => {
+let simulateEnvironment = async (devices) => {
     ensureDBconnection();
     // loop over all devices in the database
-    for (var id in devices) {
-        var device = devices[id];
+    for (let id in devices) {
+        let device = devices[id];
         // if the device
         if (device.config.active) {
             // change the current temperature
@@ -69,29 +74,26 @@ var simulateEnvironment = async (devices) => {
             }
             device.currentTemp = Math.round(generateChange(device.currentTemp) * aggressiveness.decimals * 50) / (aggressiveness.decimals * 50);
             // device has gone beyond the limits set by the owner
-            var beyondLimit = device.currentTemp >= device.config.max || device.currentTemp <= device.config.min;
+            let beyondLimit = device.currentTemp >= device.config.max || device.currentTemp <= device.config.min;
             if (beyondLimit && device.config.wantsToBeNotified && device.config.wantsToBeNotified.length > 0) {
                 // notify the owners
-                var owners_ids = device.owners || [];
-                var owners = [];
-                for(var owner_id of owners_ids) {
+                let owners_ids = device.owners || [];
+                let owners = [];
+                for(let owner_id of owners_ids) {
                     if (device.config.wantsToBeNotified.includes(owner_id)) {
-                        var owner = (await get(ref(db, `users/${owner_id}`))).val();
+                        let owner = (await get(ref(db, `users/${owner_id}`))).val();
                         owners.push(owner);
                         // remove the email from the list
                         device.config.wantsToBeNotified.splice(device.config.wantsToBeNotified.indexOf(owner.credentials.email), 1);
                     }
                 }
-                for (var owner of owners) {
+                for (let owner of owners) {
                     if (owner && owner.credentials && owner.credentials.email) {
                         notifyUserViaEmail(owner.credentials.email, device);
                         Log.info("Notified user " + owner.credentials.email + " about the device " + device.id);
                     }
                 }
-            } 
-            // else if (!beyondLimit && !device.config.wantsToBeNotified) {
-            //     device.config.wantsToBeNotified = true;
-            // }
+            }
             // update the database
             await set(ref(db, `devices/${id}`), device);
         }
@@ -100,7 +102,7 @@ var simulateEnvironment = async (devices) => {
 
 /**
  * 
- * @param {*} ms 
+ * @param ms time to wait in ms
  * @returns 
  */
 const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -108,27 +110,27 @@ const delay = ms => new Promise(res => setTimeout(res, ms));
 /**
  * start the simulation loop
  */
-var startSimulation = async (agg) => {
+let startSimulation = async (agg) => {
     aggressiveness = agg || defaultAggressiveness;
     /**
      * the database reference and the actual devices
      */
-    var devicesRef = ref(db, 'devices/'),
+    let devicesRef = ref(db, 'devices/'),
         devices;
-    while (true) {
+    while (ensureDBconnection()) {
         // wait for 10 seconds
         devices = (await get(devicesRef)).val();
-        for (var dev in devices) {
+        for (let dev in devices) {
             devices[dev].id = dev;
         }
-        simulateEnvironment(devices);
+        await simulateEnvironment(devices);
         await delay(aggressiveness.delay);
     }
 }
 
 // if command line argument is provided, start simulation with the parameter being the aggressiveness
 if (process.argv[2] === 'start') {
-    var agg = {
+    let agg = {
         min : parseFloat(process.argv[3]) || defaultAggressiveness.min,
         max : parseFloat(process.argv[4]) || defaultAggressiveness.max,
         decimals : parseInt(process.argv[5]) || defaultAggressiveness.decimals,

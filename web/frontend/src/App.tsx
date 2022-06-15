@@ -1,20 +1,20 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Register from './components/Register';
-import Login from './components/Login';
-import Profile from './components/Profile';
-import EditProfile from './components/EditProfile';
-import MyDevices from './components/MyDevices';
-import Stats from './components/Stats';
-import Alter from './components/Alter';
-import AddDevice from './components/AddDevice';
-import Logout from './components/Logout';
-import TeamSobch from './components/TeamSobch';
-import Help from './components/Help';
-import Corparate from './components/Company';
-import NavHelp from './components/NavHelp';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Profile from './components/users/Profile';
+import EditProfile from './components/users/EditProfile';
+import MyDevices from './components/devices/MyDevices';
+import Stats from './components/devices/Stats';
+import Alter from './components/devices/Alter';
+import AddDevice from './components/devices/AddDevice';
+import Logout from './components/auth/Logout';
+import TeamSobch from './components/general/TeamSobch';
+import Help from './components/general/Help';
+import Corparate from './components/general/Company';
+import NavHelp from './components/general/NavHelp';
 
-const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://www.sobch.xyz/api" || "http://172.104.242.242:8000";
+const BACKEND_BASE_URL = process.env.BACKEND_BASE_URL || "https://www.sobch.xyz/api";
 
 function App() {
   

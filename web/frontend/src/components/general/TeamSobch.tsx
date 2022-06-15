@@ -1,27 +1,22 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Card from 'react-bootstrap/esm/Card';
-import NavBar, {NavBarBot} from "../components/NavBar";
+import NavBar, {NavBarBot} from "../utils/NavBar";
 import Container from 'react-bootstrap/esm/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 function Team(){
-
-
     return (
-
         <div>
             <NavBar />
-            
             <Container>
-
             <Row>
                 <Col>
             <Card style={{width : '18em'}}>
             <Card.Header>Mohammad Al Shakoush</Card.Header>
                 <Card.Body>
                 <Card.Text>
-                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail"></img>
+                    <img src="https://avatars.githubusercontent.com/u/65516452?v=4" className="img-thumbnail" alt="Mohammad"/>
                     <Card.Footer>Technical Officer</Card.Footer>
                 </Card.Text>
                 </Card.Body>
@@ -33,7 +28,7 @@ function Team(){
                 <Card.Header>Fergal McCollam</Card.Header>
                     <Card.Body>
                     <Card.Text>
-                        <img src="./images/profile.jpg" className="img-thumbnail"></img>
+                        <img src="./images/profile.jpg" className="img-thumbnail" alt="Fergal"/>
                         <Card.Footer>Project Leader</Card.Footer>
                     </Card.Text>
                     </Card.Body>
@@ -45,7 +40,7 @@ function Team(){
                 <Card.Header>Carmen Jica</Card.Header>
                     <Card.Body>
                     <Card.Text>
-                        <img src="./images/carmenimg.jpg" className="img-thumbnail"></img>
+                        <img src="./images/carmenimg.jpg" className="img-thumbnail" alt="Carmen"/>
                         <Card.Footer>Architecture Officer</Card.Footer>
                     </Card.Text>
                     </Card.Body>
@@ -59,7 +54,7 @@ function Team(){
         <Card.Header>Selim EL Sayed Aly</Card.Header>
             <Card.Body>
             <Card.Text>
-                <img src="./images/selimimg.jpg" className="img-thumbnail"></img>
+                <img src="./images/selimimg.jpg" className="img-thumbnail" alt="Selim"/>
                 <Card.Footer>Documentation Officer</Card.Footer>
             </Card.Text>
             </Card.Body>
@@ -70,7 +65,7 @@ function Team(){
             <Card.Header>Dhruv Ghosh</Card.Header>
             <Card.Body>
             <Card.Text>
-                <img src="./images/dhruv3.jpg" className="img-thumbnail"></img>
+                <img src="./images/dhruv3.jpg" className="img-thumbnail" alt="Dhruv Ghosh"/>
                 <Card.Footer>Communication Officer</Card.Footer>
             </Card.Text>
             </Card.Body>
@@ -78,9 +73,7 @@ function Team(){
         </Col>
         </Row>
         <NavBarBot />
-
         </Container>
-
         </div> 
     )
 

@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import {PORT, getLog, getUser} from '../lib/config.js';
-import {db, auth, admin_auth, app} from '../lib/firebase.js';
+import {getLog, getUser, PORT} from '../lib/config.js';
+import {admin_auth, app, auth, db} from '../lib/firebase.js';
 import subdomain from 'express-subdomain';
 
 /**
@@ -88,7 +88,7 @@ const middleWare = async (req, res, next) => {
                 if (decodedToken.exp - decodedToken.auth_time <= 60) {
                     await admin_auth.revokeRefreshTokens(uid);
                 }
-                var user = getUser(uid);
+                let user = getUser(uid);
                 if (!user.stsTokenManager) {
                     user.stsTokenManager = {};
                 }
@@ -121,36 +121,10 @@ const middleWare = async (req, res, next) => {
  */
 function initRoutes(app) {
     app.use(middleWare);
-    for (var route in routes) {
+    for (let route in routes) {
         app.use(route, routes[route].router);
     }
 }
-
-/**
- * initialize the database and connect to it
- * 
- * @returns {firebase.database.Database} Database 
- */
-// function initDB() {
-
-//     const serviceAccount = SERVICE_ACCOUNT;
-//     const firebaseConfig = FIRE_BASE_CONFIG;
-//     // Initialize Firebase
-//     app = initializeApp({
-//         firebaseConfig,
-//         credential: cert(serviceAccount),
-//         databaseURL: "https://hip-informatics-307918-default-rtdb.europe-west1.firebasedatabase.app"
-//     });
-
-//     admin_auth = getAuth(app);
-
-//     const c_app = c_initializeApp(firebaseConfig);
-
-//     auth = c_getAuth(c_app);
-
-//     // Get a reference to the database service
-//     return c_getDatabase(c_app);
-// }
 
 /**
  * initialize the server and start it
@@ -165,11 +139,14 @@ function init() {
 
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
-    app.use(cors())
+    app.use(cors( {
+        origin : ['sobch.xyz', 'https://sobch.xyz'],
+        }
+    ))
 
     initRoutes(app);
     
-    var router = express.Router();
+    let router = express.Router();
     app.use(subdomain('api', router));
 
     app.listen(PORT, () => {
@@ -188,6 +165,7 @@ if (process.argv[2] === 'start') {
 export {
     db as db,
     auth as auth,
-    app as app
+    app as app,
+    init as init
 }
 

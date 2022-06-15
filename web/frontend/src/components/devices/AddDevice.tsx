@@ -1,16 +1,16 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import {BACKEND_BASE_URL} from "../App";
-import {getAccessToken, setLoggedIn, isLoggedIn} from "../lib/acc";
-import { Link, useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {BACKEND_BASE_URL} from "../../App";
+import {getAccessToken, isLoggedIn, setLoggedIn} from "../../lib/acc";
+import {useNavigate} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import NavBar, {NavBarBot} from "../components/NavBar";
-import {Alert, Variant} from './CustomAlert';
+import NavBar, {NavBarBot} from "../utils/NavBar";
+import {Alert, Variant} from '../utils/CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
@@ -113,7 +113,7 @@ function AddDevice() {
     }
 
 
-    var authenticate = async () => {
+    let authenticate = async () => {
         try {
             await axios.get(`${BACKEND_BASE_URL}/my-devices`, {
                 headers: {

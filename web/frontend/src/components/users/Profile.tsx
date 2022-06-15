@@ -1,17 +1,15 @@
-import {useState, useEffect} from 'react';
-import {BACKEND_BASE_URL} from '../App';
-import {useParams} from "react-router-dom"; 
-import { getAccessToken } from '../lib/acc';
-import {Link, useNavigate} from "react-router-dom"
+import {useEffect, useState} from 'react';
+import {BACKEND_BASE_URL} from '../../App';
+import {useNavigate, useParams} from "react-router-dom";
+import {getAccessToken, setLoggedIn} from '../../lib/acc';
 import axios from 'axios';
-import NavBar, {NavBarBot} from "../components/NavBar";
+import NavBar, {NavBarBot} from "../utils/NavBar";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import {isLoggedIn, setLoggedIn} from "../lib/acc";
-import {Alert, AlertProps, Variant} from './CustomAlert';
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
 import Spinner from "react-bootstrap/Spinner";
 import {AiOutlineEdit} from "react-icons/ai";
 import {TiUserDeleteOutline} from "react-icons/ti";
@@ -20,14 +18,11 @@ import Modal from "react-bootstrap/Modal";
 function Profile() {
     const [email, setEmail] = useState('');
     const [address, setAddress] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [createdAt, setCreatedAt] = useState('');
     const [lastLogin, setlastLogin] = useState('');
     const [loading, setLoading] = useState(true);
 
     const {id} = useParams();
-    
 
     const accessToken = getAccessToken();
 
@@ -51,7 +46,7 @@ function Profile() {
 
     async function goDelete(e : any) {
         e.preventDefault();
-        var data : any = {};
+        let data : any = {};
         
         try {
             setLoading(true);
@@ -77,32 +72,27 @@ function Profile() {
             }    
 
             data = res.data;
-    } catch(error) {
-        if(data.error) {
-            //alert(data.error);
-            setAlertProps({
-                heading: 'There was a problem deleting your account',
-                message: `${data.error}`,
-                variant: Variant.danger
-            });
-        } else {
-            setAlertProps({
-                heading: 'There was a problem deleting your account',
-                message: `${error}`,
-                variant: Variant.danger
-            });
-            //alert(`Something went wrong : ${error}`);
+        } catch(error) {
+            if(data.error) {
+                setAlertProps({
+                    heading: 'There was a problem deleting your account',
+                    message: `${data.error}`,
+                    variant: Variant.danger
+                });
+            } else {
+                setAlertProps({
+                    heading: 'There was a problem deleting your account',
+                    message: `${error}`,
+                    variant: Variant.danger
+                });
+            }
         }
     }
-    }
-
-    
-
 
     async function getProfile() {
         try{
             setLoading(true);
-            var url = `${BACKEND_BASE_URL}/profile/`;
+            let url = `${BACKEND_BASE_URL}/profile/`;
             if (id) {
                 url += id;
             }
@@ -118,7 +108,7 @@ function Profile() {
             setLoading(false);
             setLoggedIn(true);
             setShowPopUp(false);
-            
+
         } catch (error : any) {
             if (error.response.status === 401)
             {
@@ -149,7 +139,6 @@ function Profile() {
     }, []);
 
     function RenderProfile(){
-
         return (
                 <div>
                 <Container>
@@ -244,8 +233,7 @@ function Profile() {
             <NavBarBot />
         </div>
     );
-    
-    }
+}
 
 
 export default Profile;

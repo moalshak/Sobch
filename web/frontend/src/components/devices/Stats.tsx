@@ -1,24 +1,21 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
-import {useParams} from "react-router-dom";
-import {BACKEND_BASE_URL} from '../App';
-import {getAccessToken} from '../lib/acc';
-import {Link, useNavigate} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {BACKEND_BASE_URL} from '../../App';
+import {getAccessToken, setLoggedIn} from '../../lib/acc';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
-import NavBar, {NavBarBot} from "./NavBar";
-import {isLoggedIn, setLoggedIn} from "../lib/acc";
+import NavBar, {NavBarBot} from "../utils/NavBar";
 import Spinner from "react-bootstrap/Spinner";
 import {AiOutlineEdit} from "react-icons/ai";
 import {BiDevices} from "react-icons/bi";
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import {Alert, AlertProps, Variant} from './CustomAlert';
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
 import {MdOutlineNotificationImportant} from "react-icons/md";
 
 function Stats() {

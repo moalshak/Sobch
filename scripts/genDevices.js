@@ -1,7 +1,7 @@
 console.log("Generating devices...");
 import fs from 'fs';
 import {db} from "../lib/firebase.js";
-import {ref, set, get} from "firebase/database";
+import {get, ref, set} from "firebase/database";
 import {genRandomTemperature} from '../simulation/main.js';
 import {getLog} from "../lib/config.js";
 
@@ -35,8 +35,14 @@ const ADMINS = [
     }, // fergal
 }
 
-var ID = 0;
+/**
+ * ID for the device
+ * */
+let ID = 0;
 
+/**
+ * retrieve the last made id from disk to ensure uniqueness
+ * */
 try {
     const data = fs.readFileSync(`${process.cwd()}/scripts/lastId.id`, 'utf8');
     ID = parseInt(data);
@@ -48,6 +54,7 @@ try {
 
 
 /**
+ * Generates an id
  * @returns {string} A unique ID
  */
 function generateID() {
@@ -59,16 +66,14 @@ function generateID() {
  * @returns {string} One time password
  */
  function generateOTP() {
-    var length = 16;
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
- charactersLength));
+    let length = 16;
+    let result           = '';
+    let characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let charactersLength = characters.length;
+    for ( let i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
    }
-   result = result.match(/.{1,4}/g).join("-");
-   return result;
+   return result.match(/.{1,4}/g).join("-");
 }
 
 /**
@@ -88,7 +93,7 @@ const MODELS = ["Sobch DHT-11", "Sobch DHT-22", "Sobch DHT-33", "Sobch DHT-44", 
  * @returns {Object} A device
  */
 function generateDevice() {
-    var device = {};
+    let device = {};
     device.id = generateID();
     device.currentTemp = genRandomTemperature(15, 25, 2);
     device.config = {};
@@ -103,21 +108,26 @@ function generateDevice() {
     return device;
 }
 
-var devices = [];
+let devices = [];
 
-for (var i = 0; i < 10; i++) {
-    var device = generateDevice();
+/**
+ * generate x devices and add them to the database
+ * */
+for (let i = 0; i < 10; i++) {
+    let device = generateDevice();
     devices.push(device.id);
-    var devToAdd = {};
-    for (var key in device) {
+    let devToAdd = {};
+    for (let key in device) {
         devToAdd[key] = device[key];
     }
-    set(ref(db, `devices/${device.id}`), devToAdd);
+    await set(ref(db, `devices/${device.id}`), devToAdd);
 }
 
-
-for (var admin of ADMINS) {
-    var snapshot = await get(ref(db, `users/${admin}`))
+/**
+ * link every device to every admin
+ * */
+for (let admin of ADMINS) {
+    let snapshot = await get(ref(db, `users/${admin}`))
     if (!snapshot.exists()) {
         await set(ref(db, `users/${admin}`), {credentials : { email : emails[admin].email}, owns : []});
         snapshot = await get(ref(db, `users/${admin}`))
@@ -126,15 +136,18 @@ for (var admin of ADMINS) {
     if (user.owns === undefined || !Array.isArray(user.owns)) {
         user.owns = [];
     }
-    var owns = user.owns || [];
-    for (var device of devices) {
+    let owns = user.owns || [];
+    for (let device of devices) {
         owns.push(device);
     }
     user.owns = owns;
     // user.owns = []; // uncomment this to remove all devices from the admins
-    set(ref(db, `users/${admin}`), user);
+    await set(ref(db, `users/${admin}`), user);
 }
 
+/**
+ * save the last made id to disk
+ * */
 const idString = (ID++).toString();
 fs.writeFile(`${process.cwd()}/scripts/lastId.id`, idString, err => {
     if (err) {

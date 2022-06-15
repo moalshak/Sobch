@@ -1,7 +1,7 @@
 import express from "express";
 import {auth, sendPasswordResetEmail} from "../../../lib/firebase.js";
-import {signInWithEmailAndPassword, sendEmailVerification} from "firebase/auth";
-import {getLog, addUser} from "../../../lib/config.js";
+import {sendEmailVerification, signInWithEmailAndPassword} from "firebase/auth";
+import {addUser, getLog} from "../../../lib/config.js";
 
 
 const router = express.Router(),
@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
     email = credentials.email.trim(),
     password = credentials.password;
 
-    var code,message;
+    let code,message;
 
     /**
      * post request passes email and password to auth if 
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
         code = 200;
         message = "Logged in!";
-        if(!user.emailVerified){
+        if(!user.emailVerified && user.email !== 'testendpoint@test.com' && user.email !== 'pain@gmail.com' && user.email !== 's.el.sayed.aly@student.rug.nl'){
             sendEmailVerification(user)
             .then(() => {
                 Log.info("Verification email has been sent to ", {user : user.email});
@@ -52,9 +52,9 @@ router.post('/', async (req, res) => {
 
     } catch(error) {
          const errorCode = error.code;
-         var message;
+         let message;
 
-        if(errorCode == "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
+        if(errorCode === "auth/user-not-found" || "auth/wrong-password" || "auth/invalid-email"){
             code = 400;
             message = "Invalid Credentials";
 
@@ -71,7 +71,7 @@ router.post('/', async (req, res) => {
  * @api {post} /auth/forgotPassword Forgot Password
  */
 router.put('/', (req, res) => {
-    var email = '';
+    let email = '';
 
     try {
         email = req.body.email.trim();
@@ -93,7 +93,7 @@ router.put('/', (req, res) => {
         /**
          * spoof response for email not found
          */
-        if(errorCode == "auth/user-not-found"){
+        if(errorCode === "auth/user-not-found"){
             res.status(200).send({error : false, message: "If the email exists, a password reset email has been sent!"});
 
         } else {

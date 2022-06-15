@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from 'axios';
-import {BACKEND_BASE_URL} from '../App';
+import {BACKEND_BASE_URL} from '../../App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from 'react-bootstrap/Container';
-import NavBar, {NavBarBot} from "../components/NavBar";
-import {Alert, AlertProps, Variant} from './CustomAlert';
-import {setLoggedIn, isLoggedIn} from '../lib/acc';
+import NavBar, {NavBarBot} from "../utils/NavBar";
+import {Alert, AlertProps, Variant} from '../utils/CustomAlert';
+import {isLoggedIn, setLoggedIn} from '../../lib/acc';
 import {useNavigate} from 'react-router-dom';
-import { FaFingerprint } from "react-icons/fa";
-import { FaDoorOpen } from "react-icons/fa";
+import {FaDoorOpen, FaFingerprint} from "react-icons/fa";
 
 /**
  * The login page for the frontend
@@ -40,7 +39,7 @@ function Login() {
     */
    async function doLoginRequest(e: any) {
        e.preventDefault();
-       var data : any = {};
+       let data : any = {};
 
        try{
            const res = await axios.post(`${BACKEND_BASE_URL}/login`, {
@@ -48,7 +47,7 @@ function Login() {
                password : password.trim()
            });
            data = res.data;
-           var error = data.error, message;
+           let error = data.error, message;
 
            if(error) {
                if(data.message){
