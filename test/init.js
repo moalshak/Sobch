@@ -1,6 +1,6 @@
 import * as server from '../web/server.js';
 import assert from 'assert';
-import {describe} from 'mocha';
+import {describe, it} from 'mocha';
 import axios from 'axios';
 import {get, ref, set} from "firebase/database";
 import {db} from "../lib/firebase.js";
@@ -22,6 +22,18 @@ describe('Server can start', () => {
         server.init();
         done();
     });
+
+    it('nonexistent endpoint returns error', (done) => {
+        axios.get(`http://localhost:${PORT}/api/nonexistent`)
+        .then((res) => {
+            assert.equal(res.status, 405);
+            done(res);
+        }).catch((err) => {
+            assert.equal(err.response.status, 405);
+            done();
+        })
+
+    })
 });
 
 /**
@@ -62,6 +74,17 @@ describe('login endpoint', () => {
         })
     });
 
+    it('test request', (done) => {
+        axios.get(`http://localhost:${PORT}/api/login`, {
+        
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done();
+        })
+    });
+
     it('valid credentials responds with status 200', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "mo.alshakoush@gmail.com",
@@ -76,10 +99,21 @@ describe('login endpoint', () => {
             done(err);
         })
     });
-});
 
-describe('non-admin login', () => {
-    it('setting non-admin accessToken', (done) => {
+    it('user forgot password 200', (done) => {
+        axios.put(`http://localhost:${PORT}/api/login`, {
+            email: "testendpoint@gmail.com"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "If the email exists, a password reset email has been sent!");
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+
+    it('non-admins can also login', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "s.el.sayed.aly@student.rug.nl",
             password: ACC_PASSWORD2
@@ -96,10 +130,147 @@ describe('non-admin login', () => {
 });
 
 /**
+ * Test the register endpoint
+ */
+ describe('register endpoint', () => {
+    it('register endpoint works', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+           credentials:{
+                email: "testendpoint@test.com",
+                password: TEST_PASSWORD
+           },
+            address: "testendpoint"
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");            registerAcc = res.data.accessToken;
+            done();
+        }
+        ).catch((err) => {
+            done(err);
+        });
+    });
+
+    it('email already in use', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "f.j.mccollam@student.rug.nl",
+                 password: TEST_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Email already in use");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
+
+    it('weak password', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "f.j.mccollam@student.rug.nl",
+                 password: WEAK_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Weak password: Should be at least 6 characters long");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
+
+    it('invalid email', (done) => {
+        axios.post(`http://localhost:${PORT}/api/register`, {
+            credentials:{
+                 email: "notemail",
+                 password: WEAK_PASSWORD
+            },
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "Invalid email");
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid Credentials");
+            done();
+        })
+    });
+});
+
+/**
+ * test delete request in register endpoint
+ */ 
+ describe('login endpoint for account delete', () => {
+    it('valid credentials responds with status 200', (done) => {
+        axios.post(`http://localhost:${PORT}/api/login`, {
+            email: "testendpoint@test.com",
+            password: TEST_PASSWORD
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Logged in!");
+            registerAcc = res.data.accessToken; // set the accesstoken for later use
+            done();
+        }).catch((err) => {
+            done(err);
+        })
+    });
+    
+    it('delete account works', (done) => {
+        axios.delete(`http://localhost:${PORT}/api/register`, {
+            headers: {
+                Authorization: `${registerAcc}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+    
+});
+
+/**
  * devices test for linking accessing devices
  */
 
 describe('My devices endpoint', () => {
+    it('User cannot link a device with an invalid OTP', (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+            "device": {
+                "id": "31",
+                "config": {
+                    "min": -22,
+                    "max": 80,
+                    "room": "bedroom",
+                    "active": true
+                },
+                "otp": "miss"
+            },
+        },
+        {
+        headers: {
+            Authorization: `${accessToken2}`
+        }
+        }).then((res) => {
+            assert.equal(res.status, 403);
+            done(res);
+        }).catch((err)=>{
+            assert.equal(err.response.status, 403);
+            assert.equal(err.response.data.error, true);
+            assert.equal(err.response.data.message, "Invalid match (device id / otp)");
+            done();
+        })
+    })
     
     it ('User can link Device' , (done) => {
         axios.post(`http://localhost:${PORT}/api/my-devices`, {
@@ -157,12 +328,72 @@ describe('My devices endpoint', () => {
             done(err);
         });
     });
+
+    it('linking an owned devices updates the config', (done) => {
+        axios.post(`http://localhost:${PORT}/api/my-devices`, {
+            "device": {
+                "id": "31",
+                "config": {
+                    "min": -22,
+                    "max": 80,
+                    "room": "bedroom",
+                    "active": true
+                },
+                "otp": "PYFL-TUVB-MGEE-SYIP"
+            },
+        },
+        {
+        headers: {
+            Authorization: `${accessToken2}`
+        }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.error, false);
+            assert.equal(res.data.message, "Already Owned");
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    });
+
+    it('having no devices should not be an issue', (done) => {
+        axios.get(`http://localhost:${PORT}/api/my-devices`, {
+            headers: {
+                Authorization: `${registerAcc}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            assert.equal(res.data.message, "No devices to show.");
+            done();
+        }).catch((err) => {
+            done(err);
+        });
+    })
+
 });
 
 /**
  * test for editing device and their responses
  */
 describe('Edit a device endpoint', () => {
+    it('Invalid body request responds with 400', (done) => {
+        axios.put(`http://localhost:${PORT}/api/alter/${deviceID}`, {
+            
+        }, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 400);
+            done();
+        }).catch((err) => {
+            assert.equal(err.response.status, 400);
+            assert.equal(err.response.data.error, "Bad Request");
+            done();
+        })
+    });
+
+    
     it ('user can alter his chosen device', (done) => {
         axios.put(`http://localhost:${PORT}/api/alter/${deviceID}`, {
             device: {
@@ -197,7 +428,62 @@ describe('Edit a device endpoint', () => {
         });
     });
 
+    it ('device.config.active is undefined should work', (done) => {
+        axios.put(`http://localhost:${PORT}/api/alter/${deviceID}`, {
+            device: {
+                id: deviceID,
+                config: {
+                    "min": 15,
+                    "max":25,
+                    "room": "somewhere man",
+                },
+                otp: otp
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+
+            get(ref(db, `devices/${deviceID}`)).then((snapshot) => {
+                console.log("1");
+                let device = snapshot.val();
+                assert.equal(device.config.min, 15);
+                assert.equal(device.config.max, 25);
+                assert.equal(device.config.room, "somewhere man");
+                assert.equal(device.config.active, false);
+                done();
+            });
+        }).catch((err) => {
+            console.log(err);
+            done(err);
+        });
+    });
+
     it ('user cannot alter a device that they do not own', (done) => {
+        axios.put(`http://localhost:${PORT}/api/alter/33`, {
+            device: {
+                id : '33',
+                otp : 'anyotp'
+            }
+        }, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            done();
+        }).catch((err) => {
+            if (err.response.status === 401 && err.response.data.message === "Unauthorized") {
+                done();
+            } else {
+                done(err);
+            }
+        });
+    });
+
+    it ('user cannot alter a device that does not exist', (done) => {
         axios.put(`http://localhost:${PORT}/api/alter/0`, {
             device: {
                 id : 0,
@@ -256,7 +542,8 @@ describe('Edit a device endpoint', () => {
         }, {headers: {
             Authorization: `${accessToken2}`
         }
-    }).then((res) => {
+        }).then((res) => {
+            assert.equal(res.status, 403);
             done();
         }).catch((err) => {
             if (err.response.status === 403 && err.response.data.error === true && err.response.data.message === "Invalid match (device id / otp)") {
@@ -265,9 +552,6 @@ describe('Edit a device endpoint', () => {
                 done(err);
             }
         });
-        
-        
-
     });
 
     it ('Empty Request Add device' , (done) => {
@@ -284,20 +568,61 @@ describe('Edit a device endpoint', () => {
             }
         });
     });
-})
+});
 
 /**
  * test for retrieving device stats and their responses
  */
 describe('get device stats endpoint', () => {
-    it ('user can get device stats', (done) => {
+    it('user trying to get a non existent device gives an error', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/0`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            done(res);
+        }).catch((err)=> {
+            assert.equal(err.response.status, 401);
+            assert.equal(err.response.data.error, "Unauthorized");
+            done();
+        });
+    });
+
+    it('user trying to get a device they do not own gives an error', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/33`, {
+            headers: {
+                Authorization: `${accessToken2}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 401);
+            done(res);
+        }).catch((err)=> {
+            assert.equal(err.response.status, 401);
+            done();
+        });
+    });
+
+    it('Admin should get any devices', (done) => {
+        axios.get(`http://localhost:${PORT}/api/stats/33`, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        }).then((res) => {
+            assert.equal(res.status, 200);
+            done();
+        }).catch((err)=> {
+            done(err);
+        }); 
+    })
+
+    it ('user can get device stats they own', (done) => {
         axios.get(`http://localhost:${PORT}/api/stats/${deviceID}`, {
             headers: {
                 Authorization: `${accessToken2}`
             }
         }).then((res) => {
             assert.equal(res.status, 200);
-            console.log(res.data.device.id, deviceID)
             done();
         }).catch((err) => {
             done(err);
@@ -319,7 +644,6 @@ describe('get device stats endpoint', () => {
             }
         });
     });
-
 });
 
 
@@ -507,117 +831,6 @@ describe('logout endpoint', () => {
     });
 });
 
-
-
-/**
- * Test the register endpoint
- */
- describe('register endpoint', () => {
-    it('register endpoint works', (done) => {
-        axios.post(`http://localhost:${PORT}/api/register`, {
-           credentials:{
-                email: "testendpoint@test.com",
-                password: TEST_PASSWORD
-           },
-            address: "testendpoint"
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.message, "Success, please make sure to verify your email in order to login");            registerAcc = res.data.accessToken;
-            done();
-        }
-        ).catch((err) => {
-            done(err);
-        });
-    });
-
-    it('email already in use', (done) => {
-        axios.post(`http://localhost:${PORT}/api/register`, {
-            credentials:{
-                 email: "f.j.mccollam@student.rug.nl",
-                 password: TEST_PASSWORD
-            },
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.message, "Email already in use");
-            done();
-        }).catch((err) => {
-            assert.equal(err.response.status, 400);
-            assert.equal(err.response.data.error, true);
-            assert.equal(err.response.data.message, "Invalid Credentials");
-            done();
-        })
-    });
-
-    it('weak password', (done) => {
-        axios.post(`http://localhost:${PORT}/api/register`, {
-            credentials:{
-                 email: "f.j.mccollam@student.rug.nl",
-                 password: WEAK_PASSWORD
-            },
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.message, "Weak password: Should be at least 6 characters long");
-            done();
-        }).catch((err) => {
-            assert.equal(err.response.status, 400);
-            assert.equal(err.response.data.error, true);
-            assert.equal(err.response.data.message, "Invalid Credentials");
-            done();
-        })
-    });
-
-    it('invalid email', (done) => {
-        axios.post(`http://localhost:${PORT}/api/register`, {
-            credentials:{
-                 email: "notemail",
-                 password: WEAK_PASSWORD
-            },
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.message, "Invalid email");
-            done();
-        }).catch((err) => {
-            assert.equal(err.response.status, 400);
-            assert.equal(err.response.data.error, true);
-            assert.equal(err.response.data.message, "Invalid Credentials");
-            done();
-        })
-    });
-});
-
-/**
- * test delete request in register endpoint
- */ 
- describe('login endpoint for account delete', () => {
-    it('valid credentials responds with status 200', (done) => {
-        axios.post(`http://localhost:${PORT}/api/login`, {
-            email: "testendpoint@test.com",
-            password: TEST_PASSWORD
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            assert.equal(res.data.error, false);
-            assert.equal(res.data.message, "Logged in!");
-            registerAcc = res.data.accessToken; // set the accesstoken for later use
-            done();
-        }).catch((err) => {
-            done(err);
-        })
-    });
-    
-    it('delete account works', (done) => {
-        axios.delete(`http://localhost:${PORT}/api/register`, {
-            headers: {
-                Authorization: `${registerAcc}`
-            }
-        }).then((res) => {
-            assert.equal(res.status, 200);
-            done();
-        }).catch((err) => {
-            done(err);
-        });
-    });
-    
-});
 /**
  * test for edit profile endpoint
  */
@@ -781,7 +994,7 @@ describe('Edit-Profile endpoint', () => {
     it('try and login with new email', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "pain@gmail.com",
-            password: "selim123"
+            password: ACC_PASSWORD2
         }).then((res) => {
             assert.equal(res.status, 200);
             assert.equal(res.data.error, false);
@@ -815,7 +1028,7 @@ describe('Edit-Profile endpoint', () => {
     it('try and login with old email again', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "s.el.sayed.aly@student.rug.nl",
-            password: "selim123"
+            password: ACC_PASSWORD2
         }).then((res) => {
             assert.equal(res.status, 200);
             assert.equal(res.data.error, false);
@@ -831,7 +1044,7 @@ describe('Edit-Profile endpoint', () => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
             credentials : {
                 email : "",
-                password : "idkrandom"
+                password : ACC_PASSWORD
             },
             address : ''
         }, {headers: {
@@ -849,7 +1062,7 @@ describe('Edit-Profile endpoint', () => {
     it('try and login with new password', (done) => {
         axios.post(`http://localhost:${PORT}/api/login`, {
             email: "s.el.sayed.aly@student.rug.nl",
-            password: "idkrandom"
+            password: ACC_PASSWORD
         }).then((res) => {
             assert.equal(res.status, 200);
             assert.equal(res.data.error, false);
@@ -865,7 +1078,7 @@ describe('Edit-Profile endpoint', () => {
         axios.put(`http://localhost:${PORT}/api/profile/`, {
             credentials : {
                 email : "",
-                password : "selim123"
+                password : ACC_PASSWORD2
             },
             address : ''
         }, {headers: {
